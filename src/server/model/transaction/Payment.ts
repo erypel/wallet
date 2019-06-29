@@ -1,3 +1,8 @@
+import Transaction from './Transaction'
+import Source from '../Source'
+import Destination from '../Destination'
+import Instructions from '../Instructions'
+
 export default class Payment implements Transaction {
   source: Source
   destination: Destination
@@ -28,8 +33,7 @@ export default class Payment implements Transaction {
     this.paths = paths
   }
 
-  @Override
-  function prepare(address: string, payment: object, instructions?: Instructions): Promise<object> {
-
+  prepare = function(address: string, payment: object, instructions?: Instructions): Promise<object> {
+    return null //TODO
   }
 }

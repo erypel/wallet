@@ -1,15 +1,18 @@
+import Instructions from '../Instructions'
+
 export default interface Transaction {
-  prepare: function
+  prepare(address: string, transaction: object, instructions?: Instructions): Promise<object>
 
-  function sign() {
-    //TODO
-  }
+  // TODO these go somewhere else
+  // sign() {
+  //   //TODO
+  // }
 
-  function submit() {
+  // function submit() {
 
-  }
+  // }
 
-  function verify() {
+  // function verify() {
     
-  }
+  // }
 }
