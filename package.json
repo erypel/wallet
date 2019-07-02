@@ -2,7 +2,7 @@
   "name": "wallet",
   "version": "1.0.0",
   "description": "An xrp wallet",
-  "main": "index.ts",
+  "private": true,
   "scripts": {
     "test": "mocha"
   },
@@ -11,8 +11,26 @@
   "dependencies": {
     "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
+    "lodash": "^4.17.11",
     "mocha": "^6.1.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "ripple-lib": "*",
     "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.35.2",
+    "webpack-cli": "^3.3.5"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ],
+    "browserslist": "> 0.25%, not dead"
   }
 }
