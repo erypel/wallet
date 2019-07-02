@@ -6,11 +6,11 @@ const api = new RippleAPI({
 
 //TODO these are nested calls and problems can occur if the api connection is severed too early. need to Un-nest
 
-export default function signTransaction(txJSON, secret){
+export default function signTransaction(txJSON: string, secret: string){
 	api.connect().then(() => {
 		logger.debug('signing transaction')
 		return api.sign(txJSON, secret)
-	}).then(signed => {
+	}).then((signed: { signedTransaction: object; }) => {
 		logger.debug(signed)
 		logger.debug('signing done')
 		submitTransaction(signed.signedTransaction)
@@ -18,16 +18,16 @@ export default function signTransaction(txJSON, secret){
 		return api.disconnect()
 	}).then(() => {
 		logger.debug('done and disconnected')
-	}).catch(error => {
+	}).catch((error: any) => {
 		logger.error(error)
 	})
 }
 
-function submitTransaction(signedTransaction){
+function submitTransaction(signedTransaction: object){
 	api.connect().then(() => {
 		logger.debug('submitting transaction')
 		return api.submit(signedTransaction)
-	}).then(result => {
+	}).then((result: { id: string; }) => {
 		logger.debug(result)
 		logger.debug('submitted')
 		verifyTransaction(result.id)
@@ -35,23 +35,23 @@ function submitTransaction(signedTransaction){
 		return api.disconnect()
 	}).then(() => {
 		logger.debug('done and disconnected')
-	}).catch(error => {
+	}).catch((error: any) => {
 		logger.error(error)
 	})
 }
 
-function verifyTransaction(transactionID){
+function verifyTransaction(transactionID: string){
 	api.connect().then(() => {
 		logger.debug('verifying transaction')
 		return api.getTransaction(transactionID)
-	}).then(result => {
+	}).then((result: any) => {
 		logger.debug(result)
 		logger.debug('verified')
 	}).then(() => {
 		return api.disconnect()
 	}).then(() => {
 		logger.debug('done and disconnected')
-	}).catch(error => {
+	}).catch((error: any) => {
 		logger.error(error)
 	})
 }
