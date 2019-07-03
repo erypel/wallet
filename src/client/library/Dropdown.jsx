@@ -10,10 +10,6 @@ class Dropdown extends React.PureComponent {
         }
     }
 
-    handleClickOutside = () => {
-        this.hideDropdown()
-    }
-
     showDropdown = () => {
         this.setState({
             listOpen: true
