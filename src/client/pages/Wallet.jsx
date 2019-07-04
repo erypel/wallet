@@ -1,8 +1,17 @@
 import React from 'react'
 import Button from '../library/Button'
+import Modal from '../library/Modal'
 import Dropdown from '../library/Dropdown'
 
 export default class Wallet extends React.PureComponent {
+    constructor() {
+        super();
+
+        this.state = {
+            isSendModalOpen: false
+        }
+    }
+
     currencies = [
         {
             id: 0,
@@ -18,6 +27,18 @@ export default class Wallet extends React.PureComponent {
         }
       ];
 
+      openModal = () => {
+        this.setState({
+            isSendModalOpen: true
+        });
+    }
+
+    closeModal = () => {
+        this.setState({
+            isSendModalOpen: false
+        });
+    }
+
     render() {
         return (<div>
                 <label>Balance <Dropdown
@@ -28,7 +49,13 @@ export default class Wallet extends React.PureComponent {
                     title="Select currency"
                     list={this.currencies}
                 /></label>
-                <Button buttonText='Send'/>
+                <Button onClick={this.openModal} buttonText='Send'/>
+                {this.state.isSendModalOpen && <Modal
+                    className="modal"
+                    title="Send"
+                    onClose={this.closeModal}>
+                        Send some XRP
+                </Modal>}
                 <Button buttonText='Receive'/>
             </div>);
     }
