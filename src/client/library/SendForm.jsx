@@ -1,4 +1,6 @@
 import React from 'react'
+import Dropdown from './Dropdown';
+import CurrencyStore from '../store/currency'
 
 //TODO these files should be .tsx
 class SendForm extends React.PureComponent {
@@ -25,7 +27,9 @@ class SendForm extends React.PureComponent {
     }
 
     render() {
+        const currencies = CurrencyStore.currencies
         return <form onSubmit={this.handleSubmit}>
+            {/* TODO address fields should be their own component with special validation */}
             <label>
                 Address:
                 <input type="text" id="address" value={this.state.address} onChange={this.handleChange}/>
@@ -35,6 +39,11 @@ class SendForm extends React.PureComponent {
                 Amount:
                 <input type="number" id="amount" value={this.state.amount} onChange={this.handleChange}/>
             </label>
+            <Dropdown
+                title="Select currency"
+                list={currencies}
+            />
+            <br/>
             <input type="submit" value="Send"/>
         </form>
     }
