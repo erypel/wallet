@@ -2,6 +2,7 @@ import React from 'react'
 import Button from '../library/Button'
 import Modal from '../library/Modal'
 import Dropdown from '../library/Dropdown'
+import SendForm from '../library/SendForm'
 
 export default class Wallet extends React.PureComponent {
     constructor() {
@@ -54,7 +55,7 @@ export default class Wallet extends React.PureComponent {
                     className="modal"
                     title="Send"
                     onClose={this.closeModal}>
-                        Send some XRP
+                        <SendForm/>
                 </Modal>}
                 <Button buttonText='Receive'/>
             </div>);
