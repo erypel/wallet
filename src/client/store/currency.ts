@@ -1,7 +1,15 @@
-//TODO this whole file is incorrect and needs a thorough thinking thru
+interface Currency {
+    id: number
+    title: string
+    selected: boolean
+    key: string
+}
 
+ interface CurrencyState {
+    currencies: Currency[]
+}
 //TODO these should be kept server side with a local instance in case the server is unreachable
-const CurrencyStore: object = {
+const CurrencyState: CurrencyState = {
     currencies: [{
         id: 0,
         title: 'XRP',
@@ -20,13 +28,13 @@ const actions = {
     ADD_CURRENCY: ''
 }
 
-const reducer = (state: object, action: string, payload: object) => {
+function reducer(state = CurrencyState, action: string, payload: Currency): CurrencyState {
     switch (action) {
         case actions.ADD_CURRENCY:
-            return {...state, payload}
+            return { currencies: [...state.currencies, payload] }
         default:
             return state
     }
 }
 
-export default CurrencyStore
+export default CurrencyState

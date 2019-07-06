@@ -3,6 +3,7 @@ import Button from '../library/Button'
 import Modal from '../library/Modal'
 import Dropdown from '../library/Dropdown'
 import SendForm from '../library/SendForm'
+import CurrencyState from '../store/currency'
 
 export default class Wallet extends React.PureComponent {
     constructor() {
@@ -12,21 +13,6 @@ export default class Wallet extends React.PureComponent {
             isSendModalOpen: false
         }
     }
-
-    currencies = [
-        {
-            id: 0,
-            title: 'XRP',
-            selected: false,
-            key: 'currency'
-        },
-        {
-          id: 1,
-          title: 'USD',
-          selected: false,
-          key: 'currency'
-        }
-      ];
 
       openModal = () => {
         this.setState({
@@ -39,16 +25,17 @@ export default class Wallet extends React.PureComponent {
             isSendModalOpen: false
         });
     }
-
+    
     render() {
+        const currencies = CurrencyState.currencies
         return (<div>
                 <label>Balance <Dropdown
                     title="Select currency"
-                    list={this.currencies}
+                    list={currencies}
                 /></label>
                 <label>Value<Dropdown
                     title="Select currency"
-                    list={this.currencies}
+                    list={currencies}
                 /></label>
                 <Button onClick={this.openModal} buttonText='Send'/>
                 {this.state.isSendModalOpen && <Modal
