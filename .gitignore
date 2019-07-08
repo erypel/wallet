@@ -8,7 +8,8 @@
 # testing
 /coverage
 
-# production
+# gradle
+.gradle/
 /build
 
 # misc
