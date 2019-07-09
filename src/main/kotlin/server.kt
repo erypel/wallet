@@ -1,3 +1,4 @@
+import controller.LoginController
 import dao.Login
 import dao.Logins
 import dao.User
@@ -16,7 +17,12 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 fun main(args: Array<String>) {
 
-    Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+    val app = Javalin.create().apply {
+        exception(Exception::class.java) { e, ctx -> e.printStackTrace() }
+        error(404) { ctx -> ctx.json("not found") }
+    }.start(7000)
+
+    Database.connect("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", driver = "org.h2.Driver")
 
     transaction {
         // print sql to std-out
@@ -29,12 +35,11 @@ fun main(args: Array<String>) {
             email = "email@email.com"
         }
 
-        // 'select *' SQL: SELECT Cities.id, Cities.name FROM Cities
         println("Users: ${User.all()}")
 
         SchemaUtils.create (Logins)
 
-        val login = Login.new {
+        Login.new {
             username = "admin"
             password = "password"
             user = dummyUser
@@ -43,14 +48,11 @@ fun main(args: Array<String>) {
         println("Logins: ${Login.all()}")
     }
 
-    val app = Javalin.create().apply {
-        exception(Exception::class.java) { e, ctx -> e.printStackTrace() }
-        error(404) { ctx -> ctx.json("not found") }
-    }.start(7000)
-
     app.routes {
-        post("/login") { ctx ->
-
+        app.get("/") { ctx -> ctx.result("Hello World") }
+        get("/login") { ctx ->
+            val controller = LoginController()
+            ctx.result(controller.login(ctx).email)
         }
 
         post("/logout") { ctx ->

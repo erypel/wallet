@@ -1,5 +1,4 @@
 package dao
-import java.util.concurrent.atomic.AtomicInteger
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
