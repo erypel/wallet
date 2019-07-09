@@ -1,37 +1,18 @@
 package dao
 import java.util.concurrent.atomic.AtomicInteger
-import model.User
+import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.IntEntity
+import org.jetbrains.exposed.dao.IntEntityClass
+import org.jetbrains.exposed.dao.IntIdTable
 
-class UserDao {
+class User(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<User>(Users)
 
-    val users = hashMapOf(
-            0 to User(name = "Alice", email = "alice@alice.kt", id = 0),
-            1 to User(name = "Bob", email = "bob@bob.kt", id = 1),
-            2 to User(name = "Carol", email = "carol@carol.kt", id = 2),
-            3 to User(name = "Dave", email = "dave@dave.kt", id = 3)
-    )
+    var name by Users.name
+    var email by Users.email
+}
 
-    var lastId: AtomicInteger = AtomicInteger(users.size - 1)
-
-    fun save(name: String, email: String) {
-        val id = lastId.incrementAndGet()
-        users.put(id, User(name = name, email = email, id = id))
-    }
-
-    fun findById(id: Int): User? {
-        return users[id]
-    }
-
-    fun findByEmail(email: String): User? {
-        return users.values.find { it.email == email }
-    }
-
-    fun update(id: Int, user: User) {
-        users.put(id, User(name = user.name, email = user.email, id = id))
-    }
-
-    fun delete(id: Int) {
-        users.remove(id)
-    }
-
+object Users: IntIdTable() {
+    val name = varchar("name", 50)
+    val email = varchar("email", 50)
 }

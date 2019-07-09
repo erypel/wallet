@@ -1,5 +1,7 @@
-import model.User
-import dao.UserDao
+import dao.Login
+import dao.Logins
+import dao.User
+import dao.Users
 import io.javalin.apibuilder.ApiBuilder.*
 import io.javalin.Javalin
 import org.jetbrains.exposed.dao.EntityID
@@ -20,18 +22,26 @@ fun main(args: Array<String>) {
         // print sql to std-out
         addLogger(StdOutSqlLogger)
 
-        SchemaUtils.create (Cities)
+        SchemaUtils.create (Users)
 
-        // insert new city. SQL: INSERT INTO Cities (name) VALUES ('St. Petersburg')
-        val stPete = City.new {
-            name = "St. Petersburg"
+        val dummyUser = User.new {
+            name = "admin"
+            email = "email@email.com"
         }
 
         // 'select *' SQL: SELECT Cities.id, Cities.name FROM Cities
-        println("Cities: ${City.all()}")
-    }
+        println("Users: ${User.all()}")
 
-    val userDao = UserDao()
+        SchemaUtils.create (Logins)
+
+        val login = Login.new {
+            username = "admin"
+            password = "password"
+            user = dummyUser
+        }
+
+        println("Logins: ${Login.all()}")
+    }
 
     val app = Javalin.create().apply {
         exception(Exception::class.java) { e, ctx -> e.printStackTrace() }
@@ -46,40 +56,6 @@ fun main(args: Array<String>) {
         post("/logout") { ctx ->
 
         }
-
-
-        get("/users") { ctx ->
-            ctx.json(userDao.users)
-        }
-
-        get("/users/:user-id") { ctx ->
-            ctx.json(userDao.findById(ctx.pathParam("user-id").toInt())!!)
-        }
-
-        get("/users/email/:email") { ctx ->
-            ctx.json(userDao.findByEmail(ctx.pathParam("email"))!!)
-        }
-
-        post("/users") { ctx ->
-            val user = ctx.body<User>()
-            userDao.save(name = user.name, email = user.email)
-            ctx.status(201)
-        }
-
-        patch("/users/:user-id") { ctx ->
-            val user = ctx.body<User>()
-            userDao.update(
-                    id = ctx.pathParam("user-id").toInt(),
-                    user = user
-            )
-            ctx.status(204)
-        }
-
-        delete("/users/:user-id") { ctx ->
-            userDao.delete(ctx.pathParam("user-id").toInt())
-            ctx.status(204)
-        }
-
     }
 
 }
