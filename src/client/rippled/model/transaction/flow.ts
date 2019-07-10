@@ -4,6 +4,7 @@ const api = new RippleAPI({
 	server: 'wss://s.altnet.rippletest.net:51233'
 })
 
+//TODO this could be the interface
 //TODO these are nested calls and problems can occur if the api connection is severed too early. need to Un-nest
 
 export default function signTransaction(txJSON: string, secret: string){
