@@ -61,13 +61,3 @@ fun main(args: Array<String>) {
     }
 
 }
-
-object Cities: IntIdTable() {
-    val name = varchar("name", 50)
-}
-
-class City(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<City>(Cities)
-
-    var name by Cities.name
-}
