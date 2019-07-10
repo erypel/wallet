@@ -5,10 +5,6 @@ import dao.User
 import dao.Users
 import io.javalin.apibuilder.ApiBuilder.*
 import io.javalin.Javalin
-import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.dao.IntEntity
-import org.jetbrains.exposed.dao.IntEntityClass
-import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.StdOutSqlLogger
@@ -22,8 +18,13 @@ fun main(args: Array<String>) {
         error(404) { ctx -> ctx.json("not found") }
     }.start(7000)
 
-    Database.connect("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", driver = "org.h2.Driver")
-
+    //TODO these should go in a config file somewhere
+    val hostName = "localhost"
+    val dbName = "walletdb"
+    val dbUsername = "root"
+    val dbPassword = "password"
+    Database.connect("jdbc:mysql://$hostName:3306/$dbName?useSSL=false", driver = "com.mysql.cj.jdbc.Driver",
+                    user = dbUsername, password = dbPassword)
     transaction {
         // print sql to std-out
         addLogger(StdOutSqlLogger)
