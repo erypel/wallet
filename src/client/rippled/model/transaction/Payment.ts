@@ -35,8 +35,6 @@ export default class Payment extends Transaction {
     return JSON.parse(JSON.stringify(this, (key, value) => {
       if (value !== null) return value
     }))
-    // Object.keys(this).forEach((key, value) => this[key] === undefined && delete this[key])
-    // return this
   }
 
   preparePayment = (address: string, instructions?: Instructions) => {

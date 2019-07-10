@@ -24,7 +24,7 @@ const basicPaymentTransaction = {
     }
   }
 
-describe('basic toTxJson', function() {
+describe('basic payment toJsonObject', function() {
     it('should return a valid JSON object', function() {
         const currency = new Currency("XRP", "$")
         const amount = new Amount(currency, "100")
