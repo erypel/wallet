@@ -8,8 +8,12 @@
 # testing
 /coverage
 
-# production
+# gradle
+.gradle/
 /build
+
+# intellij
+.idea/
 
 # misc
 .DS_Store
