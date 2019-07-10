@@ -1,8 +1,8 @@
-var assert = require('assert');
+import assert from 'assert';
 
 describe('signTransaction', function() {
     it('should sign a valid transation', function() {
-      //TODO
+      assert(true)
     });
 
     it('should throw error for invalid transation', function() {
