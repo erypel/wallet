@@ -3,15 +3,13 @@ import { connect } from 'react-redux'
 import { AppState } from '../redux/reducers/AddressReducer';
 
 const mapStateToProps = (state: AppState) => {
-    return {address: state.addresses}
+    return {addresses: state.addresses}
 }
 
-const ConnectedList = (addresses: { address: string[]; }) => {
-
+const ConnectedList = (store: { addresses: string[]; }) => {
+const { addresses } = store
 return <ul>
-    <li>
-        {addresses.address[0]}
-    </li>
+    {addresses.map(address => <li key={address}>{address}</li>)}
 </ul>}
 const List = connect(mapStateToProps)(ConnectedList)
 

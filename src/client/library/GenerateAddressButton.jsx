@@ -2,6 +2,8 @@ import Button from './Button'
 import { connect } from 'react-redux'
 import React from 'react'
 import { addAddress } from '../redux/actions/AddressActions';
+import AddressStore from '../redux/store/addressStore';
+import generateAddress from '../rippled/utils/generateAddress';
 
 class GenerateAddressButton extends React.Component {
     render() {
@@ -12,8 +14,9 @@ class GenerateAddressButton extends React.Component {
     }
 
     generate = () => {
-        alert('genereated')
-        addAddress("abc")
+        const pair = generateAddress()
+        const { address } = pair
+        AddressStore.dispatch(addAddress(address))
     }
 }
 

@@ -7,7 +7,7 @@ interface AddressState {
 export type AddressType = AddressState
 
 const initialState: AddressState = {
-    addresses: ["one address"]
+    addresses: []
 }
 
 function addressReducer(state = initialState, action: AddressActionTypes): AddressState {
