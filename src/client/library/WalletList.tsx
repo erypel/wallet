@@ -7,10 +7,12 @@ const mapStateToProps = (state: AppState) => {
 }
 
 const ConnectedList = (store: { addresses: string[]; }) => {
-const { addresses } = store
-return <ul>
-    {addresses.map(address => <li key={address}>{address}</li>)}
-</ul>}
+    const { addresses } = store
+    return <ul>
+        {addresses.map(address => <li key={address}>{address}</li>)}
+    </ul>
+}
+
 const WalletList = connect(mapStateToProps)(ConnectedList)
 
 export default WalletList
