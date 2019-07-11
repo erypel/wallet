@@ -11,6 +11,6 @@ const { addresses } = store
 return <ul>
     {addresses.map(address => <li key={address}>{address}</li>)}
 </ul>}
-const List = connect(mapStateToProps)(ConnectedList)
+const WalletList = connect(mapStateToProps)(ConnectedList)
 
-export default List
+export default WalletList
