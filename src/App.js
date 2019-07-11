@@ -5,14 +5,13 @@ import { Provider } from 'react-redux';
 import AddressStore from './client/redux/store/addressStore';
 
 class App extends React.PureComponent {
+
   render() {
-    return (
-      <Provider store={AddressStore}>
+    return <Provider store={AddressStore}>
         <div className="App">
           <Wallet/>
         </div>
       </Provider>
-    );
   }
 }
 

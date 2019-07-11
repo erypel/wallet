@@ -22,4 +22,5 @@ function addressReducer(state = initialState, action: AddressActionTypes): Addre
     }
 }
 
+export type AppState = ReturnType<typeof addressReducer>
 export default addressReducer

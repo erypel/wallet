@@ -1,6 +1,7 @@
 import Button from './Button'
-
+import { connect } from 'react-redux'
 import React from 'react'
+import { addAddress } from '../redux/actions/AddressActions';
 
 class GenerateAddressButton extends React.Component {
     render() {
@@ -12,7 +13,8 @@ class GenerateAddressButton extends React.Component {
 
     generate = () => {
         alert('genereated')
+        addAddress("abc")
     }
 }
 
-export default GenerateAddressButton
+export default connect()(GenerateAddressButton)
