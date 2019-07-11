@@ -4,8 +4,10 @@ interface AddressState {
     addresses: string[]
 }
 
+export type AddressType = AddressState
+
 const initialState: AddressState = {
-    addresses: []
+    addresses: ["one address"]
 }
 
 function addressReducer(state = initialState, action: AddressActionTypes): AddressState {

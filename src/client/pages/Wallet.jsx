@@ -4,6 +4,7 @@ import Modal from '../library/Modal'
 import Dropdown from '../library/Dropdown'
 import SendForm from '../library/SendForm'
 import GenerateAddressButton from '../library/GenerateAddressButton'
+import List from '../library/List'
 import CurrencyState from '../redux/store/currency'
 
 export default class Wallet extends React.PureComponent {
@@ -32,6 +33,7 @@ export default class Wallet extends React.PureComponent {
         return (<div>
                 <GenerateAddressButton/>
                 <br/>
+                <List/>
                 <label>Balance <Dropdown
                     title="Select currency"
                     list={currencies}

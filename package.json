@@ -4,6 +4,8 @@
   "description": "An xrp wallet",
   "private": true,
   "dependencies": {
+    "@babel/runtime": "^7.5.4",
+    "@types/react-redux": "^7.1.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^7.1.0",
@@ -35,6 +37,7 @@
     ]
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.7"
+    "@types/mocha": "^5.2.7",
+    "@types/react": "^16.8.23"
   }
 }
