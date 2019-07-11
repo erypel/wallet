@@ -3,6 +3,7 @@ import Button from '../library/Button'
 import Modal from '../library/Modal'
 import Dropdown from '../library/Dropdown'
 import SendForm from '../library/SendForm'
+import GenerateAddressButton from '../library/GenerateAddressButton'
 import CurrencyState from '../store/currency'
 
 export default class Wallet extends React.PureComponent {
@@ -29,6 +30,8 @@ export default class Wallet extends React.PureComponent {
     render() {
         const currencies = CurrencyState.currencies
         return (<div>
+                <GenerateAddressButton/>
+                <br/>
                 <label>Balance <Dropdown
                     title="Select currency"
                     list={currencies}
