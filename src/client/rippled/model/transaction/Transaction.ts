@@ -1,9 +1,14 @@
 import Instructions from '../Instructions'
+import { TransactionBuilder } from './TransactionBuilder';
 
-export default interface Transaction {
-  prepare(address: string, transaction: string, instructions?: Instructions): Promise<object>
+export default class Transaction {
+  constructor(builder: TransactionBuilder) {
 
-  toJsonObject(): string
+  }
+
+  // prepare(address: string, transaction: string, instructions?: Instructions): Promise<object>
+
+  // toJsonObject(): string
   // TODO these go somewhere else
   // sign() {
   //   //TODO
