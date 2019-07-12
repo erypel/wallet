@@ -1,6 +1,6 @@
 import React from 'react'
 import Dropdown from './Dropdown';
-import CurrencyStore from '../store/currency'
+import CurrencyStore from '../redux/store/currency'
 
 //TODO these files should be .tsx
 class SendForm extends React.PureComponent {
