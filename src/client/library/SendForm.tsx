@@ -8,6 +8,7 @@ import Source from '../rippled/model/Source';
 import Destination from '../rippled/model/Destination';
 import { TransactionBuilder } from '../rippled/model/transaction/TransactionBuilder';
 import Input from './Input';
+import { isValidAddress } from '../rippled/utils/isValidAddress';
 
 /**
 	 * Your Credentials
@@ -96,7 +97,7 @@ class SendForm extends React.PureComponent<SendFormProps, SendFormState> {
                 list={currencies}
             />
             <br/>
-            <Input type="submit" value="Send" id="sendXrp"/>
+            {isValidAddress(destAddress) &&  amount && <Input type="submit" value="Send" id="sendXrp"/>}
         </form>
     }
 }
