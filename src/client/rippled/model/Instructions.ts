@@ -1,3 +1,5 @@
-export default class Instructions {
-//TODO
+export default interface Instructions {
+    fee?: string
+	maxLedgerVersion?: number
+    sequence?: number
 }

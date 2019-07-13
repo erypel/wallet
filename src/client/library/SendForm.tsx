@@ -61,7 +61,7 @@ class SendForm extends React.PureComponent<SendFormProps, SendFormState> {
         } as Pick<SendFormState, FormFields>)
     }
 
-    handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const { state, props } = this
         const {amount, destAddress} = state
@@ -73,8 +73,8 @@ class SendForm extends React.PureComponent<SendFormProps, SendFormState> {
         const destination = new Destination(destAddress, amt)
         const builder = new TransactionBuilder(source, destination)
         const payment = new Payment(builder)
-        console.log(payment)
-        payment.send()
+        const preparedPayment = await payment.send()
+        console.log("prepped", preparedPayment)
     }
 
     render() {
