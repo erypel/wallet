@@ -5,7 +5,7 @@ import Amount from "../../model/Amount";
 import Currency from "../../model/Currency";
 import Payment from "../../model/transaction/Payment";
 
-var assert = require('assert');
+var assert = require('chai').assert
 
 const basicPaymentTransaction = {
     "source": {
