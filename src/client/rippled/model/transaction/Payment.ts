@@ -36,7 +36,7 @@ export default class Payment extends Transaction {
   }
 
   send = () => {
-    this.prepare(this.source.address, this.toJsonObject())
+    this.preparePayment(this.source.address, this.toJsonObject())
   }
 
   toJsonObject = () => {
@@ -45,12 +45,7 @@ export default class Payment extends Transaction {
     }))
   }
 
-  preparePayment = (address: string, instructions?: Instructions) => {
-    return this.prepare(address, this.toJsonObject(), instructions)
-  }
-
-  // TODO should be private?
-  prepare = async(address: string, payment: object, instructions?: Instructions): Promise<object> => {
+  private preparePayment = async(address: string, payment: object, instructions?: Instructions): Promise<object> => {
     console.log("payment", payment)
     return api.connect().then(() => {
       api.preparePayment(address, payment).then((prepared: object) => {

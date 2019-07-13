@@ -7,6 +7,7 @@ import Amount from '../rippled/model/Amount';
 import Source from '../rippled/model/Source';
 import Destination from '../rippled/model/Destination';
 import { TransactionBuilder } from '../rippled/model/transaction/TransactionBuilder';
+import Input from './Input';
 
 /**
 	 * Your Credentials
@@ -83,19 +84,19 @@ class SendForm extends React.PureComponent<SendFormProps, SendFormState> {
             {/* TODO address fields should be their own component with special validation */}
             <label>
                 Address:
-                <input type="text" id="destAddress" value={destAddress} onChange={handleChange}/>
+                <Input type="text" id="destAddress" value={destAddress} onChange={handleChange}/>
             </label>
             <br/>
             <label>
                 Amount:
-                <input type="number" id="amount" value={amount} onChange={handleChange}/>
+                <Input type="number" id="amount" value={amount} onChange={handleChange}/>
             </label>
             <Dropdown
                 title="Select currency"
                 list={currencies}
             />
             <br/>
-            <input type="submit" value="Send"/>
+            <Input type="submit" value="Send" id="sendXrp"/>
         </form>
     }
 }
