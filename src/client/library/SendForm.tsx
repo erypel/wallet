@@ -2,9 +2,35 @@ import React from 'react'
 import Dropdown from './Dropdown';
 import CurrencyStore from '../redux/store/currency'
 
+/**
+	 * Your Credentials
+	Address
+	rBpMw6fUSV6TnxeAK1wEhuj854ZiTasjtS
+	Secret
+	sp1C74ibduMAXbBRN6LnXXgguNTDa
+	Balance
+	10,000 XRP
+	 */
+
+	/**
+	 * public: rwYQjHp9HZiKKpZB4i4fvc8eQvAtA7vdY6
+	 * secret: snKixQChzs9KcBxxrYWpm97sxnA1e
+	 */
+
 //TODO these files should be .tsx
-class SendForm extends React.PureComponent {
-    constructor(props) {
+interface SendFormProps {
+
+}
+
+interface SendFormState {
+    address: string
+    amount: string
+}
+
+type FormFields = keyof SendFormState
+
+class SendForm extends React.PureComponent<SendFormProps, SendFormState> {
+    constructor(props: SendFormProps) {
         super(props)
         this.state = {
             address: '',
@@ -12,16 +38,16 @@ class SendForm extends React.PureComponent {
         }
     }
 
-    handleChange = (event) => {
-        const {target} = event
-        const {value , id} = target
+    handleChange = (event: React.FormEvent<HTMLInputElement>) => {
+        const { currentTarget } = event
+        const { value, id } = currentTarget
 
         this.setState({
             [id]: value
-        })
+        } as Pick<SendFormState, FormFields>)
     }
 
-    handleSubmit = (event) => {
+    handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         alert(`Sending ${this.state.amount} to ${this.state.address}`)
         event.preventDefault()
     }
