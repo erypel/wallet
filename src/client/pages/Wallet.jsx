@@ -9,7 +9,7 @@ import CurrencyState from '../redux/store/currency'
 
 export default class Wallet extends React.PureComponent {
     constructor() {
-        super();
+        super()
 
         this.state = {
             isSendModalOpen: false
