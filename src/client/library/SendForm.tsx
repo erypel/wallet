@@ -1,6 +1,12 @@
 import React from 'react'
 import Dropdown from './Dropdown';
 import CurrencyStore from '../redux/store/currency'
+import Payment from '../rippled/model/transaction/Payment';
+import Currency from '../rippled/model/Currency';
+import Amount from '../rippled/model/Amount';
+import Source from '../rippled/model/Source';
+import Destination from '../rippled/model/Destination';
+import { TransactionBuilder } from '../rippled/model/transaction/TransactionBuilder';
 
 /**
 	 * Your Credentials
@@ -17,13 +23,13 @@ import CurrencyStore from '../redux/store/currency'
 	 * secret: snKixQChzs9KcBxxrYWpm97sxnA1e
 	 */
 
-//TODO these files should be .tsx
 interface SendFormProps {
-
+    srcAddress: string
+    srcSecret: string
 }
 
 interface SendFormState {
-    address: string
+    destAddress: string
     amount: string
 }
 
@@ -33,9 +39,15 @@ class SendForm extends React.PureComponent<SendFormProps, SendFormState> {
     constructor(props: SendFormProps) {
         super(props)
         this.state = {
-            address: '',
+            destAddress: '',
             amount: ''
         }
+    }
+
+    public static defaultProps = {
+        // These are for development and testing
+        srcAddress: 'rBpMw6fUSV6TnxeAK1wEhuj854ZiTasjtS',
+        srcSecret: 'sp1C74ibduMAXbBRN6LnXXgguNTDa'
     }
 
     handleChange = (event: React.FormEvent<HTMLInputElement>) => {
@@ -48,22 +60,35 @@ class SendForm extends React.PureComponent<SendFormProps, SendFormState> {
     }
 
     handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        alert(`Sending ${this.state.amount} to ${this.state.address}`)
         event.preventDefault()
+        const { state, props } = this
+        const {amount, destAddress} = state
+        const { srcAddress } = props
+        alert(`Sending ${amount} to ${destAddress} from ${srcAddress}`)
+        const currency = new Currency("XRP", "$")
+        const amt = new Amount(currency, amount)
+        const source = new Source(srcAddress, undefined, amt)
+        const destination = new Destination(destAddress, amt)
+        const builder = new TransactionBuilder(source, destination)
+        const payment = new Payment(builder)
+        console.log(payment)
+        payment.send()
     }
 
     render() {
         const currencies = CurrencyStore.currencies
-        return <form onSubmit={this.handleSubmit}>
+        const { handleChange, state, handleSubmit } = this
+        const { destAddress, amount} = state
+        return <form onSubmit={handleSubmit}>
             {/* TODO address fields should be their own component with special validation */}
             <label>
                 Address:
-                <input type="text" id="address" value={this.state.address} onChange={this.handleChange}/>
+                <input type="text" id="destAddress" value={destAddress} onChange={handleChange}/>
             </label>
             <br/>
             <label>
                 Amount:
-                <input type="number" id="amount" value={this.state.amount} onChange={this.handleChange}/>
+                <input type="number" id="amount" value={amount} onChange={handleChange}/>
             </label>
             <Dropdown
                 title="Select currency"

@@ -2,7 +2,7 @@ import { createLogger, format, transports } from 'winston'
 import path from 'path'
 
 //This will log to console. Eventually will want a log file
-const logger = (caller: string) => {
+const winston = (caller: string) => {
 	return createLogger({
 		// levels are:
 		// { error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
@@ -19,4 +19,4 @@ const logger = (caller: string) => {
 	})
 }
 
-module.exports = logger;
+export default winston
