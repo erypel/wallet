@@ -1,40 +1,30 @@
 import React from "react";
 import PrepareTransactionStep from './PrepareTransactionStep'
 import SignTransactionStep from './SignTransactionStep'
+import { Steps } from "../rippled/model/Steps";
 
 interface TransactionWizardProps {
 
 }
 
-export type Steps = 'Prepare' | 'Sign' //TODO make enums
+export type Step = Steps
 
 interface TransactionWizardState {
-    currentStep: Steps
+    currentStep: Step
 }
 
 export default class TransactionWizard extends React.PureComponent<TransactionWizardProps, TransactionWizardState> {
     constructor(props: TransactionWizardProps) {
         super(props)
         this.state = {
-            currentStep: 'Prepare'
+            currentStep: Steps.Prepare
         }
     }
 
     next = () => {
         var { currentStep } = this.state
-        if (currentStep === 'Prepare') {
-            currentStep = 'Sign'
-        }
-
-        this.setState({
-            currentStep: currentStep
-        })
-    }
-
-    prev = () => {
-        var { currentStep } = this.state
-        if (currentStep === 'Sign') {
-            currentStep = 'Prepare'
+        if (currentStep === Steps.Prepare) {
+            currentStep = Steps.Sign
         }
 
         this.setState({

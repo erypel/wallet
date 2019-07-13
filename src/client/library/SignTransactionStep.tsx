@@ -1,5 +1,5 @@
 import React from "react";
-import { Steps } from "./TransactionWizard";
+import { Steps } from "../rippled/model/Steps";
 
 interface Props {
     currentStep: Steps
@@ -8,7 +8,7 @@ interface Props {
 export default class PrepareTransactionStep extends React.PureComponent<Props> {
     render() {
         const { currentStep } = this.props
-        if(currentStep !== 'Sign') {
+        if(currentStep !== Steps.Sign) {
             return null
         }
         return <p>Sign Step</p>

@@ -1,6 +1,6 @@
 import React from "react";
-import { Steps } from "./TransactionWizard";
 import SendForm from "./SendForm";
+import { Steps } from "../rippled/model/Steps";
 
 interface Props {
     currentStep: Steps
@@ -9,7 +9,7 @@ interface Props {
 export default class PrepareTransactionStep extends React.PureComponent<Props> {
     render() {
         const { currentStep } = this.props
-        if(currentStep !== 'Prepare') {
+        if(currentStep !== Steps.Prepare) {
             return null
         }
         return <SendForm/>
