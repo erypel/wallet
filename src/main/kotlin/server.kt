@@ -25,29 +25,26 @@ fun main(args: Array<String>) {
     val dbPassword = "password"
     Database.connect("jdbc:mysql://$hostName:3306/$dbName?useSSL=false", driver = "com.mysql.cj.jdbc.Driver",
                     user = dbUsername, password = dbPassword)
-    transaction {
-        // print sql to std-out
-        addLogger(StdOutSqlLogger)
-
-        SchemaUtils.create (Users)
-
-        val dummyUser = User.new {
-            name = "admin"
-            email = "email@email.com"
-        }
-
-        println("Users: ${User.all()}")
-
-        SchemaUtils.create (Logins)
-
-        Login.new {
-            username = "admin"
-            password = "password"
-            user = dummyUser
-        }
-
-        println("Logins: ${Login.all()}")
-    }
+    // uncomment to add initial user
+//    transaction {
+//        // print sql to std-out
+//        addLogger(StdOutSqlLogger)
+//
+//        val dummyUser = User.new {
+//            name = "admin"
+//            email = "email@email.com"
+//        }
+//
+//        println("Users: ${User.all()}")
+//
+//        Login.new {
+//            username = "admin"
+//            password = "password"
+//            user = dummyUser
+//        }
+//
+//        println("Logins: ${Login.all()}")
+//    }
 
     app.routes {
         app.get("/") { ctx -> ctx.result("Hello World") }
