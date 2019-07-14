@@ -9,21 +9,24 @@ const api = new RippleAPI({
 //TODO this could be the interface
 //TODO these are nested calls and problems can occur if the api connection is severed too early. need to Un-nest
 
-export default async function signTransaction(txJSON: string, secret: string): Promise<SignedTransaction>{
-	 return api.connect().then(() => {
-		logger.debug('signing transaction')
-		return api.sign(txJSON, secret)
-	}).then((signed: SignedTransaction) => {
-		logger.debug(signed)
-		logger.debug('signing done')
-		return signed
-	}).then(() => {
-		api.disconnect()
-	}).then(() => {
-		logger.debug('done and disconnected')
-	}).catch((error: any) => {
-		logger.error(error)
-	})
+export default async function signTransaction(
+	txJSON: string, secret: string
+): Promise<SignedTransaction>{
+	try {
+		return await connect().then(async () => {
+			return await api.sign(txJSON, secret)
+		}).catch((error: any) => {logger.error(error)})
+	} finally {
+		disconnect()
+	}
+}
+
+async function connect() {
+	api.connect()
+}
+
+function disconnect() {
+	api.disconnect()
 }
 
 function submitTransaction(signedTransaction: string){

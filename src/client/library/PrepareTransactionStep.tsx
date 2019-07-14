@@ -10,12 +10,11 @@ import Payment from "../rippled/model/transaction/Payment";
 
 interface Props {
     currentStep: Steps
-    next: () => void
+    next: (amount?: Amount, srcAddress?: string, srcSecret?: string, destAddress?: string, txJSON?: string) => void
 }
 
 export default class PrepareTransactionStep extends React.PureComponent<Props> {
-    handleSubmit = async (srcAddress: string, destAddress: string, amount: string) => {
-        alert(`Sending ${amount} to ${destAddress} from ${srcAddress}`)
+    handleSubmit = async (srcAddress: string, srcSecret: string, destAddress: string, amount: string) => {
         const currency = new Currency("XRP", "$")
         const amt = new Amount(currency, amount)
         const source = new Source(srcAddress, undefined, amt)
@@ -24,7 +23,7 @@ export default class PrepareTransactionStep extends React.PureComponent<Props> {
         const payment = new Payment(builder)
         const preparedPayment = await payment.preparePayment()
         console.log("prepped", preparedPayment)
-        this.props.next()
+        this.props.next(amt, srcAddress, srcSecret, destAddress, preparedPayment.txJSON)
     }
     
     render() {

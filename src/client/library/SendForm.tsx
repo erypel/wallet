@@ -22,7 +22,7 @@ import { isValidAddress } from '../rippled/utils/isValidAddress';
 interface SendFormProps {
     srcAddress: string
     srcSecret: string
-    handleSubmit: (srcAddress: string, destAddress: string, amount: string) => void
+    handleSubmit: (srcAddress: string, srcSecret: string, destAddress: string, amount: string) => void
 }
 
 interface SendFormState {
@@ -60,8 +60,8 @@ class SendForm extends React.PureComponent<SendFormProps, SendFormState> {
         event.preventDefault()
         const { state, props } = this
         const { destAddress, amount } = state
-        const { srcAddress, handleSubmit } = props
-        handleSubmit(srcAddress, destAddress, amount)
+        const { srcAddress, srcSecret, handleSubmit } = props
+        handleSubmit(srcAddress, srcSecret, destAddress, amount)
     }
 
     render() {
