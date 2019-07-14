@@ -3,6 +3,7 @@ import PrepareTransactionStep from './PrepareTransactionStep'
 import SignTransactionStep from './SignTransactionStep'
 import { Steps } from "../rippled/model/Steps";
 import Amount from "../rippled/model/Amount";
+import SubmitTransactionStep from "./SubmitTransactionStep";
 
 interface TransactionWizardProps {
 
@@ -29,18 +30,23 @@ export default class TransactionWizard extends React.PureComponent<TransactionWi
 
     next = (amount?: Amount, srcAddress?: string, srcSecret?: string, destAddress?: string, txJSON?: string) => {
         var { currentStep } = this.state
-        if (currentStep === Steps.Prepare) {
-            currentStep = Steps.Sign
+        const { Prepare, Sign, Submit } = Steps
+        if (currentStep === Prepare) {
+            currentStep = Sign
+            this.setState({
+                currentStep: currentStep,
+                amount: amount,
+                srcAddress: srcAddress,
+                srcSecret: srcSecret,
+                destAddress: destAddress,
+                txJSON: txJSON
+            })
+        } else if (currentStep === Sign) {
+            currentStep = Submit
+            this.setState({
+                currentStep: currentStep
+            })
         }
-
-        this.setState({
-            currentStep: currentStep,
-            amount: amount,
-            srcAddress: srcAddress,
-            srcSecret: srcSecret,
-            destAddress: destAddress,
-            txJSON: txJSON
-        })
     }
 
     render() {
@@ -54,7 +60,9 @@ export default class TransactionWizard extends React.PureComponent<TransactionWi
                 srcSecret={srcSecret!!}
                 destAddress={destAddress!!}
                 txJSON={txJSON!!}
+                next={this.next}
             />
+            <SubmitTransactionStep currentStep={currentStep}/>
         </div>
     }
 }
