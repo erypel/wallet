@@ -15,7 +15,7 @@ export default async function signTransaction(
 	try {
 		return await connect().then(async () => {
 			return await api.sign(txJSON, secret)
-		}).catch((error: any) => {logger.error(error)})
+		}).catch((error: any) => {logger.error(error)}) //TODO could get fancy with error handling here in the future
 	} finally {
 		disconnect()
 	}
