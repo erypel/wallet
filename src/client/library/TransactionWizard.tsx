@@ -35,7 +35,7 @@ export default class TransactionWizard extends React.PureComponent<TransactionWi
     render() {
         const { currentStep } = this.state
         return <div>
-            <PrepareTransactionStep currentStep={currentStep}/>
+            <PrepareTransactionStep currentStep={currentStep} next={this.next}/>
             <SignTransactionStep currentStep={currentStep}/>
         </div>
     }

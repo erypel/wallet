@@ -1,12 +1,6 @@
 import React from 'react'
 import Dropdown from './Dropdown';
 import CurrencyStore from '../redux/store/currency'
-import Payment from '../rippled/model/transaction/Payment';
-import Currency from '../rippled/model/Currency';
-import Amount from '../rippled/model/Amount';
-import Source from '../rippled/model/Source';
-import Destination from '../rippled/model/Destination';
-import { TransactionBuilder } from '../rippled/model/transaction/TransactionBuilder';
 import Input from './Input';
 import { isValidAddress } from '../rippled/utils/isValidAddress';
 
@@ -28,6 +22,7 @@ import { isValidAddress } from '../rippled/utils/isValidAddress';
 interface SendFormProps {
     srcAddress: string
     srcSecret: string
+    handleSubmit: (srcAddress: string, destAddress: string, amount: string) => void
 }
 
 interface SendFormState {
@@ -61,27 +56,19 @@ class SendForm extends React.PureComponent<SendFormProps, SendFormState> {
         } as Pick<SendFormState, FormFields>)
     }
 
-    handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const { state, props } = this
-        const {amount, destAddress} = state
-        const { srcAddress } = props
-        alert(`Sending ${amount} to ${destAddress} from ${srcAddress}`)
-        const currency = new Currency("XRP", "$")
-        const amt = new Amount(currency, amount)
-        const source = new Source(srcAddress, undefined, amt)
-        const destination = new Destination(destAddress, amt)
-        const builder = new TransactionBuilder(source, destination)
-        const payment = new Payment(builder)
-        const preparedPayment = await payment.send()
-        console.log("prepped", preparedPayment)
+        const { destAddress, amount } = state
+        const { srcAddress, handleSubmit } = props
+        handleSubmit(srcAddress, destAddress, amount)
     }
 
     render() {
         const currencies = CurrencyStore.currencies
-        const { handleChange, state, handleSubmit } = this
+        const { handleChange, onSubmit, state } = this
         const { destAddress, amount} = state
-        return <form onSubmit={handleSubmit}>
+        return <form onSubmit={onSubmit}>
             {/* TODO address fields should be their own component with special validation */}
             <label>
                 Address:

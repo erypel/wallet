@@ -36,8 +36,8 @@ export default class Payment extends Transaction {
     this.paths = builder.paths
   }
 
-  send = async (): Promise<PreparedTransaction> => {
-    return await this.preparePayment(this.source.address, this.toJsonObject())
+  preparePayment = async (): Promise<PreparedTransaction> => {
+    return await this.callApiToPreparePayment(this.source.address, this.toJsonObject())
   }
 
   toJsonObject = () => {
@@ -46,14 +46,14 @@ export default class Payment extends Transaction {
     }))
   }
 
-  private preparePayment = async(
+  private callApiToPreparePayment = async(
     address: string,
     payment: object,
     instructions?: Instructions
   ): Promise<PreparedTransaction> => {
     return await api.connect().then(async () => {
       return this.prepare(address, payment, instructions)
-    })
+    }).then(api.disconnect())
   }
 
   private prepare = async(
