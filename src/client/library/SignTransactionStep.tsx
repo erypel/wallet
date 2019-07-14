@@ -1,8 +1,8 @@
-import React from "react";
-import { Steps } from "../rippled/model/Steps";
-import Button from "./Button";
-import Amount from "../rippled/model/Amount";
-import signTransaction from "../rippled/model/transaction/flow";
+import React from "react"
+import { Steps } from "../rippled/model/Steps"
+import Button from "./Button"
+import Amount from "../rippled/model/Amount"
+import signTransaction from "../rippled/utils/flow/signTransaction";
 
 interface Props {
     currentStep: Steps
@@ -11,7 +11,7 @@ interface Props {
     srcSecret: string
     destAddress: string
     txJSON: string
-    next: (amount?: Amount, srcAddress?: string, srcSecret?: string, destAddress?: string, txJSON?: string) => void
+    next: (amount?: Amount, srcAddress?: string, srcSecret?: string, destAddress?: string, txJSON?: string, signedTransaction?: string) => void
 }
 
 export default class PrepareTransactionStep extends React.PureComponent<Props> {
@@ -19,8 +19,7 @@ export default class PrepareTransactionStep extends React.PureComponent<Props> {
         const { txJSON, srcSecret, next } = this.props
         const signedTx = await signTransaction(txJSON, srcSecret)
         console.log('signed', signedTx)
-        alert(`signed transation ${signedTx.id}`)
-        next()
+        next(undefined, undefined, undefined, undefined, undefined, signedTx.signedTransaction )
     }
     
     render() {

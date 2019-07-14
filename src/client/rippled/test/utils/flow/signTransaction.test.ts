@@ -1,4 +1,5 @@
-import signTransaction from '../../model/transaction/flow'
+import signTransaction from "../../../utils/flow/signTransaction";
+
 var assert = require('chai').assert
 
 const validTxJSON = '{"TransactionType":"Payment","Account":"rBpMw6fUSV6TnxeAK1wEhuj854ZiTasjtS","Destination":"rwYQjHp9HZiKKpZB4i4fvc8eQvAtA7vdY6","Amount":"1000000","Flags":2147483648,"LastLedgerSequence":20987750,"Fee":"12","Sequence":1}'
@@ -24,25 +25,5 @@ describe('signTransaction', function() {
       const badTx = await signTransaction(validTxJSON, invalidSecret)
       assert.equal(badTx, undefined)
       done()
-    });
-});
-
-describe('submitTransaction', function() {
-    it('should submit a valid transation', function() {
-      //TODO
-    });
-    
-    it('should throw error for invalid transation', function() {
-        //TODO
-    });
-});
-
-describe('verifyTransaction', function() {
-    it('should verify a valid transation', function() {
-      //TODO
-    });
-    
-    it('should throw error for invalid transation', function() {
-        //TODO
     });
 });

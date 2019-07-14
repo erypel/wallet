@@ -18,6 +18,7 @@ interface TransactionWizardState {
     srcSecret?: string
     destAddress?: string
     txJSON?: string
+    signedTransaction?: string
 }
 
 export default class TransactionWizard extends React.PureComponent<TransactionWizardProps, TransactionWizardState> {
@@ -28,7 +29,7 @@ export default class TransactionWizard extends React.PureComponent<TransactionWi
         }
     }
 
-    next = (amount?: Amount, srcAddress?: string, srcSecret?: string, destAddress?: string, txJSON?: string) => {
+    next = (amount?: Amount, srcAddress?: string, srcSecret?: string, destAddress?: string, txJSON?: string, signedTransaction?: string) => {
         var { currentStep } = this.state
         const { Prepare, Sign, Submit } = Steps
         if (currentStep === Prepare) {
@@ -44,13 +45,14 @@ export default class TransactionWizard extends React.PureComponent<TransactionWi
         } else if (currentStep === Sign) {
             currentStep = Submit
             this.setState({
-                currentStep: currentStep
+                currentStep: currentStep,
+                signedTransaction: signedTransaction
             })
         }
     }
 
     render() {
-        const { currentStep, amount, srcAddress, srcSecret, destAddress, txJSON } = this.state
+        const { currentStep, amount, srcAddress, srcSecret, destAddress, txJSON, signedTransaction } = this.state
         return <div>
             <PrepareTransactionStep currentStep={currentStep} next={this.next}/>
             <SignTransactionStep 
@@ -62,7 +64,7 @@ export default class TransactionWizard extends React.PureComponent<TransactionWi
                 txJSON={txJSON!!}
                 next={this.next}
             />
-            <SubmitTransactionStep currentStep={currentStep}/>
+            <SubmitTransactionStep currentStep={currentStep} signedTransaction={signedTransaction!!}/>
         </div>
     }
 }
