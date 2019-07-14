@@ -3,11 +3,14 @@ import Source from '../Source'
 import Destination from '../Destination'
 import Instructions from '../Instructions'
 import { TransactionBuilder } from './TransactionBuilder';
-//const logger = require('../utils/logger')(__filename)
+import winston from '../../../utils/logger';
+import PreparedTransaction from './PreparedTransaction';
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({
 	server: 'wss://s.altnet.rippletest.net:51233'
 })
+
+const logger = winston(__filename)
 
 export default class Payment extends Transaction {
   source: Source
@@ -18,6 +21,8 @@ export default class Payment extends Transaction {
   //memos?: Memos[]
   noDirectRipple?: boolean
   paths?: string
+
+  
 
   constructor(builder: TransactionBuilder) {
     super(builder);
@@ -31,20 +36,37 @@ export default class Payment extends Transaction {
     this.paths = builder.paths
   }
 
+  send = async (): Promise<PreparedTransaction> => {
+    return await this.preparePayment(this.source.address, this.toJsonObject())
+  }
+
   toJsonObject = () => {
-    return JSON.parse(JSON.stringify(this, (key, value) => {
+    return JSON.parse(JSON.stringify(this, (_key, value) => {
       if (value !== null) return value
     }))
   }
 
-  preparePayment = (address: string, instructions?: Instructions) => {
-    return this.prepare(address, this.toJsonObject(), instructions)
+  private preparePayment = async(
+    address: string,
+    payment: object,
+    instructions?: Instructions
+  ): Promise<PreparedTransaction> => {
+    return await api.connect().then(async () => {
+      return this.prepare(address, payment, instructions)
+    })
   }
 
-  // TODO should be private?
-  prepare = async function(address: string, payment: string, instructions?: Instructions): Promise<object> {
-    return api.preparePayment(address, payment).catch((error: any) => {
-     // logger.error(error)    
+  private prepare = async(
+    address: string,
+    payment: object,
+    _instructions?: Instructions
+  ): Promise<PreparedTransaction> => {
+    return await api.preparePayment(address, payment).then(
+      (prepared: PreparedTransaction) => {
+        return prepared  
+      }
+    ).catch((error: any) => {
+      logger.error(error)    
     })
   }
 }
