@@ -3,6 +3,7 @@ import PrepareTransactionStep from './PrepareTransactionStep'
 import SignTransactionStep from './SignTransactionStep'
 import { Steps } from "../rippled/model/Steps";
 import Amount from "../rippled/model/Amount";
+import SubmitTransactionStep from "./SubmitTransactionStep";
 
 interface TransactionWizardProps {
 
@@ -17,6 +18,7 @@ interface TransactionWizardState {
     srcSecret?: string
     destAddress?: string
     txJSON?: string
+    signedTransaction?: string
 }
 
 export default class TransactionWizard extends React.PureComponent<TransactionWizardProps, TransactionWizardState> {
@@ -27,24 +29,30 @@ export default class TransactionWizard extends React.PureComponent<TransactionWi
         }
     }
 
-    next = (amount?: Amount, srcAddress?: string, srcSecret?: string, destAddress?: string, txJSON?: string) => {
+    next = (amount?: Amount, srcAddress?: string, srcSecret?: string, destAddress?: string, txJSON?: string, signedTransaction?: string) => {
         var { currentStep } = this.state
-        if (currentStep === Steps.Prepare) {
-            currentStep = Steps.Sign
+        const { Prepare, Sign, Submit } = Steps
+        if (currentStep === Prepare) {
+            currentStep = Sign
+            this.setState({
+                currentStep: currentStep,
+                amount: amount,
+                srcAddress: srcAddress,
+                srcSecret: srcSecret,
+                destAddress: destAddress,
+                txJSON: txJSON
+            })
+        } else if (currentStep === Sign) {
+            currentStep = Submit
+            this.setState({
+                currentStep: currentStep,
+                signedTransaction: signedTransaction
+            })
         }
-
-        this.setState({
-            currentStep: currentStep,
-            amount: amount,
-            srcAddress: srcAddress,
-            srcSecret: srcSecret,
-            destAddress: destAddress,
-            txJSON: txJSON
-        })
     }
 
     render() {
-        const { currentStep, amount, srcAddress, srcSecret, destAddress, txJSON } = this.state
+        const { currentStep, amount, srcAddress, srcSecret, destAddress, txJSON, signedTransaction } = this.state
         return <div>
             <PrepareTransactionStep currentStep={currentStep} next={this.next}/>
             <SignTransactionStep 
@@ -54,7 +62,9 @@ export default class TransactionWizard extends React.PureComponent<TransactionWi
                 srcSecret={srcSecret!!}
                 destAddress={destAddress!!}
                 txJSON={txJSON!!}
+                next={this.next}
             />
+            <SubmitTransactionStep currentStep={currentStep} signedTransaction={signedTransaction!!}/>
         </div>
     }
 }
