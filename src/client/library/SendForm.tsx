@@ -1,8 +1,8 @@
 import React from 'react'
-import Dropdown from './Dropdown';
+import Dropdown from './Dropdown'
 import CurrencyStore from '../redux/store/currency'
-import Input from './Input';
-import { isValidAddress } from '../rippled/utils/isValidAddress';
+import Input from './Input'
+import { isValidAddress } from '../rippled/utils/isValidAddress'
 
 /**
 	 * Your Credentials

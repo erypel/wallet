@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react'
 import PrepareTransactionStep from './PrepareTransactionStep'
 import SignTransactionStep from './SignTransactionStep'
-import { Steps } from "../rippled/model/Steps";
-import Amount from "../rippled/model/Amount";
-import SubmitTransactionStep from "./SubmitTransactionStep";
-import VerifyTransactionStep from "./VerifyTransactionStep";
-import SignedTransaction from "../rippled/model/transaction/SignedTransaction";
+import Amount from '../rippled/model/Amount'
+import SubmitTransactionStep from './SubmitTransactionStep'
+import VerifyTransactionStep from './VerifyTransactionStep'
+import SignedTransaction from '../rippled/model/transaction/SignedTransaction'
+import { Steps } from '../rippled/model/Steps'
 
 interface TransactionWizardProps {
 

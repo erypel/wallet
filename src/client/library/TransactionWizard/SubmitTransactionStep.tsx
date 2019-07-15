@@ -1,8 +1,8 @@
-import React from "react"
-import { Steps } from "../rippled/model/Steps"
-import submitTransaction from "../rippled/utils/flow/submitTransaction";
-import SignedTransaction from "../rippled/model/transaction/SignedTransaction";
-import Amount from "../rippled/model/Amount";
+import React from 'react'
+import { Steps } from '../rippled/model/Steps'
+import submitTransaction from '../rippled/utils/flow/submitTransaction'
+import SignedTransaction from '../rippled/model/transaction/SignedTransaction'
+import Amount from '../rippled/model/Amount'
 
 interface Props {
     currentStep: Steps
