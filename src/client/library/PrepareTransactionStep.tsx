@@ -7,10 +7,11 @@ import Source from "../rippled/model/Source";
 import Destination from "../rippled/model/Destination";
 import { TransactionBuilder } from "../rippled/model/transaction/TransactionBuilder";
 import Payment from "../rippled/model/transaction/Payment";
+import SignedTransaction from "../rippled/model/transaction/SignedTransaction";
 
 interface Props {
     currentStep: Steps
-    next: (amount?: Amount, srcAddress?: string, srcSecret?: string, destAddress?: string, txJSON?: string, signedTransaction?: string) => void
+    next: (amount?: Amount, srcAddress?: string, srcSecret?: string, destAddress?: string, txJSON?: string, signedTransaction?: SignedTransaction) => void
 }
 
 export default class PrepareTransactionStep extends React.PureComponent<Props> {
