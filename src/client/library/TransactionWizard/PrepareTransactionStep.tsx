@@ -6,7 +6,7 @@ import Source from '../../rippled/model/Source'
 import Destination from '../../rippled/model/Destination'
 import { TransactionBuilder } from '../../rippled/model/transaction/TransactionBuilder'
 import Payment from '../../rippled/model/transaction/Payment'
-import { setTxJson, setSrcAddress, setSrcSecret, setDestAddress } from '../../redux/store/TransactionStore';
+import { setTxJson, setSrcAddress, setSrcSecret, setDestAddress, setAmount } from '../../redux/store/TransactionStore';
 
 interface Props {
     next: () => void
@@ -22,6 +22,7 @@ export default class PrepareTransactionStep extends React.PureComponent<Props> {
         const payment = new Payment(builder)
         const preparedPayment = await payment.preparePayment()
         console.log("prepped", preparedPayment)
+        setAmount(amount)
         setSrcAddress(srcAddress)
         setSrcSecret(srcSecret)
         setDestAddress(destAddress)

@@ -12,7 +12,6 @@ export default class SubmitTransactionStep extends React.PureComponent<Props> {
         const { next } = this.props
         const submitted = await submitTransaction(signedTransaction!!.signedTransaction)
         console.log("submitted", submitted)
-        alert(`submitted ${submitted.engine_result}`)
         next()
     }
     

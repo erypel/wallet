@@ -8,17 +8,7 @@ interface Props {
     next: () => void
 }
 
-const mapStateToProps = (state: TransactionState) => {
-    return {
-        amount: state.amount,
-        srcAddress: state.srcAddress,
-        srcSecret: state.srcSecret,
-        destAddress: state.destAddress,
-        txJSON: state.txJSON
-    }
-}
-
-export default connect(mapStateToProps)(class PrepareTransactionStep extends React.PureComponent<Props> {
+export default class PrepareTransactionStep extends React.PureComponent<Props> {
     signTransaction = async () => {
         const { txJSON, srcSecret } = TransactionStore.getState()
         const { next } = this.props
@@ -35,4 +25,4 @@ export default connect(mapStateToProps)(class PrepareTransactionStep extends Rea
             <Button buttonText={'Confirm'} onClick={this.signTransaction}/>
         </div>
     }
-})
+}
