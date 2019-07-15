@@ -1,11 +1,8 @@
-import { Step } from "./TransactionWizard";
-import { Steps } from "../../rippled/model/Steps";
 import React from "react";
 import verifyTransaction from "../../rippled/utils/flow/verifyTransaction";
 import VerifiedTransaction from '../../rippled/model/transaction/flow/VerifiedTransaction'
 
 interface Props {
-    currentStep: Step
     transactionId: string
 }
 
@@ -40,10 +37,6 @@ export default class VerifyTransactionStep extends React.PureComponent<Props, St
     }
 
     render() {
-        const { currentStep } = this.props
-        if(currentStep !== Steps.Verify) {
-            return null
-        }
         const { verifiedTransaction } = this.state
         if(!verifiedTransaction) {
             return <div><p>Loading...</p></div>

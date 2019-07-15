@@ -1,6 +1,5 @@
 import React from 'react'
 import SendForm from '../SendForm'
-import { Steps } from '../../rippled/model/Steps'
 import Currency from '../../rippled/model/Currency'
 import Amount from '../../rippled/model/Amount'
 import Source from '../../rippled/model/Source'
@@ -10,7 +9,6 @@ import Payment from '../../rippled/model/transaction/Payment'
 import SignedTransaction from '../../rippled/model/transaction/flow/SignedTransaction'
 
 interface Props {
-    currentStep: Steps
     next: (amount?: Amount, srcAddress?: string, srcSecret?: string, destAddress?: string, txJSON?: string, signedTransaction?: SignedTransaction) => void
 }
 
@@ -28,10 +26,6 @@ export default class PrepareTransactionStep extends React.PureComponent<Props> {
     }
     
     render() {
-        const { currentStep } = this.props
-        if(currentStep !== Steps.Prepare) {
-            return null
-        }
         return <SendForm handleSubmit={this.handleSubmit}/>
     }
 }

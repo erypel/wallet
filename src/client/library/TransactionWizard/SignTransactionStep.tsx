@@ -1,12 +1,10 @@
 import React from 'react'
-import { Steps } from '../../rippled/model/Steps'
 import Button from '../Button'
 import Amount from '../../rippled/model/Amount'
 import signTransaction from '../../rippled/utils/flow/signTransaction'
 import SignedTransaction from '../../rippled/model/transaction/flow/SignedTransaction'
 
 interface Props {
-    currentStep: Steps
     amount: Amount
     srcAddress: string
     srcSecret: string
@@ -24,10 +22,7 @@ export default class PrepareTransactionStep extends React.PureComponent<Props> {
     }
     
     render() {
-        const { currentStep, amount, srcAddress, destAddress } = this.props
-        if(currentStep !== Steps.Sign) {
-            return null
-        }
+        const { amount, srcAddress, destAddress } = this.props
         return <div>
             <p>Are you sure that you want to send {amount.value} {amount.currency} from {srcAddress} to ${destAddress}?</p>
             <Button buttonText={'Confirm'} onClick={this.signTransaction}/>

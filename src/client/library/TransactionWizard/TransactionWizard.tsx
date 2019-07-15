@@ -64,9 +64,8 @@ export default class TransactionWizard extends React.PureComponent<TransactionWi
         const { currentStep, amount, srcAddress, srcSecret, destAddress, txJSON, signedTransaction, transactionId } = this.state
         const { Prepare, Sign, Submit, Verify } = Steps
         return <div>
-            {currentStep === Prepare && <PrepareTransactionStep currentStep={currentStep} next={this.next}/>}
-            {currentStep === Sign && <SignTransactionStep 
-                currentStep={currentStep}
+            {currentStep === Prepare && <PrepareTransactionStep next={this.next}/>}
+            {currentStep === Sign && <SignTransactionStep
                 amount={amount!!}
                 srcAddress={srcAddress!!}
                 srcSecret={srcSecret!!}
@@ -74,8 +73,8 @@ export default class TransactionWizard extends React.PureComponent<TransactionWi
                 txJSON={txJSON!!}
                 next={this.next}
             />}
-            {currentStep === Submit && <SubmitTransactionStep currentStep={currentStep} signedTransaction={signedTransaction!!} next={this.next}/>}
-            {currentStep === Verify && <VerifyTransactionStep currentStep={currentStep} transactionId={transactionId!!}/>}
+            {currentStep === Submit && <SubmitTransactionStep signedTransaction={signedTransaction!!} next={this.next}/>}
+            {currentStep === Verify && <VerifyTransactionStep transactionId={transactionId!!}/>}
         </div>
     }
 }
