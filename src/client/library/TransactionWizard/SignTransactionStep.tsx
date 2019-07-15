@@ -1,8 +1,7 @@
 import React from 'react'
 import Button from '../Button'
 import signTransaction from '../../rippled/utils/flow/signTransaction'
-import TransactionStore, { TransactionState, setSignedTransaction } from '../../redux/store/TransactionStore'
-import { connect } from 'react-redux';
+import TransactionStore, { setSignedTransaction } from '../../redux/store/TransactionStore'
 
 interface Props {
     next: () => void
