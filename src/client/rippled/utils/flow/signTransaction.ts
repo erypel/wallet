@@ -1,4 +1,4 @@
-import SignedTransaction from "../../model/transaction/SignedTransaction";
+import SignedTransaction from "../../model/transaction/flow/SignedTransaction";
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({
 	server: 'wss://s.altnet.rippletest.net:51233'

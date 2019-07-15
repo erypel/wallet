@@ -1,13 +1,9 @@
-import { Step } from "./TransactionWizard";
-import { Steps } from "../rippled/model/Steps";
 import React from "react";
-import verifyTransaction from "../rippled/utils/flow/verifyTransaction";
-import VerifiedTransaction from '../rippled/model/transaction/VerifiedTransaction'
+import verifyTransaction from "../../rippled/utils/flow/verifyTransaction";
+import VerifiedTransaction from '../../rippled/model/transaction/flow/VerifiedTransaction'
+import TransactionStore from "../../redux/store/TransactionStore";
 
-interface Props {
-    currentStep: Step
-    transactionId: string
-}
+interface Props {}
 
 interface State {
     verifiedTransaction?: VerifiedTransaction
@@ -26,9 +22,9 @@ export default class VerifyTransactionStep extends React.PureComponent<Props, St
     }
 
     verifyTransaction = async () => {
-        const { transactionId } = this.props
+        const { signedTransaction } = TransactionStore.getState()
         await this.waitForTransaction()
-        const verifiedTransaction = await verifyTransaction(transactionId)
+        const verifiedTransaction = await verifyTransaction(signedTransaction!!.id)
         console.log('verified', verifiedTransaction)
         this.setState({
             verifiedTransaction: verifiedTransaction
@@ -40,10 +36,6 @@ export default class VerifyTransactionStep extends React.PureComponent<Props, St
     }
 
     render() {
-        const { currentStep } = this.props
-        if(currentStep !== Steps.Verify) {
-            return null
-        }
         const { verifiedTransaction } = this.state
         if(!verifiedTransaction) {
             return <div><p>Loading...</p></div>

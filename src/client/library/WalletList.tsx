@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { AppState } from '../redux/reducers/AddressReducer';
+import { AppState } from '../redux/store/AddressStore';
 
 const mapStateToProps = (state: AppState) => {
     return {addresses: state.addresses}
