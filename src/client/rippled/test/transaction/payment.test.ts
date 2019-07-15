@@ -1,5 +1,4 @@
 import { TransactionBuilder } from '../../model/transaction/TransactionBuilder'
-import PreparedTransaction from '../../model/transaction/PreparedTransaction'
 import Source from '../../model/Source'
 import Destination from '../../model/Destination'
 import Amount from '../../model/Amount'
@@ -46,7 +45,7 @@ describe('basic payment toJsonObject', function() {
 describe('prepare payment', function() {
   it('should return a prepared payment with txJSON and instructions', async function(done) {
     const payment = buildPaymentObject()
-    const preparedPayment = await payment.send()
+    const preparedPayment = await payment.preparePayment()
     assert.isTrue(expectedTxJSONRegex.test(preparedPayment.txJSON))
     assert.isObject(preparedPayment.instructions)
     done()
