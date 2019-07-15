@@ -2,11 +2,11 @@ import { createStore } from 'redux'
 
 const ADD_ADDRESS = 'ADD_ADDRESS'
 
-interface AddressState {
+interface State {
     addresses: string[]
 }
 
-const initialState: AddressState = {
+const initialState: State = {
     addresses: []
 }
 
@@ -15,9 +15,9 @@ interface AddAddressAction {
     payload: string
 }
 
-export type AddressActionTypes = AddAddressAction
+type Actions = AddAddressAction
 
-function addressReducer(state = initialState, action: AddressActionTypes): AddressState {
+function reducer(state = initialState, action: Actions): State {
     const { type, payload } = action
     switch(type) {
         case ADD_ADDRESS:
@@ -29,14 +29,14 @@ function addressReducer(state = initialState, action: AddressActionTypes): Addre
     }
 }
 
-export function addAddress(newAddress: string): AddressActionTypes {
+export function addAddress(newAddress: string): AddAddressAction {
     return {
         type: ADD_ADDRESS,
         payload: newAddress
     }
 }
 
-export type AppState = ReturnType<typeof addressReducer>
+export type AppState = ReturnType<typeof reducer>
 
-const AddressStore = createStore(addressReducer)
+const AddressStore = createStore(reducer)
 export default AddressStore
