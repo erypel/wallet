@@ -1,11 +1,11 @@
 import React from 'react'
 import PrepareTransactionStep from './PrepareTransactionStep'
 import SignTransactionStep from './SignTransactionStep'
-import Amount from '../../rippled/model/Amount'
 import SubmitTransactionStep from './SubmitTransactionStep'
 import VerifyTransactionStep from './VerifyTransactionStep'
-import SignedTransaction from '../../rippled/model/transaction/flow/SignedTransaction'
 import { Steps } from '../../rippled/model/Steps'
+import { Provider } from 'react-redux';
+import TransactionStore from '../../redux/store/TransactionStore';
 
 interface TransactionWizardProps {
 
@@ -15,13 +15,6 @@ export type Step = Steps
 
 interface TransactionWizardState {
     currentStep: Step
-    amount?: Amount
-    srcAddress?: string
-    srcSecret?: string
-    destAddress?: string
-    txJSON?: string
-    signedTransaction?: SignedTransaction
-    transactionId?: string
 }
 
 export default class TransactionWizard extends React.PureComponent<TransactionWizardProps, TransactionWizardState> {
@@ -32,49 +25,37 @@ export default class TransactionWizard extends React.PureComponent<TransactionWi
         }
     }
 
-    next = (amount?: Amount, srcAddress?: string, srcSecret?: string, destAddress?: string, txJSON?: string, signedTransaction?: SignedTransaction) => {
+    next = () => {
         var { currentStep } = this.state
         const { Prepare, Sign, Submit, Verify } = Steps
         if (currentStep === Prepare) {
             currentStep = Sign
             this.setState({
-                currentStep: currentStep,
-                amount: amount,
-                srcAddress: srcAddress,
-                srcSecret: srcSecret,
-                destAddress: destAddress,
-                txJSON: txJSON
+                currentStep: currentStep
             })
         } else if (currentStep === Sign) {
             currentStep = Submit
             this.setState({
-                currentStep: currentStep,
-                signedTransaction: signedTransaction
+                currentStep: currentStep
             })
         } else if (currentStep === Submit) {
             currentStep = Verify
             this.setState({
-                currentStep: currentStep,
-                transactionId: signedTransaction!!.id
+                currentStep: currentStep
             })
         }
     }
 
     render() {
-        const { currentStep, amount, srcAddress, srcSecret, destAddress, txJSON, signedTransaction, transactionId } = this.state
+        const { currentStep } = this.state
         const { Prepare, Sign, Submit, Verify } = Steps
-        return <div>
-            {currentStep === Prepare && <PrepareTransactionStep next={this.next}/>}
-            {currentStep === Sign && <SignTransactionStep
-                amount={amount!!}
-                srcAddress={srcAddress!!}
-                srcSecret={srcSecret!!}
-                destAddress={destAddress!!}
-                txJSON={txJSON!!}
-                next={this.next}
-            />}
-            {currentStep === Submit && <SubmitTransactionStep signedTransaction={signedTransaction!!} next={this.next}/>}
-            {currentStep === Verify && <VerifyTransactionStep transactionId={transactionId!!}/>}
-        </div>
+        return <Provider store={TransactionStore}>
+            <div>
+                {currentStep === Prepare && <PrepareTransactionStep next={this.next}/>}
+                {currentStep === Sign && <SignTransactionStep next={this.next}/>}
+                {currentStep === Submit && <SubmitTransactionStep next={this.next}/>}
+                {currentStep === Verify && <VerifyTransactionStep/>}
+            </div>
+        </Provider>
     }
 }

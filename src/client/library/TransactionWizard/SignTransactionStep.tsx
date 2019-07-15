@@ -1,31 +1,38 @@
 import React from 'react'
 import Button from '../Button'
-import Amount from '../../rippled/model/Amount'
 import signTransaction from '../../rippled/utils/flow/signTransaction'
-import SignedTransaction from '../../rippled/model/transaction/flow/SignedTransaction'
+import TransactionStore, { TransactionState, setSignedTransaction } from '../../redux/store/TransactionStore'
+import { connect } from 'react-redux';
 
 interface Props {
-    amount: Amount
-    srcAddress: string
-    srcSecret: string
-    destAddress: string
-    txJSON: string
-    next: (amount?: Amount, srcAddress?: string, srcSecret?: string, destAddress?: string, txJSON?: string, signedTransaction?: SignedTransaction) => void
+    next: () => void
 }
 
-export default class PrepareTransactionStep extends React.PureComponent<Props> {
+const mapStateToProps = (state: TransactionState) => {
+    return {
+        amount: state.amount,
+        srcAddress: state.srcAddress,
+        srcSecret: state.srcSecret,
+        destAddress: state.destAddress,
+        txJSON: state.txJSON
+    }
+}
+
+export default connect(mapStateToProps)(class PrepareTransactionStep extends React.PureComponent<Props> {
     signTransaction = async () => {
-        const { txJSON, srcSecret, next } = this.props
-        const signedTx = await signTransaction(txJSON, srcSecret)
+        const { txJSON, srcSecret } = TransactionStore.getState()
+        const { next } = this.props
+        const signedTx = await signTransaction(txJSON!!, srcSecret!!)
+        setSignedTransaction(signedTx)
         console.log('signed', signedTx)
-        next(undefined, undefined, undefined, undefined, undefined, signedTx )
+        next()
     }
     
     render() {
-        const { amount, srcAddress, destAddress } = this.props
+        const { amount, srcAddress, destAddress } = TransactionStore.getState()
         return <div>
-            <p>Are you sure that you want to send {amount.value} {amount.currency} from {srcAddress} to ${destAddress}?</p>
+            <p>Are you sure that you want to send {amount} from {srcAddress} to ${destAddress}?</p>
             <Button buttonText={'Confirm'} onClick={this.signTransaction}/>
         </div>
     }
-}
+})

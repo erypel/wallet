@@ -1,15 +1,13 @@
 import { createStore } from 'redux'
 import SignedTransaction from '../../rippled/model/transaction/flow/SignedTransaction';
-import Amount from '../../rippled/model/Amount';
 
 interface State {
-    amount?: Amount
+    amount?: string
     srcAddress?: string
     srcSecret?: string
     destAddress?: string
     txJSON?: string
     signedTransaction?: SignedTransaction
-    transactionId?: string
 }
 
 const initialState: State = {
@@ -18,8 +16,7 @@ const initialState: State = {
     srcSecret: undefined,
     destAddress: undefined,
     txJSON: undefined,
-    signedTransaction: undefined,
-    transactionId: undefined
+    signedTransaction: undefined
 }
 
 const SET_AMOUNT = 'SET_AMOUNT'
@@ -28,11 +25,10 @@ const SET_SRC_SECRET = 'SET_SRC_SECRET'
 const SET_DEST_ADDRESS = 'SET_DEST_ADDRESS'
 const SET_TX_JSON = 'SET_TX_JSON'
 const SET_SIGNED_TRANSACTION = 'SET_SIGNED_TRANSACTION'
-const SET_TRANSACTION_ID = 'SET_TRANSACTION_ID'
 
 interface SetAmount {
     type: typeof SET_AMOUNT
-    payload: Amount
+    payload: string
 }
 interface SetSrcAddress {
     type: typeof SET_SRC_ADDRESS
@@ -54,19 +50,15 @@ interface SetSignedTransaction {
     type: typeof SET_SIGNED_TRANSACTION
     payload: SignedTransaction
 }
-interface SetTransactionId {
-    type: typeof SET_TRANSACTION_ID
-    payload: string
-}
 
 type Actions = SetAmount | SetSrcAddress | SetSrcSecret | SetDestAddress |
-    SetTxJson | SetSignedTransaction | SetTransactionId
+    SetTxJson | SetSignedTransaction
 
 function reducer(state = initialState, action: Actions): State {
     const { type, payload } = action
     switch(type) {
         case SET_AMOUNT:
-            return {...state, amount: payload as Amount}
+            return {...state, amount: payload as string}
         case SET_SRC_ADDRESS:
             return {...state, srcAddress: payload as string}
         case SET_SRC_SECRET:
@@ -77,8 +69,6 @@ function reducer(state = initialState, action: Actions): State {
             return {...state, txJSON: payload as string}
         case SET_SIGNED_TRANSACTION:
             return {...state, signedTransaction: payload as SignedTransaction}
-        case SET_TRANSACTION_ID:
-            return {...state, transactionId: payload as string}
         default:
             return state
     }
@@ -86,7 +76,7 @@ function reducer(state = initialState, action: Actions): State {
 
 const TransactionStore = createStore(reducer)
 
-export function setAmount(amount: Amount) {
+export function setAmount(amount: string) {
     TransactionStore.dispatch({type: SET_AMOUNT, payload: amount})
 }
 
@@ -110,9 +100,5 @@ export function setSignedTransaction(tx: SignedTransaction) {
     TransactionStore.dispatch({type: SET_SIGNED_TRANSACTION, payload: tx})
 }
 
-export function setTransactionId(id: string) {
-    TransactionStore.dispatch({type: SET_TRANSACTION_ID, payload: id})
-}
-
-
+export type TransactionState = ReturnType<typeof reducer>
 export default TransactionStore
