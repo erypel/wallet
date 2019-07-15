@@ -4,7 +4,7 @@ import Destination from '../Destination'
 import Instructions from '../Instructions'
 import { TransactionBuilder } from './TransactionBuilder';
 import winston from '../../../utils/logger';
-import PreparedTransaction from './PreparedTransaction';
+import PreparedTransaction from './flow/PreparedTransaction';
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({
 	server: 'wss://s.altnet.rippletest.net:51233'

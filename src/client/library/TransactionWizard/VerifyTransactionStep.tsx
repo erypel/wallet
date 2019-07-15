@@ -1,8 +1,8 @@
 import { Step } from "./TransactionWizard";
-import { Steps } from "../rippled/model/Steps";
+import { Steps } from "../../rippled/model/Steps";
 import React from "react";
-import verifyTransaction from "../rippled/utils/flow/verifyTransaction";
-import VerifiedTransaction from '../rippled/model/transaction/VerifiedTransaction'
+import verifyTransaction from "../../rippled/utils/flow/verifyTransaction";
+import VerifiedTransaction from '../../rippled/model/transaction/flow/VerifiedTransaction'
 
 interface Props {
     currentStep: Step

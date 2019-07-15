@@ -1,5 +1,5 @@
 import winston from '../../../utils/logger'
-import VerifiedTransaction from '../../model/transaction/VerifiedTransaction';
+import VerifiedTransaction from '../../model/transaction/flow/VerifiedTransaction';
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({
 	server: 'wss://s.altnet.rippletest.net:51233'

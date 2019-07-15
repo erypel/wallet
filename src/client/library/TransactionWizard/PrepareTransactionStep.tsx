@@ -1,13 +1,13 @@
 import React from 'react'
-import SendForm from './SendForm'
-import { Steps } from '../rippled/model/Steps'
-import Currency from '../rippled/model/Currency'
-import Amount from '../rippled/model/Amount'
-import Source from '../rippled/model/Source'
-import Destination from '../rippled/model/Destination'
-import { TransactionBuilder } from '../rippled/model/transaction/TransactionBuilder'
-import Payment from '../rippled/model/transaction/Payment'
-import SignedTransaction from '../rippled/model/transaction/SignedTransaction'
+import SendForm from '../SendForm'
+import { Steps } from '../../rippled/model/Steps'
+import Currency from '../../rippled/model/Currency'
+import Amount from '../../rippled/model/Amount'
+import Source from '../../rippled/model/Source'
+import Destination from '../../rippled/model/Destination'
+import { TransactionBuilder } from '../../rippled/model/transaction/TransactionBuilder'
+import Payment from '../../rippled/model/transaction/Payment'
+import SignedTransaction from '../../rippled/model/transaction/flow/SignedTransaction'
 
 interface Props {
     currentStep: Steps

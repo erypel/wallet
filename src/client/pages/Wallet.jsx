@@ -5,7 +5,7 @@ import Dropdown from '../library/Dropdown'
 import GenerateAddressButton from '../library/GenerateAddressButton'
 import WalletList from '../library/WalletList'
 import CurrencyState from '../redux/store/currency'
-import TransactionWizard from '../library/TransactionWizard';
+import TransactionWizard from '../library/TransactionWizard/TransactionWizard';
 
 export default class Wallet extends React.PureComponent {
     constructor() {
