@@ -3,7 +3,7 @@ import signTransaction from "../../../utils/flow/submitTransaction";
 var assert = require('chai').assert
 describe('submitTransaction', function() {
     it('should submit a valid transation', function() {
-      //TODO
+      //TODO figure out how to test this best
     });
     
     it('should throw error for invalid transation', function() {

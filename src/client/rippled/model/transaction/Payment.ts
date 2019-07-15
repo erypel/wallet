@@ -51,9 +51,13 @@ export default class Payment extends Transaction {
     payment: object,
     instructions?: Instructions
   ): Promise<PreparedTransaction> => {
-    return await api.connect().then(async () => {
-      return this.prepare(address, payment, instructions)
-    }).then(api.disconnect())
+    try {
+      return await api.connect().then(async () => {
+        return await this.prepare(address, payment, instructions)
+      })
+    } finally {
+      api.disconnect()
+    }
   }
 
   private prepare = async(
