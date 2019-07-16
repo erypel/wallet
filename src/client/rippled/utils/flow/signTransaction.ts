@@ -6,6 +6,11 @@ const api = new RippleAPI({
 
 export default async function signTransaction(
 	txJSON: string, secret: string
-): Promise<SignedTransaction>{
-	return await api.sign(txJSON, secret)
+): Promise<SignedTransaction | null>{
+	try {
+		return await api.sign(txJSON, secret)
+	} catch(error) {
+		console.log(error)
+		return null
+	}
 }

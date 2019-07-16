@@ -1,4 +1,5 @@
 import signTransaction from "../../../utils/flow/signTransaction";
+import { fail } from "assert";
 
 var assert = require('chai').assert
 
@@ -10,21 +11,24 @@ const invalidSecret = 'nope'
 describe('signTransaction', function() {
     it('should sign a valid transation', async function(done) {
       const signedTx = await signTransaction(validTxJSON, validSecret)
+      if(signedTx === null) {
+        fail()
+      } else {
       assert.isString(signedTx.id)
       assert.isString(signedTx.signedTransaction)
       done()
+      }
     });
 
-    // TODO determine how these should fail
-    // it('should return undefined for invalid txJSON', async function(done) {
-    //   const badTx = await signTransaction(invalidTxJSON, validSecret)
-    //   assert.equal(badTx, undefined)
-    //   done()
-    // });
+    it.only('should return null for invalid txJSON', async function(done) {
+      const tx = await signTransaction(invalidTxJSON, validSecret)
+      assert.isNull(tx)
+      done()
+    });
 
-    // it('should return undefined for invalid secret', async function(done) {
-    //   const badTx = await signTransaction(validTxJSON, invalidSecret)
-    //   assert.equal(badTx, undefined)
-    //   done()
-    // });
+    it('should return null for invalid secret', async function(done) {
+      const badTx = await signTransaction(validTxJSON, invalidSecret)
+      assert.isNull(badTx)
+      done()
+    });
 });
