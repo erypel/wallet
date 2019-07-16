@@ -28,13 +28,21 @@ interface LogoutAction {
 
 type Actions= LoginRequestAction | LoginSuccessAction | LoginFailureAction | LogoutAction
 
-function reducer(state = {}, action: Actions) {
-    const { type } = action
+let user = null
+const initialState = user ? { loggedIn: true, user } : {}
+function reducer(state = initialState, action: Actions) {
+    const { type, payload } = action
     switch (type) {
         case LOGIN_REQUEST:
-            return {}
+            return {
+                loggingIn: true,
+                user: payload
+              }
         case LOGIN_SUCCESS:
-            return {}
+            return {
+                loggedIn: true,
+                user: payload
+            }
         case LOGIN_FAILURE:
             return {}
         case LOGOUT:
