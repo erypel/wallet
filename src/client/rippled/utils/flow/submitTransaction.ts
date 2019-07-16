@@ -9,8 +9,7 @@ const api = new RippleAPI({
 export default async function submitTransaction(signedTransaction: string): Promise<SubmittedTransaction>{
 	try {
 		return await api.connect().then(async () => {
-            const test = await api.submit(signedTransaction)
-			return test
+            return await api.submit(signedTransaction)
 		}).catch((error: any) => {logger.error(error)}) //TODO could get fancy with error handling here in the future
 	} finally {
 		await api.disconnect()
