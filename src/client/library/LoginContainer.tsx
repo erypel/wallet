@@ -34,16 +34,17 @@ export default class LoginContainer extends React.PureComponent<{}, LoginContain
 
     //TODO forms can probably be their own component
     render() {
+        const { username, password } = this.state
         return <>
             <h2>Login</h2>
             <form onSubmit={this.handleSubmit}>
                 <label>
                     Username: 
-                    <Input id='username' type='text' value='' onChange={this.handleChange}/>
+                    <Input id='username' type='text' value={username} onChange={this.handleChange}/>
                 </label>
                 <label>
                     Password: 
-                    <Input id='password' type='password' value='' onChange={this.handleChange}/>
+                    <Input id='password' type='password' value={password} onChange={this.handleChange}/>
                 </label>
                 <Input id='submit' type='submit' value='Login'/>
             </form>
