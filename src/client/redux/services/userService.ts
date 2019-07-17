@@ -6,8 +6,9 @@ import User from "../../model/User";
 //I will eventually put this all in the store
 
 //login store methods
-function login(login: Login) {
+async function login(login: Login): Promise<User | undefined> {
     alert('login!')
+    return undefined
 }
 
 function logout() {
@@ -15,8 +16,9 @@ function logout() {
 }
 
 //user store methods
-function register(user: User) {
+async function register(user: User): Promise<User | undefined> {
     alert('register!')
+    return undefined
 }
 
 export const userService = {

@@ -55,14 +55,20 @@ function clearAction(): ClearAction {
 
 export const AlertStore = createStore(reducer)
 
-export function success(message: string) {
+function success(message: string) {
     AlertStore.dispatch(successAction(message))
 }
 
-export function error(message: string) {
+function error(message: string) {
     AlertStore.dispatch(errorAction(message))
 }
 
-export function clear() {
+function clear() {
     AlertStore.dispatch(clearAction())
+}
+
+export const alerts = {
+    success,
+    error,
+    clear
 }
