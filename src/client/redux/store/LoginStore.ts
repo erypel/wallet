@@ -2,7 +2,7 @@ import { createStore } from 'redux'
 import User from '../../model/User';
 import Login from '../../model/Login';
 import { userService } from '../services/userService';
-import { AlertStore, alerts } from './AlertStore';
+import { alerts } from './AlertStore';
 
 const LOGIN_REQUEST = 'USERS_LOGIN_REQUEST'
 const LOGIN_SUCCESS = 'USERS_LOGIN_SUCCESS'
@@ -111,6 +111,10 @@ export function login(username: string, password: string) {
         LoginStore.dispatch(loginFailureAction(error))
         alerts.error(error.message)
     })
+}
+
+export function isLoggedIn() {
+    return LoginStore.getState().loggedIn
 }
 
 export function logout() {
