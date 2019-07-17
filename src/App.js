@@ -1,5 +1,6 @@
 import React from 'react'
 import './App.css'
+import PrivateRoute from './client/library/PrivateRoute'
 import Login from './client/pages/Login'
 import Register from './client/pages/Register'
 import Wallet from './client/pages/Wallet'
@@ -12,12 +13,10 @@ class App extends React.PureComponent {
   render() {
     return <Provider store={LoginStore}>
         <div classname="App">
-          {/* <Router>
-            <Route path="/" component={Login}/>
-            <Route path='/register' component={Register}/>
-            <Route path='/wallet' component={Wallet}/>
-          </Router> */}
-          <Login/>
+          <PrivateRoute path="/" exact component={Wallet}/>
+          <Route path="/login" exact component={Login}/>
+          <Route path='/register' component={Register}/>
+          <PrivateRoute path='/wallet' component={Wallet}/>
         </div>
       </Provider>
   }

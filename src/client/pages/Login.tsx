@@ -1,11 +1,12 @@
 import LoginContainer from "../library/LoginContainer";
 import React from "react";
+import { Link } from "react-router-dom";
 
 class Login extends React.PureComponent {
     render() {
         return <div>
             <LoginContainer/>
-            <p>create user</p>
+            <Link to='/register'>Sign up</Link>
         </div>
     }
 }
