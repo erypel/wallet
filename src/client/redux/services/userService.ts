@@ -34,17 +34,6 @@ async function register(user: User): Promise<User | undefined> {
     return undefined
 }
 
-async function post (path: string, data: any) {
-    return await window.fetch(path, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-  }
-
 export const userService = {
     login,
     logout,

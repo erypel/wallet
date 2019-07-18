@@ -47,14 +47,6 @@ fun main(args: Array<String>) {
     val userStore = UserStore()
     val userApi = UserController(userStore)
 
-    data class User(val name: String, val email: String, val id: Int)
-    val users = hashMapOf(
-            0 to User(name = "Alice", email = "alice@alice.kt", id = 0),
-            1 to User(name = "Bob", email = "bob@bob.kt", id = 1),
-            2 to User(name = "Carol", email = "carol@carol.kt", id = 2),
-            3 to User(name = "Dave", email = "dave@dave.kt", id = 3)
-    )
-
     app.routes {
         get("/") { ctx -> ctx.result("Hello World") }
 //        get("/login") { ctx ->
@@ -66,9 +58,8 @@ fun main(args: Array<String>) {
 //
 //        }
         app.post("/user/create") { ctx ->
-            print("server made it")
             userApi.create(ctx)
-            ctx.json(users)
+            ctx.json({})
         }
     }
 }

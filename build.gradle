@@ -7,9 +7,9 @@ group 'groupId'
 version '1.0-SNAPSHOT'
 
 repositories {
-        mavenCentral()
-        jcenter()
-    }
+    mavenCentral()
+    jcenter()
+}
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
