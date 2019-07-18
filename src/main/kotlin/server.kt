@@ -1,16 +1,10 @@
-import controller.LoginController
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import controller.UserController
-import dao.Login
-import dao.Logins
-import dao.User
-import dao.Users
 import io.javalin.apibuilder.ApiBuilder.*
 import io.javalin.Javalin
+import io.javalin.plugin.json.JavalinJackson
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.StdOutSqlLogger
-import org.jetbrains.exposed.sql.addLogger
-import org.jetbrains.exposed.sql.transactions.transaction
 import store.UserStore
 
 fun main(args: Array<String>) {
@@ -19,6 +13,8 @@ fun main(args: Array<String>) {
         exception(Exception::class.java) { e, ctx -> e.printStackTrace() }
         error(404) { ctx -> ctx.json("not found") }
     }.start(7000)
+
+    JavalinJackson.configure(jacksonObjectMapper().findAndRegisterModules())
 
     //TODO these should go in a config file somewhere
     val hostName = "localhost"
@@ -51,22 +47,28 @@ fun main(args: Array<String>) {
     val userStore = UserStore()
     val userApi = UserController(userStore)
 
+    data class User(val name: String, val email: String, val id: Int)
+    val users = hashMapOf(
+            0 to User(name = "Alice", email = "alice@alice.kt", id = 0),
+            1 to User(name = "Bob", email = "bob@bob.kt", id = 1),
+            2 to User(name = "Carol", email = "carol@carol.kt", id = 2),
+            3 to User(name = "Dave", email = "dave@dave.kt", id = 3)
+    )
 
     app.routes {
-        app.get("/") { ctx -> ctx.result("Hello World") }
-        get("/login") { ctx ->
-            val controller = LoginController()
-            ctx.result(controller.login(ctx).email)
-        }
-
-        post("/logout") { ctx ->
-
-        }
-        path("/user") {
-            post("/create") { ctx ->
-                userApi.create(ctx)
-                ctx.status(200)
-            }
+        get("/") { ctx -> ctx.result("Hello World") }
+//        get("/login") { ctx ->
+//            val controller = LoginController()
+//            ctx.result(controller.login(ctx).email)
+//        }
+//
+//        post("/logout") { ctx ->
+//
+//        }
+        app.post("/user/create") { ctx ->
+            print("server made it")
+            userApi.create(ctx)
+            ctx.json(users)
         }
     }
 }

@@ -1,5 +1,5 @@
-import Login from "../../model/Login";
-import User from "../../model/User";
+import Login from '../../model/Login'
+import User from '../../model/User'
 
 //TODO this is all api request stuff. I'm putting it here
 //until I find a good way to eliminate redux boilerplate.
@@ -16,10 +16,34 @@ function logout() {
 }
 
 //user store methods
+//should use HTTPS
 async function register(user: User): Promise<User | undefined> {
-    alert('register!')
+    await fetch('http://localhost:7000/user/create', {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        mode: 'no-cors',
+        body: JSON.stringify(user),
+        method: 'POST'
+    }).then(response => {
+        alert(response)
+    }).catch(error => {
+        alert(error)
+    })
     return undefined
 }
+
+async function post (path: string, data: any) {
+    return await window.fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+  }
 
 export const userService = {
     login,

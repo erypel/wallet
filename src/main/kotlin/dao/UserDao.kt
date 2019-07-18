@@ -4,6 +4,14 @@ import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.IntIdTable
 
+data class UserModel(
+    var firstName: String,
+    var lastName: String,
+    var username: String,
+    var password: String,
+    var email: String
+)
+
 class User(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<User>(Users)
     var firstName by Users.firstName
