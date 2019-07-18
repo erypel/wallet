@@ -1,4 +1,5 @@
 import controller.LoginController
+import controller.UserController
 import dao.Login
 import dao.Logins
 import dao.User
@@ -10,6 +11,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
+import store.UserStore
 
 fun main(args: Array<String>) {
 
@@ -46,6 +48,10 @@ fun main(args: Array<String>) {
 //        println("Logins: ${Login.all()}")
 //    }
 
+    val userStore = UserStore()
+    val userApi = UserController(userStore)
+
+
     app.routes {
         app.get("/") { ctx -> ctx.result("Hello World") }
         get("/login") { ctx ->
@@ -56,6 +62,11 @@ fun main(args: Array<String>) {
         post("/logout") { ctx ->
 
         }
+        path("/user") {
+            post("/create") { ctx ->
+                userApi.create(ctx)
+                ctx.status(200)
+            }
+        }
     }
-
 }
