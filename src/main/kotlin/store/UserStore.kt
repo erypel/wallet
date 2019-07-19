@@ -24,6 +24,7 @@ class UserStore {
                 lastName = user.lastName
                 username = user.username
                 password = user.password
+                salt = user.salt
                 email = user.email
             }
         }

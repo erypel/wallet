@@ -9,6 +9,7 @@ data class UserModel(
     var lastName: String,
     var username: String,
     var password: String,
+    var salt: String,
     var email: String
 )
 
@@ -19,6 +20,7 @@ class User(id: EntityID<Int>) : IntEntity(id) {
             this.lastName,
             this.username,
             this.password,
+            this.salt,
             this.email
         )
     }
@@ -28,6 +30,7 @@ class User(id: EntityID<Int>) : IntEntity(id) {
     var lastName by Users.lastName
     var username by Users.username
     var password by Users.password
+    var salt by Users.salt
     var email by Users.email
 }
 
@@ -35,6 +38,7 @@ object Users: IntIdTable() {
     val firstName = varchar("firstname", 50)
     val lastName = varchar("lastname", 50)
     val username = varchar("username", 50)
-    val password = varchar("password", 50)
+    val password = varchar("password", 225)
+    val salt = varchar("salt", 225)
     val email = varchar("email", 50)
 }

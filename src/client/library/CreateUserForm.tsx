@@ -45,6 +45,7 @@ class CreateUserForm extends React.PureComponent<{}, CreateUserState> {
             username: username,
             password: password,
             email: email,
+            salt: ''
         }
         createUser(newUser)
     }

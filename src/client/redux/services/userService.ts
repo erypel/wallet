@@ -1,5 +1,6 @@
 import Login from '../../model/Login'
 import User from '../../model/User'
+import crypto from 'crypto';
 
 //TODO this is all api request stuff. I'm putting it here
 //until I find a good way to eliminate redux boilerplate.
@@ -34,6 +35,9 @@ function logout() {
 //user store methods
 //should use HTTPS
 async function register(user: User): Promise<User | undefined> {
+    const salted = saltHashPassword(user.password)
+    user.password = salted.hash
+    user.salt = salted.salt
     await fetch('http://localhost:7000/user/create', {
         headers: {
             'Accept': 'application/json',
@@ -48,6 +52,23 @@ async function register(user: User): Promise<User | undefined> {
         alert(error)
     })
     return undefined
+}
+
+function saltHashPassword(
+	password: string,
+	salt: string = randomString()
+) {
+	const hash = crypto
+	.createHmac('sha512', salt)
+	.update(password)
+	return {
+		salt,
+		hash: hash.digest('hex')
+	}
+}
+
+function randomString(){
+	return crypto.randomBytes(4).toString('hex')
 }
 
 export const userService = {
