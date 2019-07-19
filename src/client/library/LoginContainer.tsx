@@ -1,5 +1,6 @@
 import React from "react";
 import Input from "./Input";
+import { login } from "../redux/store/LoginStore";
 
 interface LoginContainerState {
     username: string
@@ -29,7 +30,7 @@ export default class LoginContainer extends React.PureComponent<{}, LoginContain
     
     handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        alert("Logging in")
+        login(this.state.username, this.state.password)
     }
 
     //TODO forms can probably be their own component

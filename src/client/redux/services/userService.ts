@@ -7,8 +7,24 @@ import User from '../../model/User'
 
 //login store methods
 async function login(login: Login): Promise<User | undefined> {
-    alert('login!')
-    return undefined
+    return await fetch('http://localhost:7000/user/login', {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        mode: 'cors',
+        body: JSON.stringify(login),
+        method: 'POST'
+    }).then(async res => {
+        console.log('success')
+        const json = await res.json()
+        console.log(json)
+        return json
+    }).catch(error => {
+        console.log('fail')
+        alert(error)
+        return undefined
+    })
 }
 
 function logout() {
@@ -23,7 +39,7 @@ async function register(user: User): Promise<User | undefined> {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        mode: 'no-cors',
+        mode: 'cors',
         body: JSON.stringify(user),
         method: 'POST'
     }).then(response => {

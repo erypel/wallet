@@ -6,11 +6,15 @@ import dao.Users
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class UserStore {
-    fun isUsernameUnique(username: String): Boolean {
+    fun findUserByUsername(username: String): User? {
         return transaction {
-            val user = User.find { Users.username eq username }
-            user.empty()
+            val users = User.find { Users.username eq username }
+            users.firstOrNull()
         }
+    }
+
+    fun isUsernameUnique(username: String): Boolean {
+        return findUserByUsername(username) == null
     }
 
     fun create(user: UserModel) {

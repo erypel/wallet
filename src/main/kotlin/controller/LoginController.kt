@@ -1,24 +1,22 @@
 package controller
 
-import dao.Login
-import dao.Logins
-import dao.User
+import dao.LoginModel
+import dao.UserModel
 import io.javalin.http.Context
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.transactions.transaction
+import store.UserStore
 
-class LoginController {
-    fun login(ctx: Context): User {
-        //val login = ctx.body<Login>()
-        return transaction {
-            val username = "admin"
-            val password = "password"
+class LoginController(private val userStore: UserStore) {
+    fun login(ctx: Context): UserModel {
+        val login = ctx.body<LoginModel>()
+        return authenticate(login)?: throw Exception("Error logging in")
+    }
 
-            val account = Login.find {
-                (Logins.username eq username) and (Logins.password eq password)
-            }
-
-            account.first().user
+    private fun authenticate(login: LoginModel): UserModel? {
+        val user = userStore.findUserByUsername(login.username)?: throw Exception("Login failed")
+        return if(user.password == login.password) {
+            user.asModel()
+        } else {
+            null
         }
     }
 }

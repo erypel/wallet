@@ -13,6 +13,16 @@ data class UserModel(
 )
 
 class User(id: EntityID<Int>) : IntEntity(id) {
+    fun asModel(): UserModel? {
+        return UserModel(
+            this.firstName,
+            this.lastName,
+            this.username,
+            this.password,
+            this.email
+        )
+    }
+
     companion object : IntEntityClass<User>(Users)
     var firstName by Users.firstName
     var lastName by Users.lastName

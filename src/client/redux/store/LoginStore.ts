@@ -105,7 +105,7 @@ export function login(username: string, password: string) {
             LoginStore.dispatch(loginSuccessAction(user))
         } else {
             const error = new Error('user is undefined')
-            
+            console.log(error)
         }
     }, (error: Error) => {
         LoginStore.dispatch(loginFailureAction(error))
