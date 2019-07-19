@@ -6,11 +6,22 @@ import io.javalin.http.Context
 import store.UserStore
 import javax.crypto.spec.SecretKeySpec
 import javax.crypto.Mac
+import javax.servlet.http.Cookie
 
 class LoginController(private val userStore: UserStore) {
     fun login(ctx: Context) {
         val login = ctx.body<LoginModel>()
-        ctx.json(authenticate(login)?: throw Exception("Error logging in"))
+        val authenticated = authenticate(login)?: throw Exception("Error logging in")
+        val sessionId = ctx.req.session.id ?: throw Exception("session id is null")
+        ctx.sessionAttribute("logged-in-user", login.username)
+        ctx.json(authenticated)
+        //todo formalize cookies
+        ctx.res.setHeader("Set-Cookie", "cookiecookieyumyum=$sessionId;path=/;")
+        ctx
+    }
+
+    fun logout(ctx: Context) {
+        ctx.req.session.invalidate()
     }
 
     private fun authenticate(login: LoginModel): UserModel? {

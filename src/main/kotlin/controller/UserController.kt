@@ -1,11 +1,8 @@
 package controller
 
 import api.UserApi
-import com.fasterxml.jackson.databind.util.JSONPObject
-import dao.User
 import dao.UserModel
 import io.javalin.http.Context
-import org.jetbrains.exposed.dao.EntityID
 import store.UserStore
 import java.lang.Exception
 

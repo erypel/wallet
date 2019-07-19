@@ -43,10 +43,11 @@ async function register(user: User): Promise<User | undefined> {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        mode: 'cors',
-        body: JSON.stringify(user),
-        method: 'POST'
+        credentials: 'include',
+        method: 'POST',
+        body: JSON.stringify(user)
     }).then(response => {
+        console.log(response)
         alert(response)
     }).catch(error => {
         alert(error)
