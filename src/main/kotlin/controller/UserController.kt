@@ -19,5 +19,6 @@ class UserController(private val userStore: UserStore) : UserApi {
         }
         user.username = username
         userStore.create(user)
+        ctx.json({})
     }
 }

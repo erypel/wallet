@@ -8,9 +8,9 @@ import javax.crypto.spec.SecretKeySpec
 import javax.crypto.Mac
 
 class LoginController(private val userStore: UserStore) {
-    fun login(ctx: Context): UserModel {
+    fun login(ctx: Context) {
         val login = ctx.body<LoginModel>()
-        return authenticate(login)?: throw Exception("Error logging in")
+        ctx.json(authenticate(login)?: throw Exception("Error logging in"))
     }
 
     private fun authenticate(login: LoginModel): UserModel? {

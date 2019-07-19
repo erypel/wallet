@@ -11,6 +11,7 @@ fun main(args: Array<String>) {
 
     val app = Javalin.create{config ->
         config.enableCorsForAllOrigins()
+        config.accessManager(AccessManager::accessManager)
     }.apply {
         exception(Exception::class.java) { e, _ -> e.printStackTrace() }
         error(404) { ctx -> ctx.json("not found") }
@@ -31,21 +32,18 @@ fun main(args: Array<String>) {
     val loginApi = LoginController(userStore)
 
     app.routes {
+        path("user") {
+            path("login") {
+                post(loginApi::login)
+            }
+            path("create") {
+                post(userApi::create)
+            }
+        }
         get("/") { ctx -> ctx.result("Hello World") }
-//        get("/login") { ctx ->
-//            val controller = LoginController()
-//            ctx.result(controller.login(ctx).email)
-//        }
-//
+
 //        post("/logout") { ctx ->
 //
 //        }
-        app.post("/user/login") { ctx ->
-            ctx.json(loginApi.login(ctx))
-        }
-        app.post("/user/create") { ctx ->
-            userApi.create(ctx)
-            ctx.json({})
-        }
     }
 }
