@@ -12,7 +12,7 @@ class App extends React.PureComponent {
 
   render() {
     return <Provider store={LoginStore}>
-        <div classname="App">
+        <div className="App">
           <Switch>
             <PrivateRoute path="/" exact component={Wallet}/>
             <Route path="/login" exact component={Login}/>

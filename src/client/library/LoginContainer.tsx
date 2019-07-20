@@ -10,8 +10,8 @@ interface LoginContainerState {
 type FormFields = keyof LoginContainerState
 
 export default class LoginContainer extends React.PureComponent<{}, LoginContainerState> {
-    constructor() {
-        super({})
+    constructor(props = {}) {
+        super(props)
 
         this.state = {
             username: '',
