@@ -1,8 +1,9 @@
 import { createStore } from 'redux'
-import User from '../../model/User';
-import Login from '../../model/Login';
-import { userService } from '../services/userService';
-import { alerts } from './AlertStore';
+import User from '../../model/User'
+import Login from '../../model/Login'
+import { userService } from '../services/userService'
+import { alerts } from './AlertStore'
+import { history } from '../../utils/history'
 
 const LOGIN_REQUEST = 'USERS_LOGIN_REQUEST'
 const LOGIN_SUCCESS = 'USERS_LOGIN_SUCCESS'
@@ -49,6 +50,7 @@ const initialState = user ? {
 }
 function reducer(state: State = initialState, action: Actions): State {
     const { type, payload } = action
+    console.log(state)
     switch (type) {
         case LOGIN_REQUEST:
             return {
@@ -103,9 +105,10 @@ export function login(username: string, password: string) {
     userService.login(login).then((user?: User) => {
         if (user) {
             LoginStore.dispatch(loginSuccessAction(user))
+            history.push('/wallet')
         } else {
             const error = new Error('user is undefined')
-            
+            console.log(error)
         }
     }, (error: Error) => {
         LoginStore.dispatch(loginFailureAction(error))

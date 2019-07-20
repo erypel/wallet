@@ -3,5 +3,6 @@ export default interface User {
     lastName: string
     username: string
     password: string
+    salt: string
     email: string
 }

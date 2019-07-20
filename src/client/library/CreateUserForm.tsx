@@ -1,5 +1,6 @@
 import React from 'react';
 import Input from './Input';
+import { UserStore, createUser } from '../redux/store/UserStore';
 
 interface CreateUserState {
     username: string
@@ -37,7 +38,16 @@ class CreateUserForm extends React.PureComponent<{}, CreateUserState> {
 
     handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        alert("Creating user")
+        const { firstName, lastName, username, password, email } = this.state
+        const newUser = {
+            firstName: firstName,
+            lastName: lastName,
+            username: username,
+            password: password,
+            email: email,
+            salt: ''
+        }
+        createUser(newUser)
     }
     
     render() {
