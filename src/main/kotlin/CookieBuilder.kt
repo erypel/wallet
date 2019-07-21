@@ -3,25 +3,24 @@ import org.joda.time.DateTime
 const val COOKIE_NAME = "ChocolateChip"
 
 class CookieBuilder {
-    private val cookie: String = ""
+    private var cookie: String = ""
 
     fun create(sessionId: String): String {
         addSessionToken(sessionId)
-        addExpires()
+        addMaxAge()
         addPath()
         return cookie
     }
 
     private fun addSessionToken(sessionId: String) {
-        cookie.plus("$COOKIE_NAME=$sessionId;")
+        cookie = cookie.plus("$COOKIE_NAME=$sessionId; ")
     }
 
-    private fun addExpires() {
-        var dateTime = DateTime().plusMinutes(60)
-        cookie.plus("Expires=$dateTime;")
+    private fun addMaxAge() {
+        cookie = cookie.plus("Max-Age=${60 * 60}; ") // 60 minutes
     }
 
     private fun addPath() {
-        cookie.plus("Path=/;")
+        cookie = cookie.plus("Path=/;")
     }
 }
