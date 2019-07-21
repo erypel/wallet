@@ -17,7 +17,16 @@ class WalletDao(id: EntityID<Int>): IntEntity(id) {
 
     var privateKey by Wallets.privateKey
     var publicKey by Wallets.publicKey
-    var userId by User referencedOn Users.id
+    var userId by Users.id
+
+    fun toModel(): Wallet {
+        return Wallet(
+                this.privateKey,
+                this.publicKey,
+                this.id.value,
+                this.userId.value
+        )
+    }
 }
 
 object Wallets: IntIdTable() {
