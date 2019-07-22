@@ -33,7 +33,7 @@ interface LogoutAction {
 interface State {
     loggedIn: boolean
     loggingIn: boolean
-    user?: User | Login | Error | undefined
+    user?: User
 }
 
 type Actions= LoginRequestAction | LoginSuccessAction | LoginFailureAction | LogoutAction
@@ -56,13 +56,13 @@ function reducer(state: State = initialState, action: Actions): State {
             return {
                 loggedIn: false,
                 loggingIn: true,
-                user: payload
+                user: undefined
               }
         case LOGIN_SUCCESS:
             return {
                 loggingIn: false,
                 loggedIn: true,
-                user: payload
+                user: payload as User
             }
         case LOGIN_FAILURE:
             return {

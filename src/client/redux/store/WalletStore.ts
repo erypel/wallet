@@ -22,8 +22,9 @@ function reducer(state = initialState, action: Actions): State {
     const { type, payload } = action
     switch(type) {
         case ADD_WALLET:
-            state.wallets.push(payload)
-            return {...state }
+            return {
+                wallets: [...state.wallets, payload]
+            }
         default:
             return state
     }

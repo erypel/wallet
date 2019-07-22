@@ -8,7 +8,6 @@ import org.jetbrains.exposed.dao.IntIdTable
 data class Wallet(
         var privateKey: String,
         var publicKey: String,
-        var id: Int,
         var userId: Int
 )
 
@@ -23,7 +22,6 @@ class WalletDao(id: EntityID<Int>): IntEntity(id) {
         return Wallet(
                 this.privateKey,
                 this.publicKey,
-                this.id.value,
                 this.userId.value
         )
     }
