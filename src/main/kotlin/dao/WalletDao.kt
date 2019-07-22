@@ -16,13 +16,13 @@ class WalletDao(id: EntityID<Int>): IntEntity(id) {
 
     var privateKey by Wallets.privateKey
     var publicKey by Wallets.publicKey
-    var userId by Users.id
+    var userId by Wallets.userId
 
     fun toModel(): Wallet {
         return Wallet(
                 this.privateKey,
                 this.publicKey,
-                this.userId.value
+                this.userId
         )
     }
 }

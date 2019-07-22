@@ -1,7 +1,7 @@
 import Button from './Button'
 import { connect } from 'react-redux'
 import React from 'react'
-import WalletStore, { addWallet } from '../redux/store/WalletStore'
+import { ws } from '../redux/store/WalletStore'
 import generateAddress from '../rippled/utils/generateAddress'
 import { LoginStore } from '../redux/store/LoginStore';
 
@@ -20,9 +20,9 @@ class GenerateWalletButton extends React.PureComponent {
         const wallet = {
             publicKey: address as string,
             privateKey: secret as string,
-            userId: "3"//activeUser!!.id!!
+            userId: activeUser!!.id!!
         }
-        WalletStore.dispatch(addWallet(wallet))
+        ws.create(wallet)
     }
 }
 

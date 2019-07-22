@@ -7,15 +7,15 @@ import store.WalletStore
 
 //TODO some sort of handler should go above this to pull context out
 class WalletController(private val walletStore: WalletStore): WalletApi {
-    override fun getWalletsForUser(userId: Int): List<Wallet> {
-        return walletStore.getWalletsForUser(userId)
+    override fun getWalletsForUser(ctx: Context) {
+        val userId = ctx.pathParam("userId")
+        ctx.json(walletStore.getWalletsForUser(userId.toInt()))
     }
 
     override fun create(ctx: Context) {
         val wallet = ctx.body<Wallet>()
-        val userId = ctx.pathParam("userId")
-        val newWallet = walletStore.create(wallet, userId as Int)
-        ctx.json(newWallet.toModel())
+        walletStore.create(wallet)
+        ctx.json(wallet)
     }
 
 }
