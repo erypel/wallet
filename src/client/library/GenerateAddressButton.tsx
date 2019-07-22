@@ -1,7 +1,7 @@
 import Button from './Button'
 import { connect } from 'react-redux'
 import React from 'react'
-import WalletStore, { addWallet } from '../redux/store/AddressStore'
+import WalletStore, { addWallet } from '../redux/store/WalletStore'
 import generateAddress from '../rippled/utils/generateAddress'
 
 class GenerateAddressButton extends React.Component {

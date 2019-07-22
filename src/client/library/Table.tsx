@@ -9,12 +9,12 @@ interface State {
 }
 
 interface Props {
-    className: string,
-    headers: any,
-    inHeader: boolean,
-    colSpan: number,
-    children: any,
-    columnKey: string
+    className?: string,
+    headers?: any,
+    inHeader?: boolean,
+    colSpan?: number,
+    children?: any,
+    columnKey?: string
 }
 
 const omit = (obj: any, omitProps: string[]) =>
@@ -95,7 +95,7 @@ export const Thead = (props: Props) => (
       const classes = (this.props.className || '') + ' pivoted'
       return (
         <td className={classes}>
-          <div className="tdBefore">{headers[columnKey]}</div>
+          <div className="tdBefore">{columnKey && headers[columnKey]}</div>
           {children !== undefined ? children : <div>&nbsp;</div>}
         </td>
       )

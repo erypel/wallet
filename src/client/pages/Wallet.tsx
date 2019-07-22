@@ -3,15 +3,18 @@ import { Provider } from 'react-redux'
 import Button from '../library/Button'
 import Modal from '../library/Modal'
 import Dropdown from '../library/Dropdown'
-import GenerateAddressButton from '../library/GenerateAddressButton'
-import WalletList from '../library/WalletList'
+import WalletTable from '../library/WalletTable'
 import CurrencyState from '../redux/store/currency'
 import TransactionWizard from '../library/TransactionWizard/TransactionWizard';
-import WalletStore from '../redux/store/AddressStore';
+import WalletStore from '../redux/store/WalletStore'
 
-export default class Wallet extends React.PureComponent {
-    constructor() {
-        super()
+interface State {
+    isSendModalOpen: boolean
+}
+
+export default class Wallet extends React.PureComponent<{}, State> {
+    constructor(props = {}) {
+        super(props)
 
         this.state = {
             isSendModalOpen: false
@@ -34,9 +37,8 @@ export default class Wallet extends React.PureComponent {
         const currencies = CurrencyState.currencies
         return (<Provider store={WalletStore}>
             <div>
-                <GenerateAddressButton/>
+                <WalletTable/>
                 <br/>
-                <WalletList/>
                 <label>Balance <Dropdown
                     title="Select currency"
                     list={currencies}
