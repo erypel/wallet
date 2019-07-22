@@ -8,9 +8,9 @@ import { LoginStore } from '../redux/store/LoginStore';
 class GenerateWalletButton extends React.PureComponent {
     render() {
         return <Button
-        onClick={this.generate}
-        buttonText='Generate Wallet'
-    />
+            onClick={this.generate}
+            buttonText='Generate Wallet'
+        />
     }
 
     generate = () => {

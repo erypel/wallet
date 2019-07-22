@@ -14,31 +14,6 @@ interface Props {
     wallets: Wallet[] 
 }
 
-// const ConnectedTable = (store: { wallets: Wallet[] }) => {
-//         if (!store || !store.wallets || store.wallets.length < 1){
-//             return <GenerateWalletButton/>
-//         }
-//         const { wallets } = store
-//         return <Table>
-//             <Thead>
-//                 <Tr>
-//                     <Th>Public Key</Th>
-//                     <Th>Private Key</Th>
-//                     <Th>User ID</Th>
-//                 </Tr>
-//             </Thead>
-//             <Tbody>
-//                 {wallets.map(wallet => (<Tr>
-//                         <Td>{wallet.publicKey}</Td>
-//                         <Td>{wallet.privateKey}</Td>
-//                         <Td>{wallet.userId}</Td>
-//                     </Tr>)
-//                 )}
-//                 <Tr colSpan={4}><GenerateWalletButton/></Tr>
-//             </Tbody>
-//         </Table>
-// }
-
 class ConnectedTable extends React.PureComponent<Props> {
     componentWillMount() {
         ws.load(LoginStore.getState().user!!.id!!)

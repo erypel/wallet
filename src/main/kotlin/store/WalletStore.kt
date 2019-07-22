@@ -14,11 +14,6 @@ class WalletStore {
                 it[privateKey] = wallet.privateKey
                 it[userId] = wallet.userId
             }
-//            WalletDao.new {
-//                publicKey = wallet.publicKey
-//                privateKey = wallet.privateKey
-//                userId =
-//            }
         }
     }
 
