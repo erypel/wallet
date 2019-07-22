@@ -5,4 +5,5 @@ export default interface User {
     password: string
     salt: string
     email: string
+    id?: string
 }

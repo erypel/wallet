@@ -10,7 +10,8 @@ data class UserModel(
     var username: String,
     var password: String,
     var salt: String,
-    var email: String
+    var email: String,
+    var id: Int?
 )
 
 class User(id: EntityID<Int>) : IntEntity(id) {
@@ -21,7 +22,8 @@ class User(id: EntityID<Int>) : IntEntity(id) {
             this.username,
             this.password,
             this.salt,
-            this.email
+            this.email,
+            this.id.value
         )
     }
 

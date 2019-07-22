@@ -6,6 +6,7 @@ import io.javalin.http.Context
 import store.UserStore
 import java.lang.Exception
 
+//TODO some sort of handler should go above this to pull context out
 class UserController(private val userStore: UserStore) : UserApi {
     override fun create(ctx: Context) {
         val user = ctx.body<UserModel>() //todo should get its own helper method
