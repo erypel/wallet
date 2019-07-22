@@ -7,7 +7,7 @@ import GenerateAddressButton from '../library/GenerateAddressButton'
 import WalletList from '../library/WalletList'
 import CurrencyState from '../redux/store/currency'
 import TransactionWizard from '../library/TransactionWizard/TransactionWizard';
-import AddressStore from '../redux/store/AddressStore';
+import WalletStore from '../redux/store/AddressStore';
 
 export default class Wallet extends React.PureComponent {
     constructor() {
@@ -32,7 +32,7 @@ export default class Wallet extends React.PureComponent {
     
     render() {
         const currencies = CurrencyState.currencies
-        return (<Provider store={AddressStore}>
+        return (<Provider store={WalletStore}>
             <div>
                 <GenerateAddressButton/>
                 <br/>

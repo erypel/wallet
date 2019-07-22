@@ -1,42 +1,42 @@
 import { createStore } from 'redux'
+import Wallet from '../../model/Wallet';
 
-const ADD_ADDRESS = 'ADD_ADDRESS'
+const ADD_WALLET = 'ADD_WALLET'
 
 interface State {
-    addresses: string[]
+    wallets: Wallet[]
 }
 
 const initialState: State = {
-    addresses: []
+    wallets: []
 }
 
-interface AddAddressAction {
-    type: typeof ADD_ADDRESS
-    payload: string
+interface AddWalletAction {
+    type: typeof ADD_WALLET
+    payload: Wallet
 }
 
-type Actions = AddAddressAction
+type Actions = AddWalletAction
 
 function reducer(state = initialState, action: Actions): State {
     const { type, payload } = action
     switch(type) {
-        case ADD_ADDRESS:
-            return {
-                addresses: [...state.addresses, payload]
-            }
+        case ADD_WALLET:
+            state.wallets.push(payload)
+            return {...state }
         default:
             return state
     }
 }
 
-export function addAddress(newAddress: string): AddAddressAction {
+export function addWallet(newWallet: Wallet): AddWalletAction {
     return {
-        type: ADD_ADDRESS,
-        payload: newAddress
+        type: ADD_WALLET,
+        payload: newWallet
     }
 }
 
 export type AppState = ReturnType<typeof reducer>
 
-const AddressStore = createStore(reducer)
-export default AddressStore
+const WalletStore = createStore(reducer)
+export default WalletStore

@@ -1,7 +1,7 @@
 import Button from './Button'
 import { connect } from 'react-redux'
 import React from 'react'
-import AddressStore, { addAddress } from '../redux/store/AddressStore'
+import WalletStore, { addWallet } from '../redux/store/AddressStore'
 import generateAddress from '../rippled/utils/generateAddress'
 
 class GenerateAddressButton extends React.Component {
@@ -15,7 +15,7 @@ class GenerateAddressButton extends React.Component {
     generate = () => {
         const pair = generateAddress()
         const { address } = pair
-        AddressStore.dispatch(addAddress(address))
+        WalletStore.dispatch(addWallet(address))
     }
 }
 
