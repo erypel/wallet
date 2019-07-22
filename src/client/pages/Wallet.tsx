@@ -11,6 +11,7 @@ import LogOutButton from '../library/LogOutButton';
 
 interface State {
     isSendModalOpen: boolean
+    isReceiveModalOpen: boolean
 }
 
 export default class Wallet extends React.PureComponent<{}, State> {
@@ -18,19 +19,34 @@ export default class Wallet extends React.PureComponent<{}, State> {
         super(props)
 
         this.state = {
-            isSendModalOpen: false
+            isSendModalOpen: false,
+            isReceiveModalOpen: false
         }
     }
 
-      openModal = () => {
+    openSendModal = () => {
         this.setState({
-            isSendModalOpen: true
+            isSendModalOpen: true,
+            isReceiveModalOpen: false
         });
     }
 
-    closeModal = () => {
+    closeSendModal = () => {
         this.setState({
             isSendModalOpen: false
+        });
+    }
+
+    openReceiveModal = () => {
+        this.setState({
+            isReceiveModalOpen: true,
+            isSendModalOpen: false
+        });
+    }
+
+    closeReceiveModal = () => {
+        this.setState({
+            isReceiveModalOpen: false
         });
     }
     
@@ -48,14 +64,20 @@ export default class Wallet extends React.PureComponent<{}, State> {
                     title="Select currency"
                     list={currencies}
                 /></label>
-                <Button onClick={this.openModal} buttonText='Send'/>
+                <Button onClick={this.openSendModal} buttonText='Send'/>
                 {this.state.isSendModalOpen && <Modal
                     className="modal"
                     title="Send"
-                    onClose={this.closeModal}>
+                    onClose={this.closeSendModal}>
                         <TransactionWizard/>
                 </Modal>}
-                <Button buttonText='Receive'/>
+                <Button onClick={this.openReceiveModal} buttonText='Receive'/>
+                {this.state.isReceiveModalOpen && <Modal
+                    className="modal"
+                    title="Receive"
+                    onClose={this.closeReceiveModal}>
+                        <p>Send XRP here: {}</p>
+                </Modal>}
                 <br/>
                 <LogOutButton/>
             </div>
