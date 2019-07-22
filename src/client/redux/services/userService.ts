@@ -28,8 +28,19 @@ async function login(login: Login): Promise<User | undefined> {
     })
 }
 
-function logout() {
-    alert('logout!')
+async function logout(userId: string) {
+    await fetch(`http://localhost:7000/user/logout/${userId}`, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        method: 'POST'
+    }).then(response => {
+        console.log(response)
+    }).catch(error => {
+        alert(error)
+    })
 }
 
 //user store methods

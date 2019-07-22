@@ -7,6 +7,7 @@ import WalletTable from '../library/WalletTable'
 import CurrencyState from '../redux/store/currency'
 import TransactionWizard from '../library/TransactionWizard/TransactionWizard';
 import WalletStore from '../redux/store/WalletStore'
+import LogOutButton from '../library/LogOutButton';
 
 interface State {
     isSendModalOpen: boolean
@@ -55,6 +56,8 @@ export default class Wallet extends React.PureComponent<{}, State> {
                         <TransactionWizard/>
                 </Modal>}
                 <Button buttonText='Receive'/>
+                <br/>
+                <LogOutButton/>
             </div>
             </Provider>);
     }
