@@ -42,6 +42,11 @@ fun main(args: Array<String>) {
             path("login") {
                 post(loginApi::login)
             }
+            path("logout") {
+                path(":userId") {
+                    post(loginApi::logout)
+                }
+            }
             path("create") {
                 post(userApi::create)
             }

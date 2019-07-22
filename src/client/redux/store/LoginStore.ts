@@ -121,6 +121,14 @@ export function isLoggedIn() {
 }
 
 export function logout() {
-    userService.logout()
+    const currenctUserId = LoginStore.getState().user!!.id!!
+    userService.logout(currenctUserId)
     LoginStore.dispatch(logoutAction())
+    history.push('/')
+}
+
+export const loginStore = {
+    isLoggedIn,
+    login,
+    logout
 }
