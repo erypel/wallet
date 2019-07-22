@@ -3,43 +3,64 @@ import { Provider } from 'react-redux'
 import Button from '../library/Button'
 import Modal from '../library/Modal'
 import Dropdown from '../library/Dropdown'
-import WalletTable from '../library/WalletTable'
 import CurrencyState from '../redux/store/currency'
 import TransactionWizard from '../library/TransactionWizard/TransactionWizard';
 import WalletStore from '../redux/store/WalletStore'
 import LogOutButton from '../library/LogOutButton';
+import { Link } from 'react-router-dom';
 
 interface State {
     isSendModalOpen: boolean
+    isReceiveModalOpen: boolean
 }
 
-export default class Wallet extends React.PureComponent<{}, State> {
-    constructor(props = {}) {
-        super(props)
+interface Props {
+    match: any;
+    publicKey: string
+    privateKey: string
+}
 
+export default class Wallet extends React.PureComponent<Props, State> {
+    constructor(props: Props) {
+        super(props)
+        
         this.state = {
-            isSendModalOpen: false
+            isSendModalOpen: false,
+            isReceiveModalOpen: false
         }
     }
 
-      openModal = () => {
+    openSendModal = () => {
         this.setState({
-            isSendModalOpen: true
+            isSendModalOpen: true,
+            isReceiveModalOpen: false
         });
     }
 
-    closeModal = () => {
+    closeSendModal = () => {
         this.setState({
             isSendModalOpen: false
+        });
+    }
+
+    openReceiveModal = () => {
+        this.setState({
+            isReceiveModalOpen: true,
+            isSendModalOpen: false
+        });
+    }
+
+    closeReceiveModal = () => {
+        this.setState({
+            isReceiveModalOpen: false
         });
     }
     
     render() {
         const currencies = CurrencyState.currencies
+        const { publicKey, privateKey } = this.props.match.params
         return (<Provider store={WalletStore}>
             <div>
-                <WalletTable/>
-                <br/>
                 <label>Balance <Dropdown
                     title="Select currency"
                     list={currencies}
@@ -48,14 +69,22 @@ export default class Wallet extends React.PureComponent<{}, State> {
                     title="Select currency"
                     list={currencies}
                 /></label>
-                <Button onClick={this.openModal} buttonText='Send'/>
+                <Button onClick={this.openSendModal} buttonText='Send'/>
                 {this.state.isSendModalOpen && <Modal
                     className="modal"
                     title="Send"
-                    onClose={this.closeModal}>
-                        <TransactionWizard/>
+                    onClose={this.closeSendModal}>
+                        <TransactionWizard publicKey={publicKey} privateKey={privateKey}/>
                 </Modal>}
-                <Button buttonText='Receive'/>
+                <Button onClick={this.openReceiveModal} buttonText='Receive'/>
+                {this.state.isReceiveModalOpen && <Modal
+                    className="modal"
+                    title="Receive"
+                    onClose={this.closeReceiveModal}>
+                        <p>Send XRP here: {privateKey}</p>
+                </Modal>}
+                <br/>
+                <Link to='/home'>Back to list</Link>
                 <br/>
                 <LogOutButton/>
             </div>

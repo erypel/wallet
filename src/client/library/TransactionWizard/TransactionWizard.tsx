@@ -5,10 +5,11 @@ import SubmitTransactionStep from './SubmitTransactionStep'
 import VerifyTransactionStep from './VerifyTransactionStep'
 import { Steps } from '../../rippled/model/Steps'
 import { Provider } from 'react-redux';
-import TransactionStore from '../../redux/store/TransactionStore';
+import TransactionStore, { setSrcAddress, setSrcSecret } from '../../redux/store/TransactionStore';
 
 interface TransactionWizardProps {
-
+    publicKey: string
+    privateKey: string
 }
 
 export type Step = Steps
@@ -20,6 +21,8 @@ interface TransactionWizardState {
 export default class TransactionWizard extends React.PureComponent<TransactionWizardProps, TransactionWizardState> {
     constructor(props: TransactionWizardProps) {
         super(props)
+        setSrcAddress(this.props.publicKey)
+        setSrcSecret(this.props.privateKey)
         this.state = {
             currentStep: Steps.Prepare
         }

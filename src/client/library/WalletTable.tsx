@@ -5,6 +5,8 @@ import Wallet from '../model/Wallet';
 import { Table, Thead, Th, Tr, Tbody, Td } from './Table';
 import GenerateWalletButton from './GenerateWalletButton';
 import { LoginStore } from '../redux/store/LoginStore';
+import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const mapStateToProps = (state: AppState) => {
     return {wallets: state.wallets}
@@ -35,10 +37,11 @@ class ConnectedTable extends React.PureComponent<Props> {
             </Thead>
             <Tbody>
                 {wallets.map(wallet => (<Tr>
-                        <Td>{wallet.publicKey}</Td>
+                <Td><Link to={`/wallet/${wallet.publicKey}/${wallet.privateKey}`}>{wallet.publicKey}</Link></Td>
                         <Td>{wallet.privateKey}</Td>
                         <Td>{wallet.userId}</Td>
-                    </Tr>)
+                    </Tr>
+                    )
                 )}
                 <Tr colSpan={4}><GenerateWalletButton/></Tr>
             </Tbody>
