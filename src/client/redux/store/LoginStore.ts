@@ -105,7 +105,7 @@ export function login(username: string, password: string) {
     userService.login(login).then((user?: User) => {
         if (user) {
             LoginStore.dispatch(loginSuccessAction(user))
-            history.push('/wallet')
+            history.push('/home')
         } else {
             const error = new Error('user is undefined')
             console.log(error)

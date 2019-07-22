@@ -15,6 +15,7 @@ interface Props {
     colSpan?: number,
     children?: any,
     columnKey?: string
+    onClick?: any
 }
 
 const omit = (obj: any, omitProps: string[]) =>
