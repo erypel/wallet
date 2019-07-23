@@ -1,7 +1,8 @@
+import api.UserApiImpl
 import api.WalletApiImpl
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import service.LoginController
-import service.UserController
+import service.UserService
 import io.javalin.apibuilder.ApiBuilder.*
 import io.javalin.Javalin
 import io.javalin.plugin.json.JavalinJackson
@@ -38,7 +39,9 @@ fun main(args: Array<String>) {
     val walletApi = WalletApiImpl(walletService)
 
     val userStore = UserStore()
-    val userApi = UserController(userStore)
+    val userService = UserService(userStore)
+    val userApi = UserApiImpl(userService)
+
     val loginApi = LoginController(userStore)
 
 

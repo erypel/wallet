@@ -15,7 +15,7 @@ data class UserModel(
 )
 
 class User(id: EntityID<Int>) : IntEntity(id) {
-    fun asModel(): UserModel? {
+    fun asModel(): UserModel {
         return UserModel(
             this.firstName,
             this.lastName,

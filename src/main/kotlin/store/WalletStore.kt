@@ -6,7 +6,7 @@ import dao.Wallets
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class WalletStore {
-    fun create(wallet: Wallet) {
+    fun create(wallet: Wallet): Wallet {
         return transaction {
             WalletDao.new {
                 publicKey = wallet.publicKey

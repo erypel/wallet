@@ -17,8 +17,8 @@ class UserStore {
         return findUserByUsername(username) == null
     }
 
-    fun create(user: UserModel) {
-        transaction {
+    fun create(user: UserModel): UserModel {
+        return transaction {
             User.new {
                 firstName = user.firstName
                 lastName = user.lastName
@@ -26,7 +26,7 @@ class UserStore {
                 password = user.password
                 salt = user.salt
                 email = user.email
-            }
+            }.asModel()
         }
     }
 }

@@ -10,8 +10,7 @@ class WalletService(private val walletStore: WalletStore) {
     }
 
     fun create(wallet: Wallet): Wallet {
-        walletStore.create(wallet)
-        return wallet
+        return walletStore.create(wallet)
     }
 
 }
