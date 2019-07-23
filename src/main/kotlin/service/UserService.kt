@@ -1,18 +1,31 @@
-package controller
+package service
 
-import dao.LoginModel
-import dao.UserModel
+import dao.Login
+import dao.User
 import io.javalin.http.Context
 import store.UserStore
-import javax.crypto.spec.SecretKeySpec
+import java.lang.Exception
 import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
 import CookieBuilder
+import UnexpectedStateException
 
-class LoginController(private val userStore: UserStore) {
+class UserService(private val userStore: UserStore) {
+    fun create(user: User): User {
+        // want usernames store in lowercase
+        val username = user.username.toLowerCase()
+        if(!userStore.isUsernameUnique(username)) {
+            throw Exception("username already exists")
+        }
+        user.username = username
+        return userStore.create(user)
+    }
+
+    //TODO want to think more about how to architect this
     fun login(ctx: Context) {
-        val login = ctx.body<LoginModel>()
-        val authenticated = authenticate(login)?: throw Exception("Error logging in")
-        val sessionId = ctx.req.session.id ?: throw Exception("session id is null")
+        val login = ctx.body<Login>()
+        val authenticated = authenticate(login)?: throw IllegalArgumentException("Error logging in")
+        val sessionId = ctx.req.session.id ?: throw UnexpectedStateException("session id is null")
         ctx.sessionAttribute("logged-in-user", login.username)
         ctx.json(authenticated)
         val cookieBuilder = CookieBuilder()
@@ -20,14 +33,11 @@ class LoginController(private val userStore: UserStore) {
         ctx
     }
 
-    fun logout(ctx: Context) {
-        ctx.req.session.invalidate()
-    }
 
-    private fun authenticate(login: LoginModel): UserModel? {
-        val user = userStore.findUserByUsername(login.username)?: throw Exception("Login failed")
+    private fun authenticate(login: Login): User? {
+        val user = userStore.findUserByUsername(login.username)?: return null
         return if(user.password == generateHashWithHmac512(login.password, user.salt)) {
-            user.asModel()
+            user.toUser()
         } else {
             null
         }

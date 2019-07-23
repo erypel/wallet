@@ -1,11 +1,12 @@
+import api.UserApiImpl
+import api.WalletApiImpl
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import controller.LoginController
-import controller.UserController
-import controller.WalletController
+import service.UserService
 import io.javalin.apibuilder.ApiBuilder.*
 import io.javalin.Javalin
 import io.javalin.plugin.json.JavalinJackson
 import org.jetbrains.exposed.sql.Database
+import service.WalletService
 import store.UserStore
 import store.WalletStore
 
@@ -31,20 +32,23 @@ fun main(args: Array<String>) {
 
     JavalinJackson.configure(jacksonObjectMapper().findAndRegisterModules())
 
-    val userStore = UserStore()
+
     val walletStore = WalletStore()
-    val userApi = UserController(userStore)
-    val loginApi = LoginController(userStore)
-    val walletApi = WalletController(walletStore)
+    val walletService = WalletService(walletStore)
+    val walletApi = WalletApiImpl(walletService)
+
+    val userStore = UserStore()
+    val userService = UserService(userStore)
+    val userApi = UserApiImpl(userService)
 
     app.routes {
         path("user") {
             path("login") {
-                post(loginApi::login)
+                post(userApi::login)
             }
             path("logout") {
                 path(":userId") {
-                    post(loginApi::logout)
+                    post(userApi::logout)
                 }
             }
             path("create") {

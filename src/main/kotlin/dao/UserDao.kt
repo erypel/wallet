@@ -4,7 +4,7 @@ import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.IntIdTable
 
-data class UserModel(
+data class User(
     var firstName: String,
     var lastName: String,
     var username: String,
@@ -14,9 +14,14 @@ data class UserModel(
     var id: Int?
 )
 
-class User(id: EntityID<Int>) : IntEntity(id) {
-    fun asModel(): UserModel? {
-        return UserModel(
+data class Login(
+        var username: String,
+        var password: String
+)
+
+class UserDao(id: EntityID<Int>) : IntEntity(id) {
+    fun toUser(): User {
+        return User(
             this.firstName,
             this.lastName,
             this.username,
@@ -27,7 +32,7 @@ class User(id: EntityID<Int>) : IntEntity(id) {
         )
     }
 
-    companion object : IntEntityClass<User>(Users)
+    companion object : IntEntityClass<UserDao>(Users)
     var firstName by Users.firstName
     var lastName by Users.lastName
     var username by Users.username
