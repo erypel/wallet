@@ -81,7 +81,7 @@ export default class Wallet extends React.PureComponent<Props, State> {
                     className="modal"
                     title="Receive"
                     onClose={this.closeReceiveModal}>
-                        <p>Send XRP here: {privateKey}</p>
+                        <p>Send XRP here: {publicKey}</p>
                 </Modal>}
                 <br/>
                 <Link to='/home'>Back to list</Link>
