@@ -1,6 +1,6 @@
 package api
 
-import dao.UserModel
+import dao.User
 import io.javalin.http.Context
 import service.UserService
 import java.lang.Exception
@@ -19,7 +19,7 @@ class UserApiImpl(private val userService: UserService) : UserApi {
     }
 
     override fun create(ctx: Context) {
-        val user = ctx.body<UserModel>()
+        val user = ctx.body<User>()
         ctx.json(userService.create(user))
     }
 

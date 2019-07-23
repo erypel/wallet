@@ -1,7 +1,7 @@
 package service
 
-import dao.LoginModel
-import dao.UserModel
+import dao.Login
+import dao.User
 import io.javalin.http.Context
 import store.UserStore
 import java.lang.Exception
@@ -11,7 +11,7 @@ import CookieBuilder
 import UnexpectedStateException
 
 class UserService(private val userStore: UserStore) {
-    fun create(user: UserModel): UserModel {
+    fun create(user: User): User {
         // want usernames store in lowercase
         val username = user.username.toLowerCase()
         if(!userStore.isUsernameUnique(username)) {
@@ -23,7 +23,7 @@ class UserService(private val userStore: UserStore) {
 
     //TODO want to think more about how to architect this
     fun login(ctx: Context) {
-        val login = ctx.body<LoginModel>()
+        val login = ctx.body<Login>()
         val authenticated = authenticate(login)?: throw IllegalArgumentException("Error logging in")
         val sessionId = ctx.req.session.id ?: throw UnexpectedStateException("session id is null")
         ctx.sessionAttribute("logged-in-user", login.username)
@@ -34,10 +34,10 @@ class UserService(private val userStore: UserStore) {
     }
 
 
-    private fun authenticate(login: LoginModel): UserModel? {
+    private fun authenticate(login: Login): User? {
         val user = userStore.findUserByUsername(login.username)?: return null
         return if(user.password == generateHashWithHmac512(login.password, user.salt)) {
-            user.asModel()
+            user.toUser()
         } else {
             null
         }

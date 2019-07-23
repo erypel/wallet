@@ -1,14 +1,14 @@
 package store
 
+import dao.UserDao
 import dao.User
-import dao.UserModel
 import dao.Users
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class UserStore {
-    fun findUserByUsername(username: String): User? {
+    fun findUserByUsername(username: String): UserDao? {
         return transaction {
-            val users = User.find { Users.username eq username }
+            val users = UserDao.find { Users.username eq username }
             users.firstOrNull()
         }
     }
@@ -17,16 +17,16 @@ class UserStore {
         return findUserByUsername(username) == null
     }
 
-    fun create(user: UserModel): UserModel {
+    fun create(user: User): User {
         return transaction {
-            User.new {
+            UserDao.new {
                 firstName = user.firstName
                 lastName = user.lastName
                 username = user.username
                 password = user.password
                 salt = user.salt
                 email = user.email
-            }.asModel()
+            }.toUser()
         }
     }
 }
