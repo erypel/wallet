@@ -1,5 +1,3 @@
-import org.joda.time.DateTime
-
 const val COOKIE_NAME = "ChocolateChip"
 
 class CookieBuilder {

@@ -1,7 +1,6 @@
 import api.UserApiImpl
 import api.WalletApiImpl
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import service.LoginController
 import service.UserService
 import io.javalin.apibuilder.ApiBuilder.*
 import io.javalin.Javalin
@@ -42,17 +41,14 @@ fun main(args: Array<String>) {
     val userService = UserService(userStore)
     val userApi = UserApiImpl(userService)
 
-    val loginApi = LoginController(userStore)
-
-
     app.routes {
         path("user") {
             path("login") {
-                post(loginApi::login)
+                post(userApi::login)
             }
             path("logout") {
                 path(":userId") {
-                    post(loginApi::logout)
+                    post(userApi::logout)
                 }
             }
             path("create") {

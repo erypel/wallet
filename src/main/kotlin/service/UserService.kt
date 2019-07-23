@@ -1,9 +1,14 @@
 package service
 
-
+import dao.LoginModel
 import dao.UserModel
+import io.javalin.http.Context
 import store.UserStore
 import java.lang.Exception
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
+import CookieBuilder
+import UnexpectedStateException
 
 class UserService(private val userStore: UserStore) {
     fun create(user: UserModel): UserModel {
@@ -14,5 +19,65 @@ class UserService(private val userStore: UserStore) {
         }
         user.username = username
         return userStore.create(user)
+    }
+
+    //TODO want to think more about how to architect this
+    fun login(ctx: Context) {
+        val login = ctx.body<LoginModel>()
+        val authenticated = authenticate(login)?: throw IllegalArgumentException("Error logging in")
+        val sessionId = ctx.req.session.id ?: throw UnexpectedStateException("session id is null")
+        ctx.sessionAttribute("logged-in-user", login.username)
+        ctx.json(authenticated)
+        val cookieBuilder = CookieBuilder()
+        ctx.res.setHeader("Set-Cookie", cookieBuilder.create(sessionId))
+        ctx
+    }
+
+
+    private fun authenticate(login: LoginModel): UserModel? {
+        val user = userStore.findUserByUsername(login.username)?: return null
+        return if(user.password == generateHashWithHmac512(login.password, user.salt)) {
+            user.asModel()
+        } else {
+            null
+        }
+    }
+
+    private fun generateHashWithHmac512(message: String, key: String): String {
+        try {
+            val hashingAlgorithm = "HmacSHA512"
+            val bytes = hmac(hashingAlgorithm, key.toByteArray(), message.toByteArray())
+                    ?: throw Exception("uh oh!")
+            return bytesToHex(bytes)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return ""
+    }
+
+    private fun hmac(algorithm: String, key: ByteArray, message: ByteArray): ByteArray? {
+        try {
+            val mac = Mac.getInstance(algorithm)
+            mac.init(SecretKeySpec(key, algorithm))
+            return mac.doFinal(message)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    private fun bytesToHex(bytes: ByteArray): String {
+        val hexArray = "0123456789abcdef".toCharArray()
+        val hexChars = CharArray(bytes.size * 2)
+        var j = 0
+        var v: Int
+        while (j < bytes.size) {
+            val byte = bytes[j]
+            v = (byte.toInt() and 0xFF)
+            hexChars[j * 2] = hexArray[v.ushr(4)]
+            hexChars[j * 2 + 1] = hexArray[v and 0x0F]
+            j++
+        }
+        return String(hexChars)
     }
 }
