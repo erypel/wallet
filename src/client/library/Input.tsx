@@ -9,10 +9,11 @@ interface InputProps {
     onChange?: (event: React.FormEvent<HTMLInputElement>) => void
     className?: string
     autoComplete?: 'on' | 'off'
+    required?: true | false
 }
 
 const Input = (props: InputProps) => {
-    const { type, value, onChange, className, id, autoComplete } = props
+    const { type, value, onChange, className, id, autoComplete, required } = props
     return (
         <input 
             className={className} 
@@ -21,6 +22,7 @@ const Input = (props: InputProps) => {
             value={value}
             onChange={onChange} 
             autoComplete={autoComplete ? autoComplete : "off"}
+            required={required}
         />
 )}
 export default Input
