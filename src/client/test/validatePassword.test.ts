@@ -1,8 +1,6 @@
 import validatePassword from '../utils/validatePassword'
 var assert = require('chai').assert
 
-//Your password does not meet the following requirement(s): At least one upper case english letter [A-Z]. At least one lower case english letter [a-z]. At least one digit [0-9]. At lease one special character [#?!@$ %^&*-]. A password length between 10 and 128 characters.
-
 describe('offlineValidation correctly validates addresses', function() {
     it('should validate addresses', function() {
         const validAddress1 = 'R8<~rKXG#s'
