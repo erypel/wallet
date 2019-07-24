@@ -38,5 +38,5 @@ describe('offlineValidation correctly validates addresses', function() {
         assert.isTrue(!validatedNoUppercase.success && (validatedNoUppercase.message === "Your password does not meet the following requirement(s): At least one upper case english letter [A-Z]."))
         assert.isTrue(!validatedAllErrors.success && (validatedAllErrors.message === "Your password does not meet the following requirement(s): At least one upper case english letter [A-Z]. At least one lower case english letter [a-z]. At least one digit [0-9]. At lease one special character [#?!@$ %^&*-]. A password length between 10 and 128 characters."))
         assert.isTrue(!validatedSomeErrors.success && (validatedSomeErrors.message === "Your password does not meet the following requirement(s): At lease one special character [#?!@$ %^&*-]. A password length between 10 and 128 characters."))
-    });
-});
+    })
+})
