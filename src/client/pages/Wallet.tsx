@@ -2,12 +2,11 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import Button from '../library/Button'
 import Modal from '../library/Modal'
-import Dropdown from '../library/Dropdown'
-import CurrencyState from '../redux/store/currency'
 import TransactionWizard from '../library/TransactionWizard/TransactionWizard';
 import WalletStore from '../redux/store/WalletStore'
 import LogOutButton from '../library/LogOutButton';
 import { Link } from 'react-router-dom';
+import Balance from '../library/Balance';
 
 interface State {
     isSendModalOpen: boolean
@@ -57,18 +56,11 @@ export default class Wallet extends React.PureComponent<Props, State> {
     }
     
     render() {
-        const currencies = CurrencyState.currencies
         const { publicKey, privateKey } = this.props.match.params
         return (<Provider store={WalletStore}>
             <div>
-                <label>Balance <Dropdown
-                    title="Select currency"
-                    list={currencies}
-                /></label>
-                <label>Value<Dropdown
-                    title="Select currency"
-                    list={currencies}
-                /></label>
+                <Balance address={publicKey}/>
+                
                 <Button onClick={this.openSendModal} buttonText='Send'/>
                 {this.state.isSendModalOpen && <Modal
                     className="modal"

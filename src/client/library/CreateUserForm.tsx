@@ -1,6 +1,6 @@
 import React from 'react';
 import Input from './Input';
-import { UserStore, createUser } from '../redux/store/UserStore';
+import { createUser } from '../redux/store/UserStore';
 
 interface CreateUserState {
     username: string

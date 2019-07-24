@@ -1,12 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { AppState, ws } from '../redux/store/WalletStore';
-import Wallet from '../model/Wallet';
-import { Table, Thead, Th, Tr, Tbody, Td } from './Table';
-import GenerateWalletButton from './GenerateWalletButton';
-import { LoginStore } from '../redux/store/LoginStore';
-import { Redirect } from 'react-router';
-import { Link } from 'react-router-dom';
+import { AppState, ws } from '../redux/store/WalletStore'
+import Wallet from '../model/Wallet'
+import { Table, Thead, Th, Tr, Tbody, Td } from './Table'
+import GenerateWalletButton from './GenerateWalletButton'
+import { LoginStore } from '../redux/store/LoginStore'
+import { Link } from 'react-router-dom'
 
 const mapStateToProps = (state: AppState) => {
     return {wallets: state.wallets}
@@ -36,14 +35,14 @@ class ConnectedTable extends React.PureComponent<Props> {
                 </Tr>
             </Thead>
             <Tbody>
-                {wallets.map(wallet => (<Tr>
+                {wallets.map(wallet => (<Tr key={wallet.publicKey}>
                 <Td><Link to={`/wallet/${wallet.publicKey}/${wallet.privateKey}`}>{wallet.publicKey}</Link></Td>
                         <Td>{wallet.privateKey}</Td>
                         <Td>{wallet.userId}</Td>
                     </Tr>
                     )
                 )}
-                <Tr colSpan={4}><GenerateWalletButton/></Tr>
+                <Tr colSpan={4}><Td><GenerateWalletButton/></Td></Tr>
             </Tbody>
         </Table>
     }
