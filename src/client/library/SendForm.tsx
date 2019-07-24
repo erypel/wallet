@@ -1,6 +1,4 @@
 import React from 'react'
-import Dropdown from './Dropdown'
-import CurrencyStore from '../redux/store/currency'
 import Input from './Input'
 import { isValidAddress } from '../rippled/utils/isValidAddress'
 
@@ -65,7 +63,6 @@ class SendForm extends React.PureComponent<SendFormProps, SendFormState> {
     }
 
     render() {
-        const currencies = CurrencyStore.currencies
         const { handleChange, onSubmit, state } = this
         const { destAddress, amount} = state
         return <form onSubmit={onSubmit}>
@@ -79,10 +76,6 @@ class SendForm extends React.PureComponent<SendFormProps, SendFormState> {
                 Amount:
                 <Input type="number" id="amount" value={amount} onChange={handleChange}/>
             </label>
-            <Dropdown
-                title="Select currency"
-                list={currencies}
-            />
             <br/>
             {isValidAddress(destAddress) &&  amount && <Input type="submit" value="Send" id="sendXrp"/>}
         </form>
