@@ -1,4 +1,5 @@
 import Wallet from "../../model/Wallet";
+import { WalletMap } from "../store/WalletStore";
 
 async function create(wallet: Wallet): Promise<Wallet | undefined> {
     return await fetch('http://localhost:7000/wallet/create', {
@@ -18,7 +19,7 @@ async function create(wallet: Wallet): Promise<Wallet | undefined> {
     })
 }
 
-async function loadList(userId: string): Promise<Wallet[]> {
+async function loadList(userId: string): Promise<WalletMap> {
     return await fetch(`http://localhost:7000/wallet/${userId}`, {
         headers: {
             'Accept': 'application/json',

@@ -5,7 +5,7 @@ import store.WalletStore
 
 
 class WalletService(private val walletStore: WalletStore) {
-    fun getWalletsForUser(userId: String): List<Wallet> {
+    fun getWalletsForUser(userId: String): Map<String, Wallet> {
         return walletStore.getWalletsForUser(userId.toInt())
     }
 

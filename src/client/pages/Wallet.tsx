@@ -2,11 +2,11 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import Button from '../library/Button'
 import Modal from '../library/Modal'
-import TransactionWizard from '../library/TransactionWizard/TransactionWizard';
-import WalletStore from '../redux/store/WalletStore'
-import LogOutButton from '../library/LogOutButton';
-import { Link } from 'react-router-dom';
-import Balance from '../library/Balance';
+import TransactionWizard from '../library/TransactionWizard/TransactionWizard'
+import WalletStore, { ws } from '../redux/store/WalletStore'
+import LogOutButton from '../library/LogOutButton'
+import { Link } from 'react-router-dom'
+import Balance from '../library/Balance'
 
 interface State {
     isSendModalOpen: boolean
@@ -14,9 +14,8 @@ interface State {
 }
 
 interface Props {
-    match: any;
+    match: any
     publicKey: string
-    privateKey: string
 }
 
 export default class Wallet extends React.PureComponent<Props, State> {
@@ -56,7 +55,11 @@ export default class Wallet extends React.PureComponent<Props, State> {
     }
     
     render() {
-        const { publicKey, privateKey } = this.props.match.params
+        const { publicKey } = this.props.match.params
+        const privateKey = ws.getPrivateKey(publicKey)
+        if(!privateKey) {
+            return <div>ERROR</div>
+        }
         return (<Provider store={WalletStore}>
             <div>
                 <Balance address={publicKey}/>
