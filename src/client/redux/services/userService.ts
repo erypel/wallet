@@ -13,6 +13,7 @@ async function login(login: Login): Promise<User | undefined> {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
+        credentials: 'include',
         mode: 'cors',
         body: JSON.stringify(login),
         method: 'POST'
