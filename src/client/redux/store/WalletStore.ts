@@ -1,18 +1,20 @@
 import { createStore } from 'redux'
-import Wallet from '../../model/Wallet';
-import { walletService } from '../services/walletService';
-import { alerts } from './AlertStore';
-import { LoginStore } from './LoginStore';
+import Wallet from '../../model/Wallet'
+import { walletService } from '../services/walletService'
+import { alerts } from './AlertStore'
+import { LoginStore } from './LoginStore'
 
 const ADD_WALLET = 'ADD_WALLET'
 const SET_LIST = 'SET_LIST'
 
+export type WalletMap = { [key:string]:Wallet }
+
 interface State {
-    wallets: Wallet[]
+    wallets: { [key:string]:Wallet }
 }
 
 const initialState: State = {
-    wallets: []
+    wallets: {}
 }
 
 interface AddWalletAction {
@@ -22,7 +24,7 @@ interface AddWalletAction {
 
 interface SetListAction {
     type: typeof SET_LIST
-    payload: Wallet[]
+    payload: WalletMap
 }
 
 type Actions = AddWalletAction | SetListAction
@@ -32,11 +34,15 @@ function reducer(state = initialState, action: Actions): State {
     switch(type) {
         case ADD_WALLET:
             return {
-                wallets: [...state.wallets, payload as Wallet]
+                ...state,
+                wallets: {
+                    ...state.wallets,
+                    [(payload as Wallet).publicKey]: payload as Wallet
+                }
             }
         case SET_LIST:
             return {
-                wallets: payload as Wallet[]
+                wallets: payload as WalletMap
             }
         default:
             return state
@@ -50,14 +56,14 @@ export function addWallet(newWallet: Wallet): AddWalletAction {
     }
 }
 
-function setList(wallets: Wallet[]): SetListAction {
+function setList(wallets: WalletMap): SetListAction {
     return {
         type: SET_LIST,
         payload: wallets
     }
 }
 
-export type AppState = ReturnType<typeof reducer>
+export type WalletStoreState = ReturnType<typeof reducer>
 
 const WalletStore = createStore(reducer)
 
@@ -65,7 +71,6 @@ export function create(wallet: Wallet) {
     walletService.create(wallet).then((newWallet?: Wallet) => {
         if (newWallet) {
             load(LoginStore.getState().user!!.id!!)
-            //WalletStore.dispatch(addWallet(wallet))
         } else {
             const error = new Error('wallet is undefined')
             console.log(error)
@@ -76,14 +81,24 @@ export function create(wallet: Wallet) {
 }
 
 export function load(userId: string) {
-    walletService.loadList(userId).then((wallets: Wallet[]) => {
+    walletService.loadList(userId).then((wallets: WalletMap) => {
         WalletStore.dispatch(setList(wallets))
     })
 }
 
+function getPrivateKey(publicKey: string): string | undefined {
+    const state = WalletStore.getState()
+    const { wallets } = state
+    const wallet = wallets[publicKey]
+    if (wallet){
+        return wallet.privateKey
+    } else { return undefined }
+}
+
 export const ws = {
     load,
-    create
+    create,
+    getPrivateKey
 }
 
 export default WalletStore

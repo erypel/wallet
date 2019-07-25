@@ -1,18 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { AppState, ws } from '../redux/store/WalletStore'
-import Wallet from '../model/Wallet'
+import { WalletStoreState, ws, WalletMap } from '../redux/store/WalletStore'
 import { Table, Thead, Th, Tr, Tbody, Td } from './Table'
 import GenerateWalletButton from './GenerateWalletButton'
 import { LoginStore } from '../redux/store/LoginStore'
 import { Link } from 'react-router-dom'
 
-const mapStateToProps = (state: AppState) => {
+const mapStateToProps = (state: WalletStoreState) => {
     return {wallets: state.wallets}
 }
 
 interface Props {
-    wallets: Wallet[] 
+    wallets: WalletMap
 }
 
 class ConnectedTable extends React.PureComponent<Props> {
@@ -22,10 +21,14 @@ class ConnectedTable extends React.PureComponent<Props> {
 
     render() {
         const { wallets } = this.props
-        
-        if ( !wallets ||wallets.length < 1){
+
+        // for IE
+        var justWallets = Array.from(Object.values(wallets))
+
+        if ( !justWallets || justWallets.length < 1 ){
             return <GenerateWalletButton/>
         }
+
         return <>
         <Table>
             <Thead>
@@ -36,8 +39,8 @@ class ConnectedTable extends React.PureComponent<Props> {
                 </Tr>
             </Thead>
             <Tbody>
-                {wallets.map(wallet => (<Tr key={wallet.publicKey}>
-                <Td><Link to={`/wallet/${wallet.publicKey}/${wallet.privateKey}`}>{wallet.publicKey}</Link></Td>
+                {justWallets.map(wallet => (<Tr key={wallet.publicKey}>
+                <Td><Link to={`/wallet/${wallet.publicKey}`}>{wallet.publicKey}</Link></Td>
                         <Td>{wallet.privateKey}</Td>
                         <Td>{wallet.userId}</Td>
                     </Tr>

@@ -16,10 +16,10 @@ class WalletStore {
         }
     }
 
-    fun getWalletsForUser(userId: Int): List<Wallet> {
+    fun getWalletsForUser(userId: Int): Map<String, Wallet> {
         return transaction {
             val wallets = WalletDao.find { Wallets.userId eq userId }
-            wallets.map { it.toModel() }
+            wallets.associateBy({it.publicKey}, {it.toModel()})
         }
     }
 }

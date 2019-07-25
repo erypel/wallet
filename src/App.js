@@ -22,7 +22,7 @@ class App extends React.PureComponent {
                 <PrivateRoute path="/home" exact component={Home}/>
                 <Route path="/login" exact component={Login}/>
                 <Route path='/register' component={Register}/>
-                <PrivateRoute path='/wallet/:publicKey/:privateKey' component={Wallet}/>
+                <PrivateRoute path='/wallet/:publicKey' component={Wallet}/>
                 <Route render={() => (<div> Sorry, this page does not exist. </div>)} />
               </Switch>
             </div>
