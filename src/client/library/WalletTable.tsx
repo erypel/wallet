@@ -26,7 +26,8 @@ class ConnectedTable extends React.PureComponent<Props> {
         if ( !wallets ||wallets.length < 1){
             return <GenerateWalletButton/>
         }
-        return <Table>
+        return <>
+        <Table>
             <Thead>
                 <Tr>
                     <Th>Public Key</Th>
@@ -42,9 +43,10 @@ class ConnectedTable extends React.PureComponent<Props> {
                     </Tr>
                     )
                 )}
-                <Tr colSpan={4}><Td><GenerateWalletButton/></Td></Tr>
             </Tbody>
         </Table>
+        <GenerateWalletButton/>
+        </>
     }
 }
 
