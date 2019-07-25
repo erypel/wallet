@@ -96,7 +96,7 @@ export const Thead = (props: Props) => (
       const classes = (this.props.className || '') + ' pivoted'
       return (
         <td className={classes}>
-          <div className="tdBefore">{columnKey && headers[columnKey]}</div>
+          <div className="tdBefore">{(columnKey !== undefined) && headers[columnKey]}</div>
           {children !== undefined ? children : <div>&nbsp;</div>}
         </td>
       )
