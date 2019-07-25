@@ -24,7 +24,7 @@ interface FailureAction {
 
 type Actions = CreateUserAction | SuccessAction | FailureAction
 
-function reducer(state = {}, action: Actions) {
+export function reducer(state = {}, action: Actions) {
     const { type, payload } = action
     switch(type) {
         case REGISTER_REQUEST:

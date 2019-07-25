@@ -48,7 +48,7 @@ const initialState = user ? {
     loggingIn: false,
     user: undefined
 }
-function reducer(state: State = initialState, action: Actions): State {
+export function reducer(state: State = initialState, action: Actions): State {
     const { type, payload } = action
     console.log(state)
     switch (type) {

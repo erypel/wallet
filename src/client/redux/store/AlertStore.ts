@@ -21,7 +21,7 @@ interface ClearAction {
 
 type Actions = SuccessAction | ErrorAction | ClearAction
 
-function reducer(state = {}, action: Actions) {
+export function reducer(state = {}, action: Actions) {
     const { type } = action
     switch (type) {
         case SUCCESS:
