@@ -1,7 +1,6 @@
 import { ADD_WALLET, AddWalletAction, WalletMap, SetListAction, SET_LIST } from './types'
 import Wallet from '../../../model/Wallet'
 import { walletService } from '../../services/walletService'
-import { alerts } from '../AlertStore'
 import { ActionCreator, Dispatch } from 'redux'
 
 function addWalletAction(newWallet: Wallet): AddWalletAction {
@@ -29,7 +28,7 @@ export const create: ActionCreator<any> = (newWallet: Wallet, userId: string) =>
                 console.log(error)
             }
         }, (error: Error) => {
-            alerts.error(error.message)
+            console.log(error.message)
         })
     }
 }

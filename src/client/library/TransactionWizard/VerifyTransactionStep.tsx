@@ -1,15 +1,18 @@
-import React from "react";
-import verifyTransaction from "../../rippled/utils/flow/verifyTransaction";
+import React from 'react'
+import verifyTransaction from '../../rippled/utils/flow/verifyTransaction'
 import VerifiedTransaction from '../../rippled/model/transaction/flow/VerifiedTransaction'
-import TransactionStore from "../../redux/store/TransactionStore";
+import SignedTransaction from "../../rippled/model/transaction/flow/SignedTransaction";
+import { connect } from 'react-redux'
 
-interface Props {}
+interface Props {
+    signedTx: SignedTransaction
+}
 
 interface State {
     verifiedTransaction?: VerifiedTransaction
 }
 
-export default class VerifyTransactionStep extends React.PureComponent<Props, State> {
+class VerifyTransactionStep extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props)
         this.state = {
@@ -22,9 +25,9 @@ export default class VerifyTransactionStep extends React.PureComponent<Props, St
     }
 
     verifyTransaction = async () => {
-        const { signedTransaction } = TransactionStore.getState()
+        const { signedTx } = this.props
         await this.waitForTransaction()
-        const verifiedTransaction = await verifyTransaction(signedTransaction!!.id)
+        const verifiedTransaction = await verifyTransaction(signedTx!!.id)
         console.log('verified', verifiedTransaction)
         this.setState({
             verifiedTransaction: verifiedTransaction
@@ -46,3 +49,11 @@ export default class VerifyTransactionStep extends React.PureComponent<Props, St
         </div>
     }
 }
+
+const mapStateToProps = (store: any) => {
+    return {
+        signedTx: store.tx.signedTransaction
+    }
+}
+
+export default connect(mapStateToProps)(VerifyTransactionStep)

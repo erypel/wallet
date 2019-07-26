@@ -4,7 +4,6 @@ import { LOGIN_REQUEST, LoginRequestAction, LoginSuccessAction, LoginFailureActi
 import { userService } from "../../services/userService"
 import User from "../../../model/User"
 import { history } from '../../../utils/history'
-import { alerts } from "../AlertStore";
 
 export const login: ActionCreator<any> = (username: string, password: string) => {
     return async (dispatch: Dispatch) => {
@@ -20,7 +19,7 @@ export const login: ActionCreator<any> = (username: string, password: string) =>
             }
         }, (error: Error) => {
             dispatch(loginFailureAction(error))
-            alerts.error(error.message)
+            console.log(error.message)
         })
     }
 }
