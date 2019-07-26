@@ -1,5 +1,5 @@
-import Wallet from "../../model/Wallet";
-import { WalletMap } from "../store/WalletStore";
+import Wallet from '../../model/Wallet'
+import { WalletMap } from '../store/wallet/types'
 
 async function create(wallet: Wallet): Promise<Wallet | undefined> {
     return await fetch('http://localhost:7000/wallet/create', {

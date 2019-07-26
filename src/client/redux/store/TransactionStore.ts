@@ -54,7 +54,7 @@ interface SetSignedTransaction {
 type Actions = SetAmount | SetSrcAddress | SetSrcSecret | SetDestAddress |
     SetTxJson | SetSignedTransaction
 
-function reducer(state = initialState, action: Actions): State {
+export function reducer(state = initialState, action: Actions): State {
     const { type, payload } = action
     switch(type) {
         case SET_AMOUNT:

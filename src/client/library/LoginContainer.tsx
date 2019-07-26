@@ -1,16 +1,25 @@
-import React from "react";
-import Input from "./Input";
-import { login } from "../redux/store/LoginStore";
+import React from "react"
+import Input from "./Input"
+import { AppState } from "../redux/rootReducer"
+import { ThunkDispatch } from "redux-thunk"
+import { login } from "../redux/store/login/actions"
+import { AnyAction } from "redux"
+import { connect } from "react-redux"
+
 
 interface LoginContainerState {
     username: string
     password: string
 }
 
+interface LoginContainerProps {
+    loginUser: (username: string, password: string) => Promise<any>
+}
+
 type FormFields = keyof LoginContainerState
 
-export default class LoginContainer extends React.PureComponent<{}, LoginContainerState> {
-    constructor(props = {}) {
+class LoginContainer extends React.PureComponent<LoginContainerProps, LoginContainerState> {
+    constructor(props: LoginContainerProps) {
         super(props)
 
         this.state = {
@@ -30,7 +39,8 @@ export default class LoginContainer extends React.PureComponent<{}, LoginContain
     
     handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        login(this.state.username, this.state.password)
+        const { loginUser } = this.props
+        loginUser(this.state.username, this.state.password)
     }
 
     //TODO forms can probably be their own component
@@ -52,3 +62,17 @@ export default class LoginContainer extends React.PureComponent<{}, LoginContain
         </>
     }
 }
+
+const mapStateToProps = (store: AppState) => {
+    return {
+        login: store.login
+    }
+}
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return {
+        loginUser: (username: string, password: string) => dispatch(login(username, password))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer)

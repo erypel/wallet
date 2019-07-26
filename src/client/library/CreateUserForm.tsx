@@ -1,9 +1,14 @@
 import React from 'react'
 import Input from './Input'
-import { createUser } from '../redux/store/UserStore'
 import { Link } from 'react-router-dom'
 import { history } from '../utils/history'
-import validatePassword from '../utils/validatePassword';
+import validatePassword from '../utils/validatePassword'
+import { createUser } from '../redux/store/user/actions'
+import { AppState } from '../redux/rootReducer'
+import User from '../model/User'
+import { AnyAction } from 'redux'
+import { connect } from 'react-redux'
+import { ThunkDispatch } from 'redux-thunk'
 
 interface CreateUserState {
     username: string
@@ -14,11 +19,15 @@ interface CreateUserState {
     email: string
 }
 
+interface CreateUserProps {
+    createUser: (user:User) => Promise<any>
+}
+
 type FormFields = keyof CreateUserState
 
-class CreateUserForm extends React.PureComponent<{}, CreateUserState> {
-    constructor() {
-        super({})
+class CreateUserForm extends React.PureComponent<CreateUserProps, CreateUserState> {
+    constructor(props: CreateUserProps) {
+        super(props)
 
         this.state = {
             username: '',
@@ -42,6 +51,7 @@ class CreateUserForm extends React.PureComponent<{}, CreateUserState> {
     handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const { firstName, lastName, username, password, email, verifyPassword } = this.state
+        const { createUser } = this.props
         const passwordValidation = validatePassword(password)
         if(!passwordValidation.success){
             alert(passwordValidation.message)
@@ -113,4 +123,17 @@ class CreateUserForm extends React.PureComponent<{}, CreateUserState> {
     }
 }
 
-export default CreateUserForm
+//TODO store should be a specific type for all of these 
+const mapStateToProps = (store: any) => {
+    return {
+        user: store.userReducer
+    }
+}
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return {
+        createUser: (user: User) => dispatch(createUser(user))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateUserForm)

@@ -1,11 +1,20 @@
 import Button from './Button'
 import { connect } from 'react-redux'
 import React from 'react'
-import { ws } from '../redux/store/WalletStore'
 import generateAddress from '../rippled/utils/generateAddress'
-import { LoginStore } from '../redux/store/LoginStore';
+import { AppState } from '../redux/rootReducer';
+import User from '../model/User';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
+import Wallet from '../model/Wallet';
+import { create } from '../redux/store/wallet/actions';
 
-class GenerateWalletButton extends React.PureComponent {
+interface Props {
+    user?: User
+    create: (wallet: Wallet, userId: string) => Promise<any>
+}
+
+class GenerateWalletButton extends React.PureComponent<Props> {
     render() {
         return <Button
             onClick={this.generate}
@@ -16,14 +25,27 @@ class GenerateWalletButton extends React.PureComponent {
     generate = () => {
         const pair = generateAddress()
         const { address, secret } = pair
-        const activeUser = LoginStore.getState().user
+        const { user, create } = this.props
+        const userId = user!!.id!!
         const wallet = {
             publicKey: address as string,
             privateKey: secret as string,
-            userId: activeUser!!.id!!
+            userId: userId
         }
-        ws.create(wallet)
+        create(wallet, userId)
     }
 }
 
-export default connect()(GenerateWalletButton)
+const mapStateToProps = (store: AppState) => {
+    return {
+        user: store.login.user
+    }
+}
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return {
+        create: (wallet: Wallet, userId: string) => dispatch(create(wallet, userId))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(GenerateWalletButton)

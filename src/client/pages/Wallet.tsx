@@ -1,12 +1,12 @@
 import React from 'react'
-import { Provider } from 'react-redux'
+import { connect } from 'react-redux'
 import Button from '../library/Button'
 import Modal from '../library/Modal'
 import TransactionWizard from '../library/TransactionWizard/TransactionWizard'
-import WalletStore, { ws } from '../redux/store/WalletStore'
 import LogOutButton from '../library/LogOutButton'
 import { Link } from 'react-router-dom'
 import Balance from '../library/Balance'
+import { WalletMap } from '../redux/store/wallet/types'
 
 interface State {
     isSendModalOpen: boolean
@@ -16,9 +16,10 @@ interface State {
 interface Props {
     match: any
     publicKey: string
+    wallets: WalletMap
 }
 
-export default class Wallet extends React.PureComponent<Props, State> {
+class Wallet extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props)
         
@@ -56,12 +57,11 @@ export default class Wallet extends React.PureComponent<Props, State> {
     
     render() {
         const { publicKey } = this.props.match.params
-        const privateKey = ws.getPrivateKey(publicKey)
+        const privateKey = this.props.wallets[publicKey].privateKey
         if(!privateKey) {
             return <div>ERROR</div>
         }
-        return (<Provider store={WalletStore}>
-            <div>
+        return <div>
                 <Balance address={publicKey}/>
                 
                 <Button onClick={this.openSendModal} buttonText='Send'/>
@@ -83,6 +83,13 @@ export default class Wallet extends React.PureComponent<Props, State> {
                 <br/>
                 <LogOutButton/>
             </div>
-            </Provider>);
     }
 }
+
+const mapStateToProps = (store: any) => {
+    return {
+        wallets: store.wallet.wallets
+    }
+}
+
+export default connect(mapStateToProps)(Wallet)
