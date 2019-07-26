@@ -1,4 +1,4 @@
-import LoginForm from '../component/LoginForm'
+import LoginForm from '../container/LoginForm'
 import React from 'react'
 import { Link } from "react-router-dom"
 import { AppState } from '../redux/rootReducer';
