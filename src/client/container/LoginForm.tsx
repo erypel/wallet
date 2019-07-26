@@ -1,11 +1,9 @@
 import React from "react"
-import Input from "./Input"
-import { AppState } from "../redux/rootReducer"
+import Input from "../library/Input"
 import { ThunkDispatch } from "redux-thunk"
-import { login } from "../redux/store/login/actions"
+import { login, clearErrorMessageAction } from "../redux/store/login/actions"
 import { AnyAction } from "redux"
 import { connect } from "react-redux"
-
 
 interface LoginContainerState {
     username: string
@@ -14,14 +12,15 @@ interface LoginContainerState {
 
 interface LoginContainerProps {
     loginUser: (username: string, password: string) => Promise<any>
+    clearMessage: () => void
 }
 
 type FormFields = keyof LoginContainerState
 
-class LoginContainer extends React.PureComponent<LoginContainerProps, LoginContainerState> {
+class LoginForm extends React.PureComponent<LoginContainerProps, LoginContainerState> {
     constructor(props: LoginContainerProps) {
         super(props)
-
+        this.props.clearMessage()
         this.state = {
             username: '',
             password: ''
@@ -31,7 +30,7 @@ class LoginContainer extends React.PureComponent<LoginContainerProps, LoginConta
     handleChange = (event: React.FormEvent<HTMLInputElement>) => {
         const { currentTarget } = event
         const { value, id } = currentTarget
-
+        this.props.clearMessage()
         this.setState({
             [id]: value
         } as Pick<LoginContainerState, FormFields>)
@@ -43,36 +42,37 @@ class LoginContainer extends React.PureComponent<LoginContainerProps, LoginConta
         loginUser(this.state.username, this.state.password)
     }
 
-    //TODO forms can probably be their own component
     render() {
         const { username, password } = this.state
-        return <>
-            <h2>Login</h2>
-            <form onSubmit={this.handleSubmit}>
-                <label>
-                    Username: 
-                    <Input id='username' type='text' value={username} onChange={this.handleChange}/>
-                </label>
-                <label>
-                    Password: 
-                    <Input id='password' type='password' value={password} onChange={this.handleChange}/>
-                </label>
+        return <form onSubmit={this.handleSubmit} className='login-form'>
+                <Input 
+                    id='username'
+                    type='text' 
+                    value={username} 
+                    placeHolder={'Username'} 
+                    onChange={this.handleChange} 
+                    required={true}
+                />
+                <br/>
+                <Input 
+                    id='password' 
+                    type='password' 
+                    value={password} 
+                    placeHolder={'Password'} 
+                    onChange={this.handleChange} 
+                    required={true}
+                />
+                <br/>
                 <Input id='submit' type='submit' value='Login'/>
             </form>
-        </>
-    }
-}
-
-const mapStateToProps = (store: AppState) => {
-    return {
-        login: store.login
     }
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
-        loginUser: (username: string, password: string) => dispatch(login(username, password))
+        loginUser: (username: string, password: string) => dispatch(login(username, password)),
+        clearMessage: () => dispatch(clearErrorMessageAction())
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer)
+export default connect(undefined, mapDispatchToProps)(LoginForm)

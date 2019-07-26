@@ -1,14 +1,28 @@
-import LoginContainer from "../library/LoginContainer";
-import React from "react";
-import { Link } from "react-router-dom";
+import LoginForm from '../container/LoginForm'
+import React from 'react'
+import { Link } from "react-router-dom"
+import { AppState } from '../redux/rootReducer';
+import { connect } from 'react-redux';
 
-class Login extends React.PureComponent {
+interface Props {
+    message: string
+}
+
+class Login extends React.PureComponent<Props> {
     render() {
-        return <div>
-            <LoginContainer/>
-            <Link to='/register'>Sign up</Link>
+        const { message } = this.props
+        return <div className='content'>
+            {(message != '') && <p className='error-message'>{message}</p>}
+            <LoginForm/>
+            <p>Don't have an account? <Link to='/register'>Sign up!</Link></p>
         </div>
     }
 }
 
-export default Login
+const mapStateToProps = (store: AppState) => {
+    return {
+        message: store.login.message
+    }
+}
+
+export default connect(mapStateToProps)(Login)
