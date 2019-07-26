@@ -10,6 +10,7 @@ import { history } from './client/utils/history'
 import Wallet from './client/pages/Wallet'
 import { PersistGate } from 'redux-persist/integration/react'
 import configureStore from './client/redux/store/configureStore'
+import './client/library/main.css'
 
 const {store, persistor} = configureStore()
 

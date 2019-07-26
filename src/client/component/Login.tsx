@@ -1,6 +1,5 @@
 import React from "react"
-import Input from "./Input"
-import { AppState } from "../redux/rootReducer"
+import Input from "../library/Input"
 import { ThunkDispatch } from "redux-thunk"
 import { login } from "../redux/store/login/actions"
 import { AnyAction } from "redux"
@@ -43,29 +42,24 @@ class LoginContainer extends React.PureComponent<LoginContainerProps, LoginConta
         loginUser(this.state.username, this.state.password)
     }
 
-    //TODO forms can probably be their own component
     render() {
         const { username, password } = this.state
         return <>
-            <h2>Login</h2>
+            <h1 className='eWalletHeader'>eWallet</h1>
             <form onSubmit={this.handleSubmit}>
                 <label>
                     Username: 
                     <Input id='username' type='text' value={username} onChange={this.handleChange}/>
                 </label>
+                <br/>
                 <label>
                     Password: 
                     <Input id='password' type='password' value={password} onChange={this.handleChange}/>
                 </label>
+                <br/>
                 <Input id='submit' type='submit' value='Login'/>
             </form>
         </>
-    }
-}
-
-const mapStateToProps = (store: AppState) => {
-    return {
-        login: store.login
     }
 }
 
@@ -75,4 +69,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer)
+export default connect(undefined, mapDispatchToProps)(LoginContainer)
