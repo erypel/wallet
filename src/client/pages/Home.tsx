@@ -9,7 +9,7 @@ export default class Home extends React.PureComponent {
     render() {
         return (<Provider store={WalletStore}>
             <div>
-                <WalletTable/>
+                {/* <WalletTable/> */}
                 <br/>
                 <LogOutButton/>
             </div>

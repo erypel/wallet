@@ -3,20 +3,25 @@ import { connect } from 'react-redux'
 import { WalletStoreState, ws, WalletMap } from '../redux/store/WalletStore'
 import { Table, Thead, Th, Tr, Tbody, Td } from './Table'
 import GenerateWalletButton from './GenerateWalletButton'
-import { LoginStore } from '../redux/store/LoginStore'
 import { Link } from 'react-router-dom'
+import User from '../model/User';
+import { AppState } from '../redux/rootReducer';
 
-const mapStateToProps = (state: WalletStoreState) => {
-    return {wallets: state.wallets}
+const mapStateToProps = (store: AppState) => {
+    return {
+        //wallets: store.wallets,
+        login: store.login
+    }
 }
 
 interface Props {
     wallets: WalletMap
+    user?: User
 }
 
 class ConnectedTable extends React.PureComponent<Props> {
     componentWillMount() {
-        ws.load(LoginStore.getState().user!!.id!!)
+        ws.load(this.props.user!!.id!!)
     }
 
     render() {

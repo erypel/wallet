@@ -2,7 +2,6 @@ import { createStore } from 'redux'
 import Wallet from '../../model/Wallet'
 import { walletService } from '../services/walletService'
 import { alerts } from './AlertStore'
-import { LoginStore } from './LoginStore'
 
 const ADD_WALLET = 'ADD_WALLET'
 const SET_LIST = 'SET_LIST'
@@ -70,7 +69,7 @@ const WalletStore = createStore(reducer)
 export function create(wallet: Wallet) {
     walletService.create(wallet).then((newWallet?: Wallet) => {
         if (newWallet) {
-            load(LoginStore.getState().user!!.id!!)
+            //load(LoginStore.getState().user!!.id!!)
         } else {
             const error = new Error('wallet is undefined')
             console.log(error)

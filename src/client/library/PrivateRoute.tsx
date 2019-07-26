@@ -1,15 +1,25 @@
 import React from 'react'
-import { Route, Redirect } from 'react-router-dom';
-import { isLoggedIn } from '../redux/store/LoginStore';
+import { Route, Redirect } from 'react-router-dom'
+import { AppState } from '../redux/rootReducer'
+import { connect } from 'react-redux'
 
+interface OwnProps {
+    loggedIn: boolean
+}
 
 const PrivateRoute = ({component, ...rest}: any) => {
     const routeComponent = (props: any) => (
-        isLoggedIn()
+        rest.loggedIn
             ? React.createElement(component, props)
             : <Redirect to={{pathname: '/login'}}/>
     );
     return <Route {...rest} render={routeComponent}/>;
 };
 
-export default PrivateRoute
+const mapStateToProps = (store: any) => {
+    return {
+        loggedIn: store.loginReducer.loggedIn
+    }
+}
+
+export default connect(mapStateToProps)(PrivateRoute)

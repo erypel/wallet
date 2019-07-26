@@ -3,9 +3,14 @@ import { connect } from 'react-redux'
 import React from 'react'
 import { ws } from '../redux/store/WalletStore'
 import generateAddress from '../rippled/utils/generateAddress'
-import { LoginStore } from '../redux/store/LoginStore';
+import { AppState } from '../redux/rootReducer';
+import User from '../model/User';
 
-class GenerateWalletButton extends React.PureComponent {
+interface Props {
+    user?: User
+}
+
+class GenerateWalletButton extends React.PureComponent<Props> {
     render() {
         return <Button
             onClick={this.generate}
@@ -16,7 +21,7 @@ class GenerateWalletButton extends React.PureComponent {
     generate = () => {
         const pair = generateAddress()
         const { address, secret } = pair
-        const activeUser = LoginStore.getState().user
+        const activeUser = this.props.user
         const wallet = {
             publicKey: address as string,
             privateKey: secret as string,
@@ -26,4 +31,10 @@ class GenerateWalletButton extends React.PureComponent {
     }
 }
 
-export default connect()(GenerateWalletButton)
+const mapStateToProps = (store: AppState) => {
+    return {
+        login: store.login
+    }
+}
+
+export default connect(mapStateToProps)(GenerateWalletButton)
