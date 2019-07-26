@@ -2,10 +2,129 @@ html {
     background-color: #2B3E50;
 }
 
-.eWalletHeader {
+.App {
+    text-align: center;
+}
+
+.section {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu {
+    background-color: #5995DA;
+    height: 80px;
+}
+
+.header {
     color: #26AE5F;
     font-family: Arial, Helvetica, sans-serif;
     font-style: normal;
     font-weight: bold;
     font-size: 5em;
+}
+
+.content {
+    height: 5em;
+}
+
+.login-form {
+    width: 80%;
+    display: inline-block;
+}
+
+.login-form input {
+    width: 80%;
+    background: black;
+    border: none;
+    color: white;
+    border-radius: 1em;
+    padding: 1.5em;
+    text-align: center;
+    margin: .3em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.25em;
+}
+
+/* Style the submit button */
+.login-form input[type=submit] {
+    width: 7em;
+    background-color: #26AE5F;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: white;
+    opacity: 1; /* Firefox */
+}
+  
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: white;
+}
+  
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: white;
+}
+
+.sign-up {
+    background-color: #D6E9FE;
+}
+
+.feature-1 {
+    background-color: #F5CF8E;
+}
+
+.feature-2 {
+    background-color: #F09A9D;
+}
+
+.feature-3 {
+    background-color: #C8C6FA;
+}
+  
+/* Mobile Styles */
+@media only screen and (max-width: 400px) {
+    /*useful for testing*/
+    /* body {
+        background-color: #F09A9D; 
+    } */
+}
+  
+/* Tablet Styles */
+@media only screen and (min-width: 401px) and (max-width: 960px) {
+    /*useful for testing*/
+    /* body {
+        background-color: #F5CF8E;
+    } */
+
+    /* .sign-up,
+    .feature-1,
+    .feature-2,
+    .feature-3 {
+    width: 50%;
+  } */
+}
+  
+/* Desktop Styles */
+@media only screen and (min-width: 961px) {
+    /*useful for testing*/
+    /* body {
+        background-color: #B2D6FF;
+    } */
+
+    .App {
+        width: 960px;
+        margin: 0 auto;
+     }
+     /*
+    .feature-1,
+    .feature-2,
+    .feature-3 {
+        width: 33.3%;
+    } */
 }

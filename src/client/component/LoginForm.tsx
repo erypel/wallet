@@ -5,7 +5,6 @@ import { login } from "../redux/store/login/actions"
 import { AnyAction } from "redux"
 import { connect } from "react-redux"
 
-
 interface LoginContainerState {
     username: string
     password: string
@@ -17,7 +16,7 @@ interface LoginContainerProps {
 
 type FormFields = keyof LoginContainerState
 
-class LoginContainer extends React.PureComponent<LoginContainerProps, LoginContainerState> {
+class LoginForm extends React.PureComponent<LoginContainerProps, LoginContainerState> {
     constructor(props: LoginContainerProps) {
         super(props)
 
@@ -44,22 +43,13 @@ class LoginContainer extends React.PureComponent<LoginContainerProps, LoginConta
 
     render() {
         const { username, password } = this.state
-        return <>
-            <h1 className='eWalletHeader'>eWallet</h1>
-            <form onSubmit={this.handleSubmit}>
-                <label>
-                    Username: 
-                    <Input id='username' type='text' value={username} onChange={this.handleChange}/>
-                </label>
+        return <form onSubmit={this.handleSubmit} className='login-form'>
+                <Input id='username' type='text' value={username} placeHolder={'Username'} onChange={this.handleChange}/>
                 <br/>
-                <label>
-                    Password: 
-                    <Input id='password' type='password' value={password} onChange={this.handleChange}/>
-                </label>
+                <Input id='password' type='password' value={password} placeHolder={'Password'} onChange={this.handleChange}/>
                 <br/>
                 <Input id='submit' type='submit' value='Login'/>
             </form>
-        </>
     }
 }
 
@@ -69,4 +59,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     }
 }
 
-export default connect(undefined, mapDispatchToProps)(LoginContainer)
+export default connect(undefined, mapDispatchToProps)(LoginForm)

@@ -4,6 +4,7 @@ import PrivateRoute from './client/library/PrivateRoute'
 import Login from './client/pages/Login'
 import Register from './client/pages/Register'
 import Home from './client/pages/Home'
+import Header from './client/component/header'
 import { Route, Router, Switch } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { history } from './client/utils/history'
@@ -19,6 +20,7 @@ class App extends React.PureComponent {
     return <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <div className="App">
+            <Header/>
             <Router history={history}>
               <div>
                 <Switch>
