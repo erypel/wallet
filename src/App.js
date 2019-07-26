@@ -1,5 +1,4 @@
 import React from 'react'
-import './App.css'
 import PrivateRoute from './client/library/PrivateRoute'
 import Login from './client/pages/Login'
 import Register from './client/pages/Register'

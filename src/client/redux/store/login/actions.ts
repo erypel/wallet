@@ -1,8 +1,19 @@
-import { ActionCreator, Dispatch } from "redux"
-import Login from "../../../model/Login"
-import { LOGIN_REQUEST, LoginRequestAction, LoginSuccessAction, LoginFailureAction, LOGIN_FAILURE, LOGOUT, LogoutAction, LOGIN_SUCCESS } from "./types"
-import { userService } from "../../services/userService"
-import User from "../../../model/User"
+import { ActionCreator, Dispatch } from 'redux'
+import Login from '../../../model/Login'
+import { 
+    LOGIN_REQUEST,
+    LoginRequestAction, 
+    LoginSuccessAction, 
+    LoginFailureAction, 
+    LOGIN_FAILURE, 
+    LOGOUT, 
+    LogoutAction, 
+    LOGIN_SUCCESS, 
+    CLEAR, 
+    ClearErrorMessageAction 
+} from './types'
+import { userService } from '../../services/userService'
+import User from '../../../model/User'
 import { history } from '../../../utils/history'
 
 export const login: ActionCreator<any> = (username: string, password: string) => {
@@ -14,8 +25,7 @@ export const login: ActionCreator<any> = (username: string, password: string) =>
                 dispatch(loginSuccessAction(user))
                 history.push('/home')
             } else {
-                const error = new Error('user is undefined')
-                console.log(error)
+                dispatch(loginFailureAction(new Error("Incorrect username or password.")))
             }
         }, (error: Error) => {
             dispatch(loginFailureAction(error))
@@ -30,6 +40,10 @@ export const logout: ActionCreator<any> = (userId: string) => {
         dispatch(logoutAction())
         history.push('/')
     }
+}
+
+export function clearErrorMessageAction(): ClearErrorMessageAction {
+    return { type: CLEAR, payload: '' }
 }
 
 function loginRequestAction(login: Login): LoginRequestAction {

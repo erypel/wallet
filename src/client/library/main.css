@@ -31,6 +31,18 @@ html {
     height: 5em;
 }
 
+.content a {
+    color: white;
+}
+
+.content p {
+    color: white;
+}
+
+.error-message {
+    color: red !important;
+}
+
 .login-form {
     width: 80%;
     display: inline-block;
@@ -49,15 +61,6 @@ html {
     font-size: 1.25em;
 }
 
-/* Style the submit button */
-.login-form input[type=submit] {
-    width: 7em;
-    background-color: #26AE5F;
-    border: none;
-    color: white;
-    cursor: pointer;
-  }
-
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
     color: white;
     opacity: 1; /* Firefox */
@@ -71,11 +74,15 @@ html {
     color: white;
 }
 
-.sign-up {
-    background-color: #D6E9FE;
-}
+.login-form input[type=submit] {
+    width: 7em;
+    background-color: #26AE5F;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
 
-.feature-1 {
+/* .feature-1 {
     background-color: #F5CF8E;
 }
 
@@ -85,13 +92,13 @@ html {
 
 .feature-3 {
     background-color: #C8C6FA;
-}
+} */
   
 /* Mobile Styles */
 @media only screen and (max-width: 400px) {
     /*useful for testing*/
     /* body {
-        background-color: #F09A9D; 
+        background-color: red; 
     } */
 }
   
@@ -99,7 +106,7 @@ html {
 @media only screen and (min-width: 401px) and (max-width: 960px) {
     /*useful for testing*/
     /* body {
-        background-color: #F5CF8E;
+        background-color: green;
     } */
 
     /* .sign-up,
@@ -114,7 +121,7 @@ html {
 @media only screen and (min-width: 961px) {
     /*useful for testing*/
     /* body {
-        background-color: #B2D6FF;
+        background-color: blue;
     } */
 
     .App {
