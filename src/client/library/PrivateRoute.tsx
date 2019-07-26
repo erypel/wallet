@@ -18,7 +18,7 @@ const PrivateRoute = ({component, ...rest}: any) => {
 
 const mapStateToProps = (store: any) => {
     return {
-        loggedIn: store.loginReducer.loggedIn
+        loggedIn: store.login.loggedIn
     }
 }
 

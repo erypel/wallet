@@ -123,9 +123,10 @@ class CreateUserForm extends React.PureComponent<CreateUserProps, CreateUserStat
     }
 }
 
-const mapStateToProps = (store: AppState) => {
+//TODO store should be a specific type for all of these 
+const mapStateToProps = (store: any) => {
     return {
-        user: store.user
+        user: store.userReducer
     }
 }
 

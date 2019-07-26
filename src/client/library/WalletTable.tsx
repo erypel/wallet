@@ -1,27 +1,38 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { WalletStoreState, ws, WalletMap } from '../redux/store/WalletStore'
 import { Table, Thead, Th, Tr, Tbody, Td } from './Table'
 import GenerateWalletButton from './GenerateWalletButton'
 import { Link } from 'react-router-dom'
-import User from '../model/User';
-import { AppState } from '../redux/rootReducer';
+import User from '../model/User'
+import { AppState } from '../redux/rootReducer'
+import { WalletMap } from '../redux/store/wallet/types'
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
+import { load } from '../redux/store/wallet/actions';
 
-const mapStateToProps = (store: AppState) => {
+const mapStateToProps = (store: any) => {
     return {
-        //wallets: store.wallets,
-        login: store.login
+        wallets: store.wallet.wallets,
+        user: store.login.user
+    }
+}
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return {
+        load: (userId: string) => dispatch(load(userId))
     }
 }
 
 interface Props {
     wallets: WalletMap
     user?: User
+    load: (userId: string) => Promise<any>
 }
 
-class ConnectedTable extends React.PureComponent<Props> {
+class WalletTable extends React.PureComponent<Props> {
     componentWillMount() {
-        ws.load(this.props.user!!.id!!)
+        const { load, user } = this.props
+        load(user!!.id!!)
     }
 
     render() {
@@ -58,6 +69,4 @@ class ConnectedTable extends React.PureComponent<Props> {
     }
 }
 
-const WalletTable = connect(mapStateToProps)(ConnectedTable)
-
-export default WalletTable
+export default connect(mapStateToProps, mapDispatchToProps)(WalletTable)
