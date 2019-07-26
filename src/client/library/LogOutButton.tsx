@@ -28,7 +28,7 @@ class LogOutButton extends React.PureComponent<Props> {
 
 const mapStateToProps = (store: AppState) => {
     return {
-        login: store.login
+        user: store.login.user
     }
 }
 
