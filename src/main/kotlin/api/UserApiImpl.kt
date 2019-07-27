@@ -1,7 +1,6 @@
 package api
 
 import dao.NewUser
-import dao.User
 import dao.UserDetail
 import io.javalin.http.Context
 import service.UserService
@@ -27,6 +26,7 @@ class UserApiImpl(private val userService: UserService) : UserApi {
 
     override fun update(ctx: Context) {
         val detail = ctx.body<UserDetail>()
-        ctx.json(userService.update(detail))
+        userService.update(detail)
+        ctx
     }
 }

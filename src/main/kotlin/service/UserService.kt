@@ -10,6 +10,7 @@ import javax.crypto.spec.SecretKeySpec
 import CookieBuilder
 import UnexpectedStateException
 import dao.NewUser
+import dao.UserDetail
 
 class UserService(private val userStore: UserStore) {
     fun create(user: NewUser): User {
@@ -20,6 +21,10 @@ class UserService(private val userStore: UserStore) {
         }
         user.username = username
         return createNewUser(user)
+    }
+
+    fun update(detail: UserDetail) {
+        return userStore.update(detail)
     }
 
     //TODO want to think more about how to architect this
@@ -42,7 +47,8 @@ class UserService(private val userStore: UserStore) {
 
     private fun authenticate(login: Login): User? {
         val user = userStore.findUserByUsername(login.username)?: return null
-        return if(user.password == generateHashWithHmac512(login.password, user.salt)) {
+        var salt = userStore.getSaltForUser(user.id.value)
+        return if(user.password == generateHashWithHmac512(login.password, salt)) {
             user.toUser()
         } else {
             null

@@ -1,13 +1,33 @@
 package store
 
 import dao.*
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
 class UserStore {
     fun findUserByUsername(username: String): UserDao? {
         return transaction {
             val users = UserDao.find { Users.username eq username }
             users.firstOrNull()
+        }
+    }
+
+    fun getSaltForUser(userId: Int): String {
+        return transaction {
+            UserDetails.slice(UserDetails.salt)
+                    .select { UserDetails.userId eq userId }
+                    .first()[UserDetails.salt]
+        }
+    }
+
+    fun update(detail: UserDetail) {
+        transaction {
+            UserDetails.update({UserDetails.userId eq detail.userId}) {
+                it[firstName] = detail.firstName
+                it[lastName] = detail.lastName
+                it[email] = detail.email
+            }
         }
     }
 

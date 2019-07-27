@@ -49,7 +49,7 @@ class UserProfileForm extends React.PureComponent<UserProfileProps, UserProfileS
             lastName: lastName,
             email: email
         }
-        updateUser(user)
+        //updateUser(user)
     }
 
     render() {
@@ -78,7 +78,7 @@ const mapStateToProps = (store: AppState) => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
-        updateUser: (user: User) => dispatch(updateUser(user))
+        //updateUser: (user: User) => dispatch(updateUser(user))
     }
 }
 

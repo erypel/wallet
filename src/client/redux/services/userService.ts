@@ -40,6 +40,11 @@ async function register(user: User): Promise<User | undefined> {
     const salted = salt(user.password)
     user.password = salted.hash
     user.salt = salted.salt
+    const newUser = {
+        username: user.username,
+        password: user.password,
+        salt: user.salt
+    }
     await fetch('http://localhost:7000/user/create/', {
         headers: {
             'Accept': 'application/json',
@@ -47,7 +52,7 @@ async function register(user: User): Promise<User | undefined> {
         },
         credentials: 'include',
         method: 'POST',
-        body: JSON.stringify(user)
+        body: JSON.stringify(newUser)
     }).then(response => {
         console.log(response)
         alert(response)
