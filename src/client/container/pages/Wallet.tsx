@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Button from '../library/Button'
-import Modal from '../library/Modal'
-import TransactionWizard from '../library/TransactionWizard/TransactionWizard'
-import LogOutButton from '../library/LogOutButton'
+import Button from '../../library/Button'
+import Modal from '../../library/Modal'
+import TransactionWizard from '../TransactionWizard/TransactionWizard'
+import LogOutButton from '../../library/LogOutButton'
 import { Link } from 'react-router-dom'
-import Balance from '../library/Balance'
-import { WalletMap } from '../redux/store/wallet/types'
+import Balance from '../../library/Balance'
+import { WalletMap } from '../../redux/store/wallet/types'
 
 interface State {
     isSendModalOpen: boolean

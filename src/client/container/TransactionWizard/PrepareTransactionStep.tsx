@@ -1,5 +1,5 @@
 import React from 'react'
-import SendForm from '../SendForm'
+import SendForm from '../../library/SendForm'
 import Currency from '../../rippled/model/Currency'
 import Amount from '../../rippled/model/Amount'
 import Source from '../../rippled/model/Source'

@@ -19,12 +19,22 @@ html {
     height: 80px;
 }
 
-.header {
+.header h1 {
     color: #26AE5F;
     font-family: Arial, Helvetica, sans-serif;
     font-style: normal;
     font-weight: bold;
     font-size: 5em;
+    margin-bottom: 0;
+}
+
+.header h2 {
+    color: rgb(177, 90, 19);
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 2em;
+    margin-top: 0;
 }
 
 .content {
@@ -37,6 +47,12 @@ html {
 
 .content p {
     color: white;
+}
+
+.ul-no-style ul {
+    list-style: none;
+    color: #95A5A5;
+    padding-left: 0;
 }
 
 .error-message {
@@ -80,7 +96,7 @@ html {
     border: none;
     color: white;
     cursor: pointer;
-  }
+}
 
 /* .feature-1 {
     background-color: #F5CF8E;

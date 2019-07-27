@@ -9,6 +9,8 @@ import User from '../model/User'
 import { AnyAction } from 'redux'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
+import PasswordRequirements from '../component/PasswordRequirements';
+import Subheader from '../component/Subheader';
 
 interface CreateUserState {
     username: string
@@ -73,60 +75,29 @@ class CreateUserForm extends React.PureComponent<CreateUserProps, CreateUserStat
     
     render() {
         const { username, password, verifyPassword, firstName, lastName, email } = this.state
-        return <>
-            <h2>Create User</h2>
-            <h2>Passwords must meet these conditions: </h2>
-		    <ul>
-                <li>At least one uppercase english letter [A-Z]</li>
-                <li>At least one lowercase english letter [a-z]</li>
-                <li>At least one digit [0-9]</li>
-                <li>At least one special character [#?!@ $%^&*-]</li>
-                <li>Minimum length 10, maximum length 128</li>
-		    </ul>
-            <form onSubmit={this.handleSubmit}>
-                <label>
-                    First Name: 
-                    <Input required={true} id='firstName' type='text' value={firstName} onChange={this.handleChange}/>
-                </label>
-                <br/>
-                <label>
-                    Last Name: 
-                    <Input required={true} id='lastName' type='text' value={lastName} onChange={this.handleChange}/>
-                </label>
-                <br/>
-                <label>
-                    Email: 
-                    <Input required={true} id='email' type='text' value={email} onChange={this.handleChange}/>
-                </label>
-                <br/>
-                <label>
-                    Username: 
-                    <Input required={true} id='username' type='text' value={username} onChange={this.handleChange}/>
-                </label>
-                <br/>
-                <label>
-                    Password: 
-                    <Input required={true} id='password' type='password' value={password} onChange={this.handleChange}/>
-                </label>
-                <br/>
-                <label>
-                    Verify Password: 
-                    <Input required={true} id='verifyPassword' type='password' value={verifyPassword} onChange={this.handleChange}/>
-                </label>
-                <br/>
+        return <div className='content'>
+            <Subheader title='Sign Up'/>
+            <form onSubmit={this.handleSubmit} className='login-form'>
+                <Input required={true} id='firstName' type='text' value={firstName} onChange={this.handleChange} placeHolder='First Name'/>
+                <Input required={true} id='lastName' type='text' value={lastName} onChange={this.handleChange} placeHolder='Last Name'/>
+                <Input required={true} id='email' type='text' value={email} onChange={this.handleChange} placeHolder='Email'/> 
+                <Input required={true} id='username' type='text' value={username} onChange={this.handleChange} placeHolder='Username'/>
+                <Input required={true} id='password' type='password' value={password} onChange={this.handleChange} placeHolder='Password'/>
+                <Input required={true} id='verifyPassword' type='password' value={verifyPassword} onChange={this.handleChange} placeHolder='Verify Password'/>
                 <Input id='submit' type='submit' value='Register'/>
             </form>
+            <PasswordRequirements/>
             <br/>
             <Link to='/login'>Back to login</Link>
             <br/>
-        </>
+            <br/>
+        </div>
     }
 }
 
-//TODO store should be a specific type for all of these 
-const mapStateToProps = (store: any) => {
+const mapStateToProps = (store: AppState) => {
     return {
-        user: store.userReducer
+        user: store.user.user
     }
 }
 
