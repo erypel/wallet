@@ -1,8 +1,6 @@
 package store
 
-import dao.UserDao
-import dao.User
-import dao.Users
+import dao.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class UserStore {
@@ -17,16 +15,24 @@ class UserStore {
         return findUserByUsername(username) == null
     }
 
-    fun create(user: User): User {
+    fun createUser(user: NewUser): User {
         return transaction {
             UserDao.new {
-                firstName = user.firstName
-                lastName = user.lastName
                 username = user.username
                 password = user.password
-                salt = user.salt
-                email = user.email
             }.toUser()
+        }
+    }
+
+    fun createUserDetail(randomString: String, id: Int): UserDetail {
+        return transaction {
+            UserDetailDao.new {
+                firstName = ""
+                lastName = ""
+                salt = randomString
+                email = ""
+                userId = id
+            }.toUserDetail()
         }
     }
 }

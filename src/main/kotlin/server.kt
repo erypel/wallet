@@ -54,6 +54,9 @@ fun main(args: Array<String>) {
             path("create") {
                 post(userApi::create)
             }
+            path("update") {
+                post(userApi::update)
+            }
         }
         path("wallet") {
             path("create") {
