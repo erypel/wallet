@@ -8,7 +8,7 @@ import org.jetbrains.exposed.dao.IntIdTable
 data class UserDetail(
         var firstName: String,
         var lastName: String,
-        var salt: String,
+        var salt: String?,
         var email: String,
         var userId: Int
 )

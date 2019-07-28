@@ -11,6 +11,7 @@ import Wallet from './client/container/pages/Wallet'
 import { PersistGate } from 'redux-persist/integration/react'
 import configureStore from './client/redux/store/configureStore'
 import './client/library/main.css'
+import UserProfileForm from './client/container/UserProfileForm';
 
 const {store, persistor} = configureStore()
 
@@ -28,6 +29,7 @@ class App extends React.PureComponent {
                   <Route path="/login" exact component={Login}/>
                   <Route path='/register' component={Register}/>
                   <PrivateRoute path='/wallet/:publicKey' component={Wallet}/>
+                  <PrivateRoute path='/profile' component={UserProfileForm}/>
                   <Route render={() => (<div> Sorry, this page does not exist. </div>)} />
                 </Switch>
               </div>

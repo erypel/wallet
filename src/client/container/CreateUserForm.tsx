@@ -8,8 +8,9 @@ import User from '../model/User'
 import { AnyAction } from 'redux'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
-import PasswordRequirements from '../component/PasswordRequirements';
-import Subheader from '../component/Subheader';
+import PasswordRequirements from '../component/PasswordRequirements'
+import Subheader from '../component/Subheader'
+import { login } from '../redux/store/login/actions'
 
 interface CreateUserState {
     username: string
@@ -19,6 +20,7 @@ interface CreateUserState {
 
 interface CreateUserProps {
     createUser: (user:User) => Promise<any>
+    login: (username: string, password: string) => Promise<any>
 }
 
 type FormFields = keyof CreateUserState
@@ -46,7 +48,7 @@ class CreateUserForm extends React.PureComponent<CreateUserProps, CreateUserStat
     handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const { username, password, verifyPassword } = this.state
-        const { createUser } = this.props
+        const { createUser, login } = this.props
         const passwordValidation = validatePassword(password)
         if(!passwordValidation.success){
             alert(passwordValidation.message)
@@ -61,8 +63,9 @@ class CreateUserForm extends React.PureComponent<CreateUserProps, CreateUserStat
                 email: '',
                 salt: ''
             }
-            createUser(newUser)
-            history.push('/login')
+            createUser(newUser).then(() => {login(username, password)})
+            
+            //history.push('/login')
         }
     }
     
@@ -87,7 +90,8 @@ class CreateUserForm extends React.PureComponent<CreateUserProps, CreateUserStat
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
-        createUser: (user: User) => dispatch(createUser(user))
+        createUser: (user: User) => dispatch(createUser(user)),
+        login: (username: string, password: string) => dispatch(login(username, password, true))
     }
 }
 

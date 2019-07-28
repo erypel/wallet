@@ -1,7 +1,8 @@
 import { ActionCreator, Dispatch } from 'redux'
-import { REGISTER_REQUEST, SuccessAction, REGISTER_SUCCESS, REGISTER_FAILURE, FailureAction, CreateUserAction } from './types';
+import { REGISTER_REQUEST, SuccessAction, REGISTER_SUCCESS, REGISTER_FAILURE, FailureAction, CreateUserAction, UPDATE_USER } from './types';
 import User from '../../../model/User'
 import { userService } from '../../services/userService'
+import UserDetail from '../../../model/UserDetail';
 
 export const createUser: ActionCreator<any> = (user: User) => {
     return async (dispatch: Dispatch) => {
@@ -17,6 +18,17 @@ export const createUser: ActionCreator<any> = (user: User) => {
             dispatch(failure())
         }
         return dispatch(createUserAction)
+    }
+}
+
+export const updateUser: ActionCreator<any> = (detail: UserDetail) => {
+    return async (dispatch: Dispatch) => {
+        const updateUserAction = {
+            type: UPDATE_USER, 
+            payload: detail
+        }
+        await userService.update(detail)
+        return dispatch(updateUserAction)
     }
 }
 

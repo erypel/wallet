@@ -1,6 +1,7 @@
 import Login from '../../model/Login'
 import User from '../../model/User'
 import salt from '../../utils/salt'
+import UserDetail from '../../model/UserDetail';
 
 //login store methods
 async function login(login: Login): Promise<User | undefined> {
@@ -55,15 +56,31 @@ async function register(user: User): Promise<User | undefined> {
         body: JSON.stringify(newUser)
     }).then(response => {
         console.log(response)
-        alert(response)
     }).catch(error => {
         alert(error)
     })
     return undefined
 }
 
+async function update(detail: UserDetail): Promise<any> {
+    return await fetch('http://localhost:7000/user/update/', {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'text/plain'
+        },
+        credentials: 'include',
+        body: JSON.stringify(detail),
+        method: 'POST'
+    }).then(async res => {
+        return await res.json()
+    }).catch(() => {
+        return undefined
+    })
+}
+
 export const userService = {
     login,
     logout,
-    register
+    register,
+    update
 }

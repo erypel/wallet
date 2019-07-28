@@ -1,12 +1,14 @@
-import User from "../model/User";
-import React from "react";
-import Subheader from "../component/Subheader";
-import Input from "../library/Input";
-import { Link } from "react-router-dom";
-import { ThunkDispatch } from "redux-thunk";
-import { AppState } from "../redux/rootReducer";
-import { AnyAction } from "redux";
-import { connect } from "react-redux";
+import React from 'react'
+import Subheader from '../component/Subheader'
+import Input from '../library/Input'
+import { Link } from 'react-router-dom'
+import { ThunkDispatch } from 'redux-thunk'
+import { AppState } from '../redux/rootReducer'
+import { AnyAction } from 'redux'
+import { connect } from 'react-redux'
+import UserDetail from '../model/UserDetail'
+import { updateUser } from '../redux/store/user/actions'
+import { history } from '../utils/history'
 
 interface UserProfileState {
     firstName: string
@@ -15,7 +17,8 @@ interface UserProfileState {
 }
 
 interface UserProfileProps {
-    updateUser: (user:User) => Promise<any>
+    updateUser: (detail:UserDetail) => Promise<any>
+    userId: string
 }
 
 type FormFields = keyof UserProfileState
@@ -43,13 +46,15 @@ class UserProfileForm extends React.PureComponent<UserProfileProps, UserProfileS
     handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const { firstName, lastName, email } = this.state
-        const { updateUser } = this.props
-        const user = {
+        const { updateUser, userId } = this.props
+        const user: UserDetail = {
             firstName: firstName,
             lastName: lastName,
-            email: email
+            email: email,
+            userId: userId!!
         }
-        //updateUser(user)
+        updateUser(user)
+        history.push('/home')
     }
 
     render() {
@@ -60,7 +65,7 @@ class UserProfileForm extends React.PureComponent<UserProfileProps, UserProfileS
                 <Input required={true} id='firstName' type='text' value={firstName} onChange={this.handleChange} placeHolder='First Name'/>
                 <Input required={true} id='lastName' type='text' value={lastName} onChange={this.handleChange} placeHolder='Last Name'/>
                 <Input required={true} id='email' type='text' value={email} onChange={this.handleChange} placeHolder='Email'/> 
-                <Input id='submit' type='submit' value='Register'/>
+                <Input id='submit' type='submit' value='Save'/>
             </form>
             <br/>
             <Link to='/home'>Skip for now.</Link>
@@ -72,13 +77,13 @@ class UserProfileForm extends React.PureComponent<UserProfileProps, UserProfileS
 
 const mapStateToProps = (store: AppState) => {
     return {
-        user: store.user.user
+        userId: store.login.user!!.id!!
     }
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
-        //updateUser: (user: User) => dispatch(updateUser(user))
+        updateUser: (detail: UserDetail) => dispatch(updateUser(detail))
     }
 }
 
