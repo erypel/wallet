@@ -41,7 +41,7 @@ html {
     height: 5em;
 }
 
-.content a {
+a {
     color: white;
 }
 
@@ -101,20 +101,44 @@ html {
 .tab-list {
     border-bottom: 1px solid #ccc;
     padding-left: 0;
-  }
+    margin-top: 0;
+    margin-bottom: 0;
+}
   
-  .tab-list-item {
+.tab-list-item {
     display: inline-block;
     list-style: none;
     margin-bottom: -1px;
     padding: 0.5rem 0.75rem;
-  }
+}
   
-  .tab-list-active {
-    background-color: white;
-    border: solid #ccc;
+.tab-list-active {
+    background: white;
+    color: black;
+    border: none;
+    border-top-left-radius: .5em;
+    border-top-right-radius: .5em;
     border-width: 1px 1px 0 1px;
-  }
+}
+
+.tab-content {
+    background: white;
+}
+
+.width-2-3 {
+    width: 66%;
+}
+
+.container-black {
+    background: black;
+    border: none;
+    color: white;
+    border-radius: 1em;
+    padding: 1.5em;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.25em;
+}
 
 /* .feature-1 {
     background-color: #F5CF8E;

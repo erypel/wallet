@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Td, Tbody, Tr } from './Table';
+import { Table, Td, Tbody, Tr } from '../library/Table';
 import getBalances from '../rippled/utils/getBalances';
 
 interface Props {
@@ -33,7 +33,7 @@ class Balance extends React.PureComponent<Props, State> {
         if(!xrpBalance) {
             return <label>Fetching Balance...</label>
         }
-        return <Table>
+        return <Table className='container-black'>
             <Tbody>
                 <Tr>
                     <Td>Balance</Td>

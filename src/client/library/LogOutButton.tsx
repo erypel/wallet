@@ -1,4 +1,4 @@
-import Button from "./Button";
+import Button from "../component/Button";
 import React from "react";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";

@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '../../library/Button'
+import Button from '../../component/Button'
 import signTransaction from '../../rippled/utils/flow/signTransaction'
 import { Dispatch } from 'redux';
 import SignedTransaction from '../../rippled/model/transaction/flow/SignedTransaction';

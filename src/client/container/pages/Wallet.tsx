@@ -1,13 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Button from '../../library/Button'
-import Modal from '../../library/Modal'
 import TransactionWizard from '../TransactionWizard/TransactionWizard'
-import LogOutButton from '../../library/LogOutButton'
 import { Link } from 'react-router-dom'
-import Balance from '../../library/Balance'
+import Balance from '../Balance'
 import { WalletMap } from '../../redux/store/wallet/types'
 import Tabs from '../Tabs';
+import Subheader from '../../component/Subheader';
 
 interface Props {
     match: any
@@ -26,21 +24,25 @@ class Wallet extends React.PureComponent<Props> {
         if(!privateKey) {
             return <div>ERROR</div>
         }
-        return <div>
+        return <>
+        <Subheader title='Send and Receive'/>
+        <div className='section'>
+            <div className='width-2-3'>
                 <Balance address={publicKey}/>
                 <Tabs>
                     <div data-label="Send">
                         <TransactionWizard publicKey={publicKey} privateKey={privateKey}/>
                     </div>
                     <div data-label="Receive">
-                        <p>Send XRP here: {publicKey}</p>
+                        <div>Send XRP here: {publicKey}</div>
                     </div>
                 </Tabs>
                 <br/>
                 <Link to='/home'>Back to list</Link>
                 <br/>
-                <LogOutButton/>
             </div>
+        </div>
+        </>
     }
 }
 
