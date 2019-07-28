@@ -1,7 +1,6 @@
 import React from 'react'
 import Input from '../library/Input'
 import { Link } from 'react-router-dom'
-import { history } from '../utils/history'
 import validatePassword from '../utils/validatePassword'
 import { createUser } from '../redux/store/user/actions'
 import User from '../model/User'
@@ -64,8 +63,6 @@ class CreateUserForm extends React.PureComponent<CreateUserProps, CreateUserStat
                 salt: ''
             }
             createUser(newUser).then(() => {login(username, password)})
-            
-            //history.push('/login')
         }
     }
     

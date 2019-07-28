@@ -10,10 +10,10 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { load } from '../redux/store/wallet/actions';
 
-const mapStateToProps = (store: any) => {
+const mapStateToProps = (store: AppState) => {
     return {
         wallets: store.wallet.wallets,
-        user: store.login.user
+        user: store.user.user
     }
 }
 

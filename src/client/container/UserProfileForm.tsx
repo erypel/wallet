@@ -18,6 +18,7 @@ interface UserProfileState {
 
 interface UserProfileProps {
     updateUser: (detail:UserDetail) => Promise<any>
+    userDetail: UserDetail
     userId: string
 }
 
@@ -27,10 +28,12 @@ class UserProfileForm extends React.PureComponent<UserProfileProps, UserProfileS
     constructor(props: UserProfileProps) {
         super(props)
 
+        const { firstName, lastName, email } = props.userDetail
+
         this.state = {
-            firstName: '',
-            lastName: '',
-            email: ''
+            firstName: firstName,
+            lastName: lastName,
+            email: email
         }
     }
 
@@ -77,7 +80,8 @@ class UserProfileForm extends React.PureComponent<UserProfileProps, UserProfileS
 
 const mapStateToProps = (store: AppState) => {
     return {
-        userId: store.login.user!!.id!!
+        userId: store.login.user!!.id!!,
+        userDetail: store.user.detail!!
     }
 }
 
