@@ -1,6 +1,6 @@
-import User from "../../../model/User";
-import { Action } from "redux";
-import UserDetail from "../../../model/UserDetail";
+import User from '../../../model/User'
+import { Action } from 'redux'
+import UserDetail from '../../../model/UserDetail'
 
 export interface UserState {
     user?: User
@@ -10,7 +10,10 @@ export interface UserState {
 export const REGISTER_REQUEST = 'USERS_REGISTER_REQUEST'
 export const REGISTER_SUCCESS = 'USERS_REGISTER_SUCCESS'
 export const REGISTER_FAILURE = 'USERS_REGISTER_FAILURE'
-export const UPDATE_USER = 'USERS_UPDATE'
+export const UPDATE_USER_DETAIL = 'USERS_UPDATE_DETAIL'
+export const SET_USER = 'USERS_SET_USER'
+export const SET_USER_DETAIL = 'USERS_SET_DETAIL'
+export const CLEAR = 'USERS_CLEAR'
 
 export interface CreateUserAction extends Action {
     type: typeof REGISTER_REQUEST
@@ -32,4 +35,20 @@ export interface FailureAction extends Action {
     payload: null
 }
 
-export type UserActions = CreateUserAction | SuccessAction | FailureAction | UpdateUserAction
+export interface SetUserAction extends Action {
+    type: typeof SET_USER
+    payload: User
+}
+
+export interface SetUserDetailAction extends Action {
+    type: typeof SET_USER_DETAIL
+    payload: UserDetail
+}
+
+export interface ClearUserAction extends Action {
+    type: typeof CLEAR
+    payload: null
+}
+
+export type UserActions = CreateUserAction | SuccessAction | FailureAction 
+    | UpdateUserAction | SetUserAction | UserDetail | ClearUserAction

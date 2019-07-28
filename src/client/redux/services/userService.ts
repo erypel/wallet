@@ -1,10 +1,11 @@
 import Login from '../../model/Login'
 import User from '../../model/User'
 import salt from '../../utils/salt'
-import UserDetail from '../../model/UserDetail';
+import UserDetail from '../../model/UserDetail'
+import Pair from '../../model/Pair'
 
 //login store methods
-async function login(login: Login): Promise<User | undefined> {
+async function login(login: Login): Promise<Pair | undefined> {
     return await fetch('http://localhost:7000/user/login/', {
         headers: {
             'Accept': 'application/json',

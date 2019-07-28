@@ -45,11 +45,13 @@ class UserService(private val userStore: UserStore) {
         return createdUser
     }
 
-    private fun authenticate(login: Login): User? {
+    private fun authenticate(login: Login): Pair<User, UserDetail>? {
         val user = userStore.findUserByUsername(login.username)?: return null
-        var salt = userStore.getSaltForUser(user.id.value)
+        val userId = user.id.value
+        val detail = userStore.getUserDetail(userId)
+        var salt = detail.salt!!
         return if(user.password == generateHashWithHmac512(login.password, salt)) {
-            user.toUser()
+            Pair(user.toUser(), detail)
         } else {
             null
         }

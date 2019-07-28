@@ -15,14 +15,20 @@ import {
 import { userService } from '../../services/userService'
 import User from '../../../model/User'
 import { history } from '../../../utils/history'
+import { setUser, clearUser, setUserDetail } from '../user/actions'
+import Pair from '../../../model/Pair'
 
 export const login: ActionCreator<any> = (username: string, password: string, intial?: boolean) => {
     return async (dispatch: Dispatch) => {
         const login = { username, password }
         dispatch(loginRequestAction(login))
-        userService.login(login).then((user?: User) => {
-            if (user) {
+        userService.login(login).then((pair?: Pair) => {
+            if (pair) {
+                const user = pair.first
+                const detail = pair.second
                 dispatch(loginSuccessAction(user))
+                dispatch(setUser(user))
+                dispatch(setUserDetail(detail))
                 if(intial) {
                     history.push('/profile')
                 } else {
@@ -42,6 +48,7 @@ export const logout: ActionCreator<any> = (userId: string) => {
     return async (dispatch: Dispatch) => {
         userService.logout(userId)
         dispatch(logoutAction())
+        dispatch(clearUser())
         history.push('/')
     }
 }

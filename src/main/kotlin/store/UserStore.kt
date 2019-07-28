@@ -13,11 +13,9 @@ class UserStore {
         }
     }
 
-    fun getSaltForUser(userId: Int): String {
+    fun getUserDetail(userId: Int): UserDetail {
         return transaction {
-            UserDetails.slice(UserDetails.salt)
-                    .select { UserDetails.userId eq userId }
-                    .first()[UserDetails.salt]
+            UserDetailDao.findById(userId)!!.toUserDetail()
         }
     }
 
