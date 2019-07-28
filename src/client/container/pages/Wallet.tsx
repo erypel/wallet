@@ -7,11 +7,7 @@ import LogOutButton from '../../library/LogOutButton'
 import { Link } from 'react-router-dom'
 import Balance from '../../library/Balance'
 import { WalletMap } from '../../redux/store/wallet/types'
-
-interface State {
-    isSendModalOpen: boolean
-    isReceiveModalOpen: boolean
-}
+import Tabs from '../Tabs';
 
 interface Props {
     match: any
@@ -19,40 +15,9 @@ interface Props {
     wallets: WalletMap
 }
 
-class Wallet extends React.PureComponent<Props, State> {
+class Wallet extends React.PureComponent<Props> {
     constructor(props: Props) {
         super(props)
-        
-        this.state = {
-            isSendModalOpen: false,
-            isReceiveModalOpen: false
-        }
-    }
-
-    openSendModal = () => {
-        this.setState({
-            isSendModalOpen: true,
-            isReceiveModalOpen: false
-        });
-    }
-
-    closeSendModal = () => {
-        this.setState({
-            isSendModalOpen: false
-        });
-    }
-
-    openReceiveModal = () => {
-        this.setState({
-            isReceiveModalOpen: true,
-            isSendModalOpen: false
-        });
-    }
-
-    closeReceiveModal = () => {
-        this.setState({
-            isReceiveModalOpen: false
-        });
     }
     
     render() {
@@ -63,21 +28,14 @@ class Wallet extends React.PureComponent<Props, State> {
         }
         return <div>
                 <Balance address={publicKey}/>
-                
-                <Button onClick={this.openSendModal} buttonText='Send'/>
-                {this.state.isSendModalOpen && <Modal
-                    className="modal"
-                    title="Send"
-                    onClose={this.closeSendModal}>
+                <Tabs>
+                    <div data-label="Send">
                         <TransactionWizard publicKey={publicKey} privateKey={privateKey}/>
-                </Modal>}
-                <Button onClick={this.openReceiveModal} buttonText='Receive'/>
-                {this.state.isReceiveModalOpen && <Modal
-                    className="modal"
-                    title="Receive"
-                    onClose={this.closeReceiveModal}>
+                    </div>
+                    <div data-label="Receive">
                         <p>Send XRP here: {publicKey}</p>
-                </Modal>}
+                    </div>
+                </Tabs>
                 <br/>
                 <Link to='/home'>Back to list</Link>
                 <br/>
