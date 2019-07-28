@@ -16,14 +16,18 @@ import { userService } from '../../services/userService'
 import User from '../../../model/User'
 import { history } from '../../../utils/history'
 
-export const login: ActionCreator<any> = (username: string, password: string) => {
+export const login: ActionCreator<any> = (username: string, password: string, intial?: boolean) => {
     return async (dispatch: Dispatch) => {
         const login = { username, password }
         dispatch(loginRequestAction(login))
         userService.login(login).then((user?: User) => {
             if (user) {
                 dispatch(loginSuccessAction(user))
-                history.push('/home')
+                if(intial) {
+                    history.push('/profile')
+                } else {
+                    history.push('/home')
+                }
             } else {
                 dispatch(loginFailureAction(new Error("Incorrect username or password.")))
             }

@@ -30,10 +30,6 @@ fun main(args: Array<String>) {
         error(404) { ctx -> ctx.json("not found") }
     }.start(7000)
 
-    app.before { ctx ->
-        //ctx.header("ACCESS_CONTROL_ALLOW_CREDENTIALS", "true")
-    }
-
     JavalinJackson.configure(jacksonObjectMapper().findAndRegisterModules())
 
 
@@ -58,6 +54,9 @@ fun main(args: Array<String>) {
             path("create") {
                 post(userApi::create)
             }
+            path("update") {
+                post(userApi::update)
+            }
         }
         path("wallet") {
             path("create") {
@@ -68,9 +67,5 @@ fun main(args: Array<String>) {
             }
         }
         get("/") { ctx -> ctx.result("Hello World") }
-
-//        post("/logout") { ctx ->
-//
-//        }
     }
 }

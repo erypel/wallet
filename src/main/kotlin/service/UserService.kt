@@ -9,16 +9,22 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import CookieBuilder
 import UnexpectedStateException
+import dao.NewUser
+import dao.UserDetail
 
 class UserService(private val userStore: UserStore) {
-    fun create(user: User): User {
+    fun create(user: NewUser): User {
         // want usernames store in lowercase
         val username = user.username.toLowerCase()
         if(!userStore.isUsernameUnique(username)) {
             throw Exception("username already exists")
         }
         user.username = username
-        return userStore.create(user)
+        return createNewUser(user)
+    }
+
+    fun update(detail: UserDetail) {
+        return userStore.update(detail)
     }
 
     //TODO want to think more about how to architect this
@@ -33,10 +39,16 @@ class UserService(private val userStore: UserStore) {
         ctx
     }
 
+    private fun createNewUser(user: NewUser): User {
+        val createdUser = userStore.createUser(user)
+        userStore.createUserDetail(user.salt, createdUser.id!!)
+        return createdUser
+    }
 
     private fun authenticate(login: Login): User? {
         val user = userStore.findUserByUsername(login.username)?: return null
-        return if(user.password == generateHashWithHmac512(login.password, user.salt)) {
+        var salt = userStore.getSaltForUser(user.id.value)
+        return if(user.password == generateHashWithHmac512(login.password, salt)) {
             user.toUser()
         } else {
             null

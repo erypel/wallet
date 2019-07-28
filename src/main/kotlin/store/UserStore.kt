@@ -1,9 +1,9 @@
 package store
 
-import dao.UserDao
-import dao.User
-import dao.Users
+import dao.*
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
 class UserStore {
     fun findUserByUsername(username: String): UserDao? {
@@ -13,20 +13,46 @@ class UserStore {
         }
     }
 
+    fun getSaltForUser(userId: Int): String {
+        return transaction {
+            UserDetails.slice(UserDetails.salt)
+                    .select { UserDetails.userId eq userId }
+                    .first()[UserDetails.salt]
+        }
+    }
+
+    fun update(detail: UserDetail) {
+        transaction {
+            UserDetails.update({UserDetails.userId eq detail.userId}) {
+                it[firstName] = detail.firstName
+                it[lastName] = detail.lastName
+                it[email] = detail.email
+            }
+        }
+    }
+
     fun isUsernameUnique(username: String): Boolean {
         return findUserByUsername(username) == null
     }
 
-    fun create(user: User): User {
+    fun createUser(user: NewUser): User {
         return transaction {
             UserDao.new {
-                firstName = user.firstName
-                lastName = user.lastName
                 username = user.username
                 password = user.password
-                salt = user.salt
-                email = user.email
             }.toUser()
+        }
+    }
+
+    fun createUserDetail(randomString: String, id: Int): UserDetail {
+        return transaction {
+            UserDetailDao.new {
+                firstName = ""
+                lastName = ""
+                salt = randomString
+                email = ""
+                userId = id
+            }.toUserDetail()
         }
     }
 }
