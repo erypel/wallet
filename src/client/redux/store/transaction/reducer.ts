@@ -30,3 +30,5 @@ const reducer:Reducer<TransactionState> = (state = initialState, action) => {
             return state
     }
 }
+
+export default reducer

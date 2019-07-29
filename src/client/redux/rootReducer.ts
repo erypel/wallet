@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import tx from './store/wallet/reducer'
+import tx from './store/transaction/reducer'
 import user from './store/user/reducer'
 import login from './store/login/reducer'
 import wallet from './store/wallet/reducer'
