@@ -11,6 +11,7 @@ import { create } from '../redux/store/wallet/actions';
 
 interface Props {
     user?: User
+    className?: string
     create: (wallet: Wallet, userId: string) => Promise<any>
 }
 
@@ -19,6 +20,7 @@ class GenerateWalletButton extends React.PureComponent<Props> {
         return <Button
             onClick={this.generate}
             buttonText='Generate Wallet'
+            className={this.props.className}
         />
     }
 

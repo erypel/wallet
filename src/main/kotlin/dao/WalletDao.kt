@@ -5,6 +5,17 @@ import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.IntIdTable
 
+data class WalletDTO(
+        var privateKey: String,
+        var publicKey: String,
+        var userId: Int,
+        var balance: String
+) {
+    fun toWallet(): Wallet {
+        return Wallet(this.privateKey, this.publicKey, this.userId)
+    }
+}
+
 data class Wallet(
         var privateKey: String,
         var publicKey: String,
