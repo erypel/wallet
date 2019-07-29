@@ -65,18 +65,10 @@ class SendForm extends React.PureComponent<SendFormProps, SendFormState> {
     render() {
         const { handleChange, onSubmit, state } = this
         const { destAddress, amount} = state
-        return <form onSubmit={onSubmit}>
+        return <form onSubmit={onSubmit} className='send-form'>
             {/* TODO address fields should be their own component with special validation */}
-            <label>
-                Address:
-                <Input type="text" id="destAddress" value={destAddress} onChange={handleChange}/>
-            </label>
-            <br/>
-            <label>
-                Amount:
-                <Input type="number" id="amount" value={amount} onChange={handleChange}/>
-            </label>
-            <br/>
+            <Input type="text" id="destAddress" value={destAddress} onChange={handleChange} placeHolder='Address'/>
+            <Input type="number" id="amount" value={amount} onChange={handleChange} placeHolder='Amount'/>
             {isValidAddress(destAddress) &&  amount && <Input type="submit" value="Send" id="sendXrp"/>}
         </form>
     }

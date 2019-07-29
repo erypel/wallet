@@ -26,15 +26,16 @@ class Wallet extends React.PureComponent<Props> {
         }
         return <>
         <Subheader title='Send and Receive'/>
-        <div className='section'>
+        <div className='content'>
             <div className='width-2-3'>
                 <Balance address={publicKey}/>
+                <br/>
                 <Tabs>
                     <div data-label="Send">
                         <TransactionWizard publicKey={publicKey} privateKey={privateKey}/>
                     </div>
                     <div data-label="Receive">
-                        <div>Send XRP here: {publicKey}</div>
+                        <div className='container-white'>Send XRP here: {publicKey}</div>
                     </div>
                 </Tabs>
                 <br/>
