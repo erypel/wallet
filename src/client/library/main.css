@@ -190,12 +190,17 @@ a {
 .container-white {
     display: inline-block;
     background: white;
+    color: black;
     border-radius: 1em;
     padding: .5em;
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1.25em;
     width: 80%;
+}
+
+.container-white p {
+    color: black
 }
 
 .inline-block {
@@ -209,7 +214,6 @@ a {
     border-radius: 1em;
     padding: .5em;
     cursor: pointer;
-    /* display: inline-block; */
 }
 
 .wallet-table .wallet-table-label {
@@ -217,7 +221,7 @@ a {
     font-weight: bold;
 }
 
-.button-black {
+.button-green {
     width: 100%;
     background: #26AE5F;
     color: white;

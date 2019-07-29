@@ -33,9 +33,9 @@ class PrepareTransactionStep extends React.PureComponent<Props> {
     
     render() {
         const { amount, srcAddress, destAddress } = this.props
-        return <div>
+        return <div className='container-white'>
             <p>Are you sure that you want to send {amount} from {srcAddress} to {destAddress}?</p>
-            <Button buttonText={'Confirm'} onClick={this.signTransaction}/>
+            <Button buttonText={'Confirm'} onClick={this.signTransaction} className='button-green'/>
         </div>
     }
 }

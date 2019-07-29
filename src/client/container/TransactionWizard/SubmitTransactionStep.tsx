@@ -20,7 +20,7 @@ class SubmitTransactionStep extends React.PureComponent<Props> {
     
     render() {
         this.submitTransaction()
-        return <p>Submitting...</p>
+        return <div className='container-white'><p>Submitting...</p></div>
     }
 }
 

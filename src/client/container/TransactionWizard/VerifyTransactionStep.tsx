@@ -41,10 +41,10 @@ class VerifyTransactionStep extends React.PureComponent<Props, State> {
     render() {
         const { verifiedTransaction } = this.state
         if(!verifiedTransaction) {
-            return <div><p>Loading...</p></div>
+            return <div className='container-white'><p>Loading...</p></div>
         }
         const { result } = verifiedTransaction.outcome
-        return <div>
+        return <div className='container-white'>
             <p>Outcome: {result}</p>
         </div>
     }

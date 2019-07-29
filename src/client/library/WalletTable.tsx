@@ -9,8 +9,6 @@ import { AnyAction } from 'redux'
 import { load } from '../redux/store/wallet/actions'
 import Subheader from '../component/Subheader'
 import { history } from '../utils/history'
-import Wallet from '../model/Wallet';
-import getBalances from '../rippled/utils/getBalances';
 
 const mapStateToProps = (store: AppState) => {
     return {
@@ -70,7 +68,7 @@ class WalletTable extends React.PureComponent<Props> {
                     </tr>
                 </table>
             })}
-            <GenerateWalletButton className='button-black'/>
+            <GenerateWalletButton className='button-green'/>
         </div>
     }
 }
