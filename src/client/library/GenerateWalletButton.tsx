@@ -1,4 +1,4 @@
-import Button from './Button'
+import Button from '../component/Button'
 import { connect } from 'react-redux'
 import React from 'react'
 import generateAddress from '../rippled/utils/generateAddress'

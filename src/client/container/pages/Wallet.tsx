@@ -1,17 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Button from '../../library/Button'
-import Modal from '../../library/Modal'
 import TransactionWizard from '../TransactionWizard/TransactionWizard'
-import LogOutButton from '../../library/LogOutButton'
 import { Link } from 'react-router-dom'
-import Balance from '../../library/Balance'
+import Balance from '../Balance'
 import { WalletMap } from '../../redux/store/wallet/types'
-
-interface State {
-    isSendModalOpen: boolean
-    isReceiveModalOpen: boolean
-}
+import Tabs from '../Tabs';
+import Subheader from '../../component/Subheader';
 
 interface Props {
     match: any
@@ -19,40 +13,9 @@ interface Props {
     wallets: WalletMap
 }
 
-class Wallet extends React.PureComponent<Props, State> {
+class Wallet extends React.PureComponent<Props> {
     constructor(props: Props) {
         super(props)
-        
-        this.state = {
-            isSendModalOpen: false,
-            isReceiveModalOpen: false
-        }
-    }
-
-    openSendModal = () => {
-        this.setState({
-            isSendModalOpen: true,
-            isReceiveModalOpen: false
-        });
-    }
-
-    closeSendModal = () => {
-        this.setState({
-            isSendModalOpen: false
-        });
-    }
-
-    openReceiveModal = () => {
-        this.setState({
-            isReceiveModalOpen: true,
-            isSendModalOpen: false
-        });
-    }
-
-    closeReceiveModal = () => {
-        this.setState({
-            isReceiveModalOpen: false
-        });
     }
     
     render() {
@@ -61,28 +24,26 @@ class Wallet extends React.PureComponent<Props, State> {
         if(!privateKey) {
             return <div>ERROR</div>
         }
-        return <div>
+        return <>
+        <Subheader title='Send and Receive'/>
+        <div className='content'>
+            <div className='width-2-3'>
                 <Balance address={publicKey}/>
-                
-                <Button onClick={this.openSendModal} buttonText='Send'/>
-                {this.state.isSendModalOpen && <Modal
-                    className="modal"
-                    title="Send"
-                    onClose={this.closeSendModal}>
+                <br/>
+                <Tabs>
+                    <div data-label="Send">
                         <TransactionWizard publicKey={publicKey} privateKey={privateKey}/>
-                </Modal>}
-                <Button onClick={this.openReceiveModal} buttonText='Receive'/>
-                {this.state.isReceiveModalOpen && <Modal
-                    className="modal"
-                    title="Receive"
-                    onClose={this.closeReceiveModal}>
-                        <p>Send XRP here: {publicKey}</p>
-                </Modal>}
+                    </div>
+                    <div data-label="Receive">
+                        <div className='container-white'>Send XRP here: {publicKey}</div>
+                    </div>
+                </Tabs>
                 <br/>
                 <Link to='/home'>Back to list</Link>
                 <br/>
-                <LogOutButton/>
             </div>
+        </div>
+        </>
     }
 }
 
