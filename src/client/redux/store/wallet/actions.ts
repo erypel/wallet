@@ -2,6 +2,7 @@ import { ADD_WALLET, AddWalletAction, WalletMap, SetListAction, SET_LIST } from 
 import Wallet from '../../../model/Wallet'
 import { walletService } from '../../services/walletService'
 import { ActionCreator, Dispatch } from 'redux'
+import getBalances from '../../../rippled/utils/getBalances';
 
 function addWalletAction(newWallet: Wallet): AddWalletAction {
     return {
@@ -19,6 +20,7 @@ function setList(wallets: WalletMap): SetListAction {
 
 export const create: ActionCreator<any> = (newWallet: Wallet, userId: string) => {
     return async (dispatch: Dispatch) => {
+        newWallet.balance = '0'
         dispatch(addWalletAction(newWallet))
         walletService.create(newWallet).then((newWallet?: Wallet) => {
             if (newWallet) {
@@ -35,8 +37,26 @@ export const create: ActionCreator<any> = (newWallet: Wallet, userId: string) =>
 
 export const load: ActionCreator<any> = (userId: string) => {
     return async (dispatch: Dispatch) => {
-        walletService.loadList(userId).then((wallets: WalletMap) => {
-            dispatch(setList(wallets))
+        walletService.loadList(userId).then(async (wallets: WalletMap) => {
+           const walletsWithBalances: WalletMap = {}
+           var justWallets = Array.from(Object.values(wallets))
+           try {
+                for(const wallet of justWallets) {
+                // await justWallets.forEach(async wallet => {
+                    try {
+                        const balances = await getBalances(wallet.publicKey)
+                        wallet.balance = balances[0].value
+                        const walletWithBalance = wallet
+                        walletsWithBalances[wallet.publicKey] = walletWithBalance
+                    } catch (error) {
+                        wallet.balance = '0'
+                        const walletWithBalance = wallet
+                        walletsWithBalances[wallet.publicKey] = walletWithBalance
+                    }
+                }
+            } finally {
+                dispatch(setList(walletsWithBalances))
+            }
         })
     }
 }
