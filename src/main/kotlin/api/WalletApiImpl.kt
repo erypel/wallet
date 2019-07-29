@@ -1,6 +1,6 @@
 package api
 
-import dao.Wallet
+import dao.WalletDTO
 import io.javalin.http.Context
 import service.WalletService
 
@@ -11,7 +11,7 @@ class WalletApiImpl(private val walletService: WalletService) : WalletApi {
     }
 
     override fun create(ctx: Context) {
-        val wallet = ctx.body<Wallet>()
+        val wallet = ctx.body<WalletDTO>().toWallet()
         ctx.json(walletService.create(wallet))
     }
 }
