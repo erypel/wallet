@@ -46,7 +46,10 @@ class WalletTable extends React.PureComponent<Props> {
         var justWallets = Array.from(Object.values(wallets))
 
         if ( !justWallets || justWallets.length < 1 ){
-            return <GenerateWalletButton/>
+            return <div className='width-2-3'>
+                <Subheader title='Accounts'/>
+                <GenerateWalletButton className='button-green'/
+            ></div>
         }
 
         return <div className='width-2-3'>
