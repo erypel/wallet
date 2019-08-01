@@ -6,9 +6,9 @@ import Source from '../../rippled/model/Source'
 import Destination from '../../rippled/model/Destination'
 import { TransactionBuilder } from '../../rippled/model/transaction/TransactionBuilder'
 import Payment from '../../rippled/model/transaction/Payment'
-import { Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { setAmount, setDestAddress, setTxJson } from '../../redux/store/transaction/actions';
+import { Dispatch } from 'redux'
+import { connect } from 'react-redux'
+import { setAmount, setDestAddress, setTxJson } from '../../store/transaction/actions'
 
 interface Props {
     next: () => void

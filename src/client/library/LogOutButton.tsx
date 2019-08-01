@@ -1,11 +1,11 @@
-import Button from "../component/Button";
-import React from "react";
-import { ThunkDispatch } from "redux-thunk";
-import { AnyAction } from "redux";
-import { logout } from "../redux/store/login/actions";
-import { connect } from "react-redux";
-import { AppState } from "../redux/rootReducer";
-import User from "../model/User";
+import Button from '../component/Button'
+import React from 'react'
+import { ThunkDispatch } from 'redux-thunk'
+import { AnyAction } from 'redux'
+import { logout } from '../store/login/actions'
+import { connect } from 'react-redux'
+import { AppState } from '../store/rootReducer'
+import User from '../model/User'
 
 interface Props {
     user?: User

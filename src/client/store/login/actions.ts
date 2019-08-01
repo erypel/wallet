@@ -1,5 +1,5 @@
 import { ActionCreator, Dispatch } from 'redux'
-import Login from '../../../model/Login'
+import Login from '../../model/Login'
 import { 
     LOGIN_REQUEST,
     LoginRequestAction, 
@@ -13,10 +13,10 @@ import {
     ClearErrorMessageAction 
 } from './types'
 import { userService } from '../../services/userService'
-import User from '../../../model/User'
-import { history } from '../../../utils/history'
+import User from '../../model/User'
+import { history } from '../../utils/history'
 import { setUser, clearUser, setUserDetail } from '../user/actions'
-import Pair from '../../../model/Pair'
+import Pair from '../../model/Pair'
 
 export const login: ActionCreator<any> = (username: string, password: string, intial?: boolean) => {
     return async (dispatch: Dispatch) => {

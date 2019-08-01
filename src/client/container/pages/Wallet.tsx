@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import TransactionWizard from '../TransactionWizard/TransactionWizard'
 import { Link } from 'react-router-dom'
 import Balance from '../Balance'
-import { WalletMap } from '../../redux/store/wallet/types'
+import { WalletMap } from '../../store/wallet/types'
 import Tabs from '../Tabs';
-import Subheader from '../../component/Subheader';
+import Subheader from '../../component/Subheader'
 
 interface Props {
     match: any

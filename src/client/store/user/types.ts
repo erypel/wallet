@@ -1,6 +1,6 @@
-import User from '../../../model/User'
+import User from '../../model/User'
 import { Action } from 'redux'
-import UserDetail from '../../../model/UserDetail'
+import UserDetail from '../../model/UserDetail'
 
 export interface UserState {
     user?: User

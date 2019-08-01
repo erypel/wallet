@@ -1,5 +1,5 @@
 import { Reducer } from "redux"
-import SignedTransaction from "../../../rippled/model/transaction/flow/SignedTransaction";
+import SignedTransaction from "../../rippled/model/transaction/flow/SignedTransaction";
 import { SET_SIGNED_TRANSACTION, SET_TX_JSON, SET_DEST_ADDRESS, SET_SRC_SECRET, SET_SRC_ADDRESS, SET_AMOUNT, TransactionState } from "./types";
 
 const initialState: TransactionState = {

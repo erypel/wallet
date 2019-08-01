@@ -2,14 +2,14 @@ import React from 'react'
 import Input from '../library/Input'
 import { Link } from 'react-router-dom'
 import validatePassword from '../utils/validatePassword'
-import { createUser } from '../redux/store/user/actions'
+import { createUser } from '../store/user/actions'
 import User from '../model/User'
 import { AnyAction } from 'redux'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import PasswordRequirements from '../component/PasswordRequirements'
 import Subheader from '../component/Subheader'
-import { login } from '../redux/store/login/actions'
+import { login } from '../store/login/actions'
 
 interface CreateUserState {
     username: string

@@ -1,7 +1,7 @@
 import React from "react"
 import Input from "../library/Input"
 import { ThunkDispatch } from "redux-thunk"
-import { login, clearErrorMessageAction } from "../redux/store/login/actions"
+import { login, clearErrorMessageAction } from "../store/login/actions"
 import { AnyAction } from "redux"
 import { connect } from "react-redux"
 

@@ -1,8 +1,8 @@
 import { ActionCreator, Dispatch } from 'redux'
 import { REGISTER_REQUEST, SuccessAction, REGISTER_SUCCESS, REGISTER_FAILURE, FailureAction, CreateUserAction, UPDATE_USER_DETAIL, SetUserAction, SET_USER, ClearUserAction, CLEAR, SetUserDetailAction, SET_USER_DETAIL } from './types';
-import User from '../../../model/User'
+import User from '../../model/User'
 import { userService } from '../../services/userService'
-import UserDetail from '../../../model/UserDetail'
+import UserDetail from '../../model/UserDetail'
 
 export const createUser: ActionCreator<any> = (user: User) => {
     return async (dispatch: Dispatch) => {

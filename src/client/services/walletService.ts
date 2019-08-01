@@ -1,4 +1,4 @@
-import Wallet from '../../model/Wallet'
+import Wallet from '../model/Wallet'
 import { WalletMap } from '../store/wallet/types'
 
 async function create(wallet: Wallet): Promise<Wallet | undefined> {

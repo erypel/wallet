@@ -2,12 +2,12 @@ import Button from '../component/Button'
 import { connect } from 'react-redux'
 import React from 'react'
 import generateAddress from '../rippled/utils/generateAddress'
-import { AppState } from '../redux/rootReducer';
-import User from '../model/User';
-import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
-import Wallet from '../model/Wallet';
-import { create } from '../redux/store/wallet/actions';
+import { AppState } from '../store/rootReducer'
+import User from '../model/User'
+import { ThunkDispatch } from 'redux-thunk'
+import { AnyAction } from 'redux'
+import Wallet from '../model/Wallet'
+import { create } from '../store/wallet/actions'
 
 interface Props {
     user?: User
