@@ -1,6 +1,7 @@
-import Transaction from "./Transaction";
-import { TransactionBuilder } from "./TransactionBuilder";
-import Amount from "../Amount";
+import Transaction from  './Transaction'
+import { TransactionBuilder } from  './TransactionBuilder'
+import Amount from  '../Amount'
+import { OfferCreateBuilder } from  './OfferCreateBuilder'
 
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({
@@ -20,7 +21,7 @@ const tf_PASSIVE = 65536
     Treat the offer as an Immediate or Cancel order . If enabled, the offer 
     never becomes a ledger object: it only tries to match existing offers in
      the ledger. If the offer cannot match any offers immediately, it executes
-    "successfully" without trading any currency. In this case, the transaction 
+     'successfully' without trading any currency. In this case, the transaction 
     has the result code tesSUCCESS, but creates no Offer objects in the ledger.
 */
 const tf_IMMEDIATE_OR_CANCEL = 131072
@@ -45,11 +46,21 @@ export default class OfferCreate extends Transaction {
     expiration?: number // time must be since the Ripple Epoch
     offerSequence?: number
     takerGets: Amount
-    TakePays: Amount
+    takerPays: Amount
 
 
-    constructor(builder: TransactionBuilder) {
-        super(builder)
+    constructor(transactionBuilder: TransactionBuilder, offerCreateBuilder: OfferCreateBuilder) {
+        super(transactionBuilder)
+        this.takerGets = offerCreateBuilder.takerGets
+        this.takerPays = offerCreateBuilder.takerPays
+        this.expiration = offerCreateBuilder.expiration
+        this.offerSequence = offerCreateBuilder.offerSequence
     }
 
+    private flagCheck = () => {
+        const flags = this.flags
+        if (flags && flags.has(tf_IMMEDIATE_OR_CANCEL) && flags.has(tf_FILL_OR_KILL)) {
+            throw Error( 'Invalid flags ')
+        }
+    }
 }

@@ -1,81 +1,107 @@
-import Source from "../Source";
-import Destination from "../Destination";
-import Payment from "./Payment";
+import Transaction from './Transaction'
+
+export type TransactionType = 'Payment' | 'OfferCreate' | 'OfferCancel' |
+    'TrustSet' | 'AccountSet' | 'SetRegularKey' | 'SignerListSet' | 'EscrowCreate' 
+    | 'EscrowFinish' | 'EscrowCancel' | 'PaymentChannelCreate' | 'PaymentChannelFund'
+    | 'PaymentChannelClaim' | 'DepositPreauth'
 
 export class TransactionBuilder {
-    private readonly _source: Source
-    private readonly _destination: Destination
-    private _allowPartialPayment?: boolean = undefined
-    private _invoiceId?: string = undefined
-    private _limitQuality?: boolean = undefined
-    //privat_e memos?: Memos[]
-    private _noDirectRipple?: boolean = undefined
-    private _paths?: string = undefined
+    private readonly _account: string
+    private readonly _transactionType: TransactionType
+    private _fee?: string
+    private _sequence?: number
+    private _accountTxnId?: string
+    private _flags?: Set<number>
+    private _lastLedgerSequence?: number
+    private _signers?: object[]
+    private _sourceTag?: number
+    private _memos?: object[]
 
-    constructor(source: Source, destination: Destination) {
-        this._source = source
-        this._destination = destination
+    constructor(account: string, transactionType: TransactionType) {
+        this._account = account
+        this._transactionType = transactionType
     }
 
-    //TODO this will take in a type when we have more transaction types
     build() {
-        return new Payment(this)
+        return new Transaction(this)
     }
 
-    setAllowPartialPayment() {
-        this._allowPartialPayment = true
+    setFee(fee: string) {
+        this._fee = fee
         return this
     }
 
-    withInvoiceId(id: string) {
-        this._invoiceId = id
+    setSequence(sequence: number) {
+        this._sequence = sequence
         return this
     }
 
-    setLimitQuality() {
-        this._limitQuality = true
+    setAccountTxnId(accountTxnId: string) {
+        this._accountTxnId = accountTxnId
         return this
     }
 
-    // withMemos() {
-
-    // }
-
-    setNoDirectRipple() {
-        this._noDirectRipple = true
+    setFlags(...flags: number[]) {
+        this._flags = new Set(flags)
         return this
     }
 
-    withPaths(paths: string) {
-        this._paths = paths
+    setLastLedgerSequence(lastLedgerSequence: number) {
+        this._lastLedgerSequence = lastLedgerSequence
         return this
     }
 
-    get source() {
-        return this._source
+    setSigners(...signers: object[]) {
+        this._signers = signers
+        return this
     }
 
-    get destination() {
-        return this._destination
+    setSourceTag(sourceTag: number) {
+        this._sourceTag = sourceTag
+        return this
     }
 
-    get allowPartialPayment() {
-        return this._allowPartialPayment
+    setMemos(...memos: object[]){
+        this._memos = memos
+    }
+    
+    get account() {
+        return this._account
     }
 
-    get invoiceId() {
-        return this._invoiceId
+    get transactionType() {
+        return this._transactionType
     }
 
-    get limitQuality() {
-        return this._limitQuality
+    get fee() {
+        return this._fee
     }
 
-    get noDirectRipple() {
-        return this._noDirectRipple
+    get sequence() {
+        return this._sequence
     }
 
-    get paths() {
-        return this._paths
+    get accountTxnId() {
+        return this._accountTxnId
+    }
+
+    get flags() {
+        return this._flags
+    }
+
+    get lastLedgerSequence() {
+        return this._lastLedgerSequence
+    }
+
+    get signers() {
+        return this._signers
+    }
+
+    get sourceTag() {
+        return this._sourceTag
+    }
+
+    get memos() {
+        return this._memos
     }
 }
