@@ -4,9 +4,9 @@ import SignTransactionStep from './SignTransactionStep'
 import SubmitTransactionStep from './SubmitTransactionStep'
 import VerifyTransactionStep from './VerifyTransactionStep'
 import { Steps } from '../../rippled/model/Steps'
-import { Dispatch } from 'redux';
-import { setSrcAddress, setSrcSecret } from '../../redux/store/transaction/actions';
-import { connect } from 'react-redux';
+import { Dispatch } from 'redux'
+import { setSrcAddress, setSrcSecret } from '../../store/transaction/actions'
+import { connect } from 'react-redux'
 
 interface TransactionWizardProps {
     publicKey: string

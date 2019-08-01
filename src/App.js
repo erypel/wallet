@@ -9,7 +9,7 @@ import { Provider } from 'react-redux'
 import { history } from './client/utils/history'
 import Wallet from './client/container/pages/Wallet'
 import { PersistGate } from 'redux-persist/integration/react'
-import configureStore from './client/redux/store/configureStore'
+import configureStore from './client/store/configureStore'
 import './client/library/main.css'
 import UserProfileForm from './client/container/UserProfileForm';
 

@@ -1,4 +1,4 @@
-import Wallet from "../../../model/Wallet";
+import Wallet from "../../model/Wallet"
 
 export const ADD_WALLET = 'ADD_WALLET'
 export const SET_LIST = 'SET_LIST'

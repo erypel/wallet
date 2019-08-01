@@ -1,8 +1,8 @@
-import Login from '../../model/Login'
-import User from '../../model/User'
-import salt from '../../utils/salt'
-import UserDetail from '../../model/UserDetail'
-import Pair from '../../model/Pair'
+import Login from '../model/Login'
+import User from '../model/User'
+import salt from '../utils/salt'
+import UserDetail from '../model/UserDetail'
+import Pair from '../model/Pair'
 
 //login store methods
 async function login(login: Login): Promise<Pair | undefined> {

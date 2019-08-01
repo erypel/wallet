@@ -2,13 +2,12 @@ import React from 'react'
 import SendForm from '../../library/SendForm'
 import Currency from '../../rippled/model/Currency'
 import Amount from '../../rippled/model/Amount'
-import Source from '../../rippled/model/Source'
-import Destination from '../../rippled/model/Destination'
 import { TransactionBuilder } from '../../rippled/model/transaction/TransactionBuilder'
 import Payment from '../../rippled/model/transaction/Payment'
-import { Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { setAmount, setDestAddress, setTxJson } from '../../redux/store/transaction/actions';
+import { Dispatch } from 'redux'
+import { connect } from 'react-redux'
+import { setAmount, setDestAddress, setTxJson } from '../../store/transaction/actions'
+import { PaymentBuilder } from '../../rippled/model/transaction/PaymentBuilder'
 
 interface Props {
     next: () => void
@@ -23,10 +22,9 @@ class PrepareTransactionStep extends React.PureComponent<Props> {
         const { srcAddress } = this.props
         const currency = new Currency("XRP", "$")
         const amt = new Amount(currency, amount!!)
-        const source = new Source(srcAddress!!, undefined, amt)
-        const destination = new Destination(destAddress!!, amt)
-        const builder = new TransactionBuilder(source, destination)
-        const payment = new Payment(builder)
+        const builder = new TransactionBuilder(srcAddress, 'Payment')
+        const paymentBuilder = new PaymentBuilder(amt, destAddress)
+        const payment = new Payment(builder, paymentBuilder)
         const preparedPayment = await payment.preparePayment()
         console.log("prepped", preparedPayment)
         const { setAmount, setDestAddress, setTxJson } = this.props

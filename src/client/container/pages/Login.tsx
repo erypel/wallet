@@ -1,7 +1,7 @@
 import LoginForm from '../LoginForm'
 import React from 'react'
 import { Link } from "react-router-dom"
-import { AppState } from '../../redux/rootReducer';
+import { AppState } from '../../store/rootReducer';
 import { connect } from 'react-redux';
 
 interface Props {

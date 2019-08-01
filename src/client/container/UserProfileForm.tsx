@@ -3,11 +3,11 @@ import Subheader from '../component/Subheader'
 import Input from '../library/Input'
 import { Link } from 'react-router-dom'
 import { ThunkDispatch } from 'redux-thunk'
-import { AppState } from '../redux/rootReducer'
+import { AppState } from '../store/rootReducer'
 import { AnyAction } from 'redux'
 import { connect } from 'react-redux'
 import UserDetail from '../model/UserDetail'
-import { updateUser } from '../redux/store/user/actions'
+import { updateUser } from '../store/user/actions'
 import { history } from '../utils/history'
 
 interface UserProfileState {

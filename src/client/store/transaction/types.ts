@@ -1,4 +1,4 @@
-import SignedTransaction from '../../../rippled/model/transaction/flow/SignedTransaction'
+import SignedTransaction from '../../rippled/model/transaction/flow/SignedTransaction'
 
 export interface TransactionState {
     amount?: string

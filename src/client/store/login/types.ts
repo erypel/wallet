@@ -1,5 +1,5 @@
-import Login from "../../../model/Login";
-import User from "../../../model/User";
+import Login from '../../model/Login'
+import User from '../../model/User'
 
 export const LOGIN_REQUEST = 'USERS_LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'USERS_LOGIN_SUCCESS'
