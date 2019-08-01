@@ -7,7 +7,7 @@ import Payment from '../../rippled/model/transaction/Payment'
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { setAmount, setDestAddress, setTxJson } from '../../store/transaction/actions'
-import { PaymentBuilder } from '../../rippled/model/transaction/PaymentBuilder';
+import { PaymentBuilder } from '../../rippled/model/transaction/PaymentBuilder'
 
 interface Props {
     next: () => void
