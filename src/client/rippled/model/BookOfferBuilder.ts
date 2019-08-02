@@ -1,4 +1,4 @@
-import { BookOffer } from "./BookOffer";
+import { BookOffer } from './BookOffer'
 
 export class BookOfferBuilder {
     private readonly _taker_gets: object
