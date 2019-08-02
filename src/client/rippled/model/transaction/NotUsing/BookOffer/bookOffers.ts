@@ -1,6 +1,6 @@
-import { BookOfferBuilder } from '../model/BookOfferBuilder'
-import { BookOffer } from '../model/BookOffer'
-import toJsonObject from '../../utils/toJsonObject'
+import { BookOfferBuilder } from './BookOfferBuilder'
+import { BookOffer } from './BookOffer'
+import toJsonObject from '../../../../../utils/toJsonObject'
 
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({
@@ -18,6 +18,7 @@ type TakerPays = {
 }
 
 /**
+ * DEPRECATED
  * 
  * @param taker an address
  * @param gets a three letter currency code
@@ -28,14 +29,11 @@ export default async function bookOffers(taker: string, gets: string, pays: stri
     const takerPays = makeTakerPays(taker, pays)
     const bookOffer = buildBookOffer(takerGets, takerPays)
     const bookOfferJson = toJsonObject(bookOffer)
-    return await api.connect().then(async (connection: any) => {
-        const test = await connection.send(bookOfferJson)
-        console.log(test)
-    })
+    //THIS NEEDS TO BE SENT AS A POST TO AS JSONRPC
 }
 
 function buildBookOffer(takerGets: object, takerPays: object): BookOffer {
-    const builder = new BookOfferBuilder(takerGets, takerPays)
+    const builder = new BookOfferBuilder(takerGets, takerPays).setTaker('r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59')
     return builder.build()
 }
 

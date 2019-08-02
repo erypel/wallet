@@ -20,6 +20,8 @@ class NavBar extends React.PureComponent<Props> {
             <br/>
             <Button buttonText='Profile' onClick={() => history.push('/profile')}/>
             <br/>
+            <Button buttonText='Trader' onClick={() => history.push('/trade')}/>
+            <br/>
             <LogOutButton/>
         </Menu>
     </div>
