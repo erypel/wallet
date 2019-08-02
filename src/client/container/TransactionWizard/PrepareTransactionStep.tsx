@@ -3,11 +3,12 @@ import SendForm from '../../library/SendForm'
 import Currency from '../../rippled/model/Currency'
 import Amount from '../../rippled/model/Amount'
 import { TransactionBuilder } from '../../rippled/model/transaction/TransactionBuilder'
-import Payment from '../../rippled/model/transaction/Payment'
+import Payment from '../../rippled/model/transaction/Payment/Payment'
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { setAmount, setDestAddress, setTxJson } from '../../store/transaction/actions'
-import { PaymentBuilder } from '../../rippled/model/transaction/PaymentBuilder'
+import { PaymentBuilder } from '../../rippled/model/transaction/Payment/PaymentBuilder'
+
 
 interface Props {
     next: () => void

@@ -1,6 +1,6 @@
-import Transaction from  './Transaction'
-import { TransactionBuilder } from  './TransactionBuilder'
-import Amount from  '../Amount'
+import Transaction from  '../Transaction'
+import { TransactionBuilder } from  '../TransactionBuilder'
+import Amount from  '../../Amount'
 import { OfferCreateBuilder } from  './OfferCreateBuilder'
 
 const RippleAPI = require('ripple-lib').RippleAPI

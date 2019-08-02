@@ -1,10 +1,10 @@
-import Transaction from './Transaction'
-import Instructions from '../Instructions'
-import { TransactionBuilder } from './TransactionBuilder'
-import PreparedTransaction from './flow/PreparedTransaction'
+import Transaction from '../Transaction'
+import Instructions from '../../Instructions'
+import { TransactionBuilder } from '../TransactionBuilder'
+import PreparedTransaction from '../flow/PreparedTransaction'
 import { PaymentBuilder } from './PaymentBuilder';
-import Amount from '../Amount';
-import prepareTransaction from '../../utils/flow/prepareTransacton';
+import Amount from '../../Amount';
+import prepareTransaction from '../../../utils/flow/prepareTransacton';
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({
 	server: 'wss://s.altnet.rippletest.net:51233'

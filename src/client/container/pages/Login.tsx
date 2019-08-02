@@ -1,8 +1,8 @@
 import LoginForm from '../LoginForm'
 import React from 'react'
 import { Link } from "react-router-dom"
-import { AppState } from '../../store/rootReducer';
-import { connect } from 'react-redux';
+import { AppState } from '../../store/rootReducer'
+import { connect } from 'react-redux'
 
 interface Props {
     message: string
@@ -12,7 +12,7 @@ class Login extends React.PureComponent<Props> {
     render() {
         const { message } = this.props
         return <div className='content'>
-            {(message != '') && <p className='error-message'>{message}</p>}
+            {(message !== '') && <p className='error-message'>{message}</p>}
             <LoginForm/>
             <p>Don't have an account? <Link to='/register'>Sign up!</Link></p>
         </div>

@@ -26,7 +26,7 @@ class App extends React.PureComponent {
             <Router history={history}>
               <div>
                 <Switch>
-                  <PrivateRoute exact path="/" exact component={Home}/>
+                  <PrivateRoute exact path="/" component={Home}/>
                   <PrivateRoute path="/home" exact component={Home}/>
                   <Route path="/login" exact component={Login}/>
                   <Route path='/register' component={Register}/>
