@@ -1,9 +1,16 @@
 import React from 'react'
 import Button from '../../component/Button'
-import getOrderbook from '../../rippled/utils/getOrderbook';
-import OrderbookBuilder from '../../rippled/model/transaction/Orderbook/OrderbookBuilder';
+import getOrderbook from '../../rippled/utils/getOrderbook'
+import OrderbookBuilder from '../../rippled/model/transaction/Orderbook/OrderbookBuilder'
+import Bid from '../../rippled/model/transaction/Orderbook/Bid'
+import Ask from '../../rippled/model/transaction/Orderbook/Ask'
 
-export default class Home extends React.PureComponent {
+interface State {
+    bids: Bid[]
+    asks: Ask[]
+}
+
+export default class Home extends React.PureComponent<{}, State> {
     
     onClick = () => {
         const orderbook = new OrderbookBuilder({
@@ -17,7 +24,28 @@ export default class Home extends React.PureComponent {
     }
 
     render() {
-        return <div>
+        return <div className='orderbook'>
+                <h1>Orderbook</h1>
+                <table>
+                    <thead>
+                        <th>MarketSize</th>
+                        <th>Price</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1.43</td>
+                            <td>.54</td>
+                        </tr>
+                        <tr>
+                            <td>Spread</td>
+                            <td>0.01</td>
+                        </tr>
+                        <tr>
+                            <td>43</td>
+                            <td>.53</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <Button buttonText='Get Order Book' onClick={this.onClick}/>
             </div>
             

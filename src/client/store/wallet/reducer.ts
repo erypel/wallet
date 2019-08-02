@@ -1,6 +1,6 @@
-import { WalletState, ADD_WALLET, SET_LIST, WalletMap } from "./types"
-import { Reducer } from "redux"
-import Wallet from "../../model/Wallet"
+import { WalletState, ADD_WALLET, SET_LIST, WalletMap } from './types'
+import { Reducer } from 'redux'
+import Wallet from '../../model/Wallet'
 
 const initialState: WalletState = {
     wallets: {}

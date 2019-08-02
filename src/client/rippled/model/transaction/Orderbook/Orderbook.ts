@@ -1,4 +1,11 @@
 import OrderbookBuilder from './OrderbookBuilder'
+import Ask from './Ask'
+import Bid from './Bid'
+
+export type AsksAndBids = {
+    asks: Ask[]
+    bids: Bid[]
+}
 
 export type CurrencyCounterparty = {
     currency: string
