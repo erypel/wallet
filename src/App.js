@@ -11,7 +11,8 @@ import Wallet from './client/container/pages/Wallet'
 import { PersistGate } from 'redux-persist/integration/react'
 import configureStore from './client/store/configureStore'
 import './client/library/main.css'
-import UserProfileForm from './client/container/UserProfileForm';
+import UserProfileForm from './client/container/UserProfileForm'
+import NavBar from './client/container/NavBar'
 
 const {store, persistor} = configureStore()
 
@@ -19,12 +20,13 @@ class App extends React.PureComponent {
   render() {
     return <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
+          <NavBar/>
           <div className="App">
             <Header/>
             <Router history={history}>
               <div>
                 <Switch>
-                  <PrivateRoute path="/" exact component={Home}/>
+                  <PrivateRoute exact path="/" exact component={Home}/>
                   <PrivateRoute path="/home" exact component={Home}/>
                   <Route path="/login" exact component={Login}/>
                   <Route path='/register' component={Register}/>

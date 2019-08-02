@@ -18,6 +18,54 @@ html {
     height: 80px;
 }
 
+.navigation {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    background-color: black;
+    text-align: right;
+}
+
+.navigation button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-size: 1.5em;
+    background-color: black;
+    color: white;
+    border: none;
+}
+
+.navigation button:hover {
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
+.navigation-items {
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    background-color: black;
+}
+
+.navigation-items button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-size: 1.5em;
+    background-color: black;
+    color: white;
+    width: 100%;
+    border: none;
+}
+
+.navigation-items button:hover {
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
 .header {
     display: block;
 }
