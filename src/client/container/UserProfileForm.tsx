@@ -24,7 +24,7 @@ interface UserProfileProps {
 
 type FormFields = keyof UserProfileState
 
-class UserProfileForm extends React.Component<UserProfileProps, UserProfileState> {
+class UserProfileForm extends React.PureComponent<UserProfileProps, UserProfileState> {
     constructor(props: UserProfileProps) {
         super(props)
 
