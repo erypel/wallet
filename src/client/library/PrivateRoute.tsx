@@ -1,11 +1,6 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
-import { AppState } from '../store/rootReducer'
 import { connect } from 'react-redux'
-
-interface OwnProps {
-    loggedIn: boolean
-}
 
 const PrivateRoute = ({component, ...rest}: any) => {
     const routeComponent = (props: any) => (
