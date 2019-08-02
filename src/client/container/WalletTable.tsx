@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import GenerateWalletButton from './GenerateWalletButton'
+import GenerateWalletButton from '../library/GenerateWalletButton'
 import User from '../model/User'
 import { AppState } from '../store/rootReducer'
 import { WalletMap } from '../store/wallet/types'
@@ -61,14 +61,16 @@ class WalletTable extends React.PureComponent<Props> {
                     balance = 'ERROR'
                 }
                 return <table className="wallet-table" onClick={() => this.handleClick(publicKey)}>
-                    <tr>
-                        <td className="wallet-table-label">Account #:</td>
-                        <td className="wallet-table-value">{publicKey}</td>
-                    </tr>
-                    <tr>
-                        <td className="wallet-table-label">Balance:</td>
-                        <td className="wallet-table-value">{balance}</td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <td className="wallet-table-label">Account #:</td>
+                            <td className="wallet-table-value">{publicKey}</td>
+                        </tr>
+                        <tr>
+                            <td className="wallet-table-label">Balance:</td>
+                            <td className="wallet-table-value">{balance}</td>
+                        </tr>
+                    </tbody>
                 </table>
             })}
             <GenerateWalletButton className='button-green'/>

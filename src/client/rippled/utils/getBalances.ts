@@ -1,4 +1,4 @@
-import Balance from "../model/Balance";
+import Balance from '../model/Balance'
 
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({
