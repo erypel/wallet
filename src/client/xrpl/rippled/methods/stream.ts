@@ -1,4 +1,4 @@
-import connector from '../RippledConnector';
+import { api_request } from '../Dispatch'
 
 /**
  * Methods for subscribing and unsubscribing to streams
@@ -33,12 +33,12 @@ import connector from '../RippledConnector';
   }
 }
  */
-function subscribeToAccounts(...accounts: string[]){
+async function subscribeToAccounts(...accounts: string[]){
 	if(!accounts) {
 		accounts = []
   }
 	let json = '{"id": 1, "command": "subscribe", "accounts":'+ accounts +',"streams": ["server", "ledger"]}'
-	connector.send(json)
+	await api_request(json)
 }
 
 /**
@@ -55,12 +55,12 @@ function subscribeToAccounts(...accounts: string[]){
   "result": {}
 }
  */
-function unsubscribeFromAccounts(...accounts: string[]){
+async function unsubscribeFromAccounts(...accounts: string[]){
 	if(!accounts) {
 		accounts = []
   }
 	let json = '{"id": 1, "command": "unsubscribe", "accounts":'+ accounts +',"streams": ["server", "ledger"]}'
-	connector.send(json)
+	await api_request(json)
 }
 
 export const rippledStream = {

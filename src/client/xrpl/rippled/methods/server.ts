@@ -1,4 +1,4 @@
-import connector from '../RippledConnector'
+import { api_request } from '../Dispatch'
 
 /**
  * Methods for interacting with an XRP server
@@ -64,9 +64,9 @@ import connector from '../RippledConnector'
   }
 }
  */
-function server_info() {
+async function server_info() {
 	let json = '{"id": 1, "command": "server_info"}'
-	connector.send(json)
+	await api_request(json)
 }
 
 /**
@@ -133,9 +133,9 @@ function server_info() {
   }
 }
  */
-function server_state(){
+async function server_state(){
 	let json = '{"id": 2, "command": "server_state"}'
-	connector.send(json)
+	await api_request(json)
 }
 
 /**
@@ -148,9 +148,9 @@ function server_state(){
   	"result": {}
 	}
  */
-function ping(){
-	let json = '{"id": 3, "command": "ping"}'
-	connector.send(json)
+async function ping(){
+  let json = '{"id": 3, "command": "ping"}'
+  await api_request(json)
 }
 
 export const rippledServer = {
