@@ -1,9 +1,9 @@
-import { TransactionBuilder } from '../../model/transaction/TransactionBuilder'
-import Source from '../../model/Source'
-import Destination from '../../model/Destination'
-import Amount from '../../model/Amount'
-import Currency from '../../model/Currency'
-import Payment from '../../model/transaction/Payment/Payment'
+import { TransactionBuilder } from '../../model/transaction/TransactionBuilder
+import Source from '../../model/Source
+import Destination from '../../model/Destination
+import Amount from '../../model/Amount
+import Currency from '../../model/Currency
+import Payment from '../../model/transaction/Payment/Payment
 
 var assert = require('chai').assert
 

@@ -1,7 +1,7 @@
 import React from 'react'
-import submitTransaction from '../../rippled/utils/flow/submitTransaction'
-import SignedTransaction from '../../rippled/model/transaction/flow/SignedTransaction';
 import { connect } from 'react-redux'
+import SignedTransaction from '../../xrpl/api/model/transaction/flow/SignedTransaction'
+import submitTransaction from '../../xrpl/api/utils/flow/submitTransaction'
 
 
 interface Props {

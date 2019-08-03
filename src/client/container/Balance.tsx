@@ -1,6 +1,6 @@
 import React from 'react'
-import { Table, Td, Tbody, Tr } from '../library/Table';
-import getBalances from '../rippled/utils/getBalances';
+import { Table, Td, Tbody, Tr } from '../library/Table'
+import getBalances from '../xrpl/api/utils/getBalances'
 
 interface Props {
     address: string

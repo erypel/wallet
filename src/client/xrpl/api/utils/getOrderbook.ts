@@ -1,5 +1,5 @@
 import Orderbook, { AsksAndBids } from '../model/transaction/Orderbook/Orderbook'
-import toJsonObject from '../../utils/toJsonObject'
+import toJsonObject from '../../../utils/toJsonObject'
 
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({

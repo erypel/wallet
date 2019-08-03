@@ -1,14 +1,14 @@
 import React from 'react'
 import Button from '../../component/Button'
-import getOrderbook from '../../rippled/utils/getOrderbook'
-import OrderbookBuilder from '../../rippled/model/transaction/Orderbook/OrderbookBuilder'
-import Bid from '../../rippled/model/transaction/Orderbook/Bid'
-import Ask from '../../rippled/model/transaction/Orderbook/Ask'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import { AppState } from '../../store/rootReducer'
 import { fetchOrderbook } from '../../store/orderbook/actions'
 import { connect } from 'react-redux'
+import Bid from '../../xrpl/api/model/transaction/Orderbook/Bid'
+import Ask from '../../xrpl/api/model/transaction/Orderbook/Ask'
+import OrderbookBuilder from '../../xrpl/api/model/transaction/Orderbook/OrderbookBuilder'
+import getOrderbook from '../../xrpl/api/utils/getOrderbook'
 
 interface Props {
     bids: Bid[]
