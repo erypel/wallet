@@ -1,10 +1,11 @@
-import Transaction from './Transaction'
-import Instructions from '../Instructions'
-import { TransactionBuilder } from './TransactionBuilder'
-import PreparedTransaction from './flow/PreparedTransaction'
-import { PaymentBuilder } from './PaymentBuilder';
-import Amount from '../Amount';
-import prepareTransaction from '../../utils/flow/prepareTransacton';
+import Transaction from '../Transaction'
+import Instructions from '../../Instructions'
+import { TransactionBuilder } from '../TransactionBuilder'
+import PreparedTransaction from '../flow/PreparedTransaction'
+import { PaymentBuilder } from './PaymentBuilder'
+import Amount from '../../Amount'
+import prepareTransaction from '../../../utils/flow/prepareTransacton'
+import toJsonObject from '../../../../utils/toJsonObject'
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({
 	server: 'wss://s.altnet.rippletest.net:51233'
@@ -33,13 +34,7 @@ export default class Payment extends Transaction {
   }
 
   preparePayment = async (): Promise<PreparedTransaction> => {
-    return await this.callApiToPreparePayment(this.toJsonObject())
-  }
-
-  toJsonObject = () => {
-    return JSON.parse(JSON.stringify(this, (_key, value) => {
-      if (value !== null) return value
-    }))
+    return await this.callApiToPreparePayment(toJsonObject(this))
   }
 
   private callApiToPreparePayment = async(

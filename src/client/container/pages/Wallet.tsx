@@ -14,10 +14,6 @@ interface Props {
 }
 
 class Wallet extends React.PureComponent<Props> {
-    constructor(props: Props) {
-        super(props)
-    }
-    
     render() {
         const { publicKey } = this.props.match.params
         const privateKey = this.props.wallets[publicKey].privateKey

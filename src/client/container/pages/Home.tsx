@@ -1,5 +1,5 @@
 import React from 'react'
-import WalletTable from '../../library/WalletTable'
+import WalletTable from '../WalletTable'
 
 export default class Home extends React.PureComponent {
     

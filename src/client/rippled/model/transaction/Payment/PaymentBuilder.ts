@@ -1,6 +1,6 @@
 import Payment from './Payment'
-import { TransactionBuilder } from './TransactionBuilder'
-import Amount from '../Amount'
+import { TransactionBuilder } from '../TransactionBuilder'
+import Amount from '../../Amount'
 
 export class PaymentBuilder {
     private _amount: Amount | string

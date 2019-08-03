@@ -1,6 +1,6 @@
 import OfferCreate from './OfferCreate'
-import Amount from '../Amount'
-import { TransactionBuilder } from './TransactionBuilder';
+import Amount from '../../Amount'
+import { TransactionBuilder } from '../TransactionBuilder';
 
 export class OfferCreateBuilder {
     private _expiration?: number = undefined
