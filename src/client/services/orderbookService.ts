@@ -1,6 +1,6 @@
-import Orderbook, { AsksAndBids, CurrencyCounterparty } from '../rippled/model/transaction/Orderbook/Orderbook'
-import callForOrderbook from '../rippled/utils/getOrderbook'
-import OrderbookBuilder from '../rippled/model/transaction/Orderbook/OrderbookBuilder'
+import Orderbook, { AsksAndBids, CurrencyCounterparty } from '../xrpl/api/model/transaction/Orderbook/Orderbook'
+import callForOrderbook from '../xrpl/api/utils/getOrderbook'
+import OrderbookBuilder from '../xrpl/api/model/transaction/Orderbook/OrderbookBuilder'
 
 async function getOrderbook(
     address: string, 

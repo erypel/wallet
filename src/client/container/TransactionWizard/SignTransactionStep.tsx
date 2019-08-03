@@ -1,10 +1,10 @@
 import React from 'react'
 import Button from '../../component/Button'
-import signTransaction from '../../rippled/utils/flow/signTransaction'
 import { Dispatch } from 'redux'
-import SignedTransaction from '../../rippled/model/transaction/flow/SignedTransaction'
 import { setSignedTransaction } from '../../store/transaction/actions'
 import { connect } from 'react-redux'
+import SignedTransaction from '../../xrpl/api/model/transaction/flow/SignedTransaction'
+import signTransaction from '../../xrpl/api/utils/flow/signTransaction'
 
 
 interface Props {

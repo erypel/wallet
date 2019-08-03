@@ -1,5 +1,5 @@
-import Ask from '../../rippled/model/transaction/Orderbook/Ask'
-import Bid from '../../rippled/model/transaction/Orderbook/Bid'
+import Ask from '../../xrpl/api/model/transaction/Orderbook/Ask'
+import Bid from '../../xrpl/api/model/transaction/Orderbook/Bid'
 
 export const SET_ASKS = 'SET_ASKS'
 export const SET_BIDS = 'SET_BIDS'

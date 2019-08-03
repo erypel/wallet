@@ -1,6 +1,6 @@
 import React from 'react'
 import Input from './Input'
-import { isValidAddress } from '../rippled/utils/isValidAddress'
+import { isValidAddress } from '../xrpl/api/utils/isValidAddress'
 
 /**
 	 * Your Credentials

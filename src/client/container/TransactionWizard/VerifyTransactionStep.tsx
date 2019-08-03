@@ -1,8 +1,8 @@
 import React from 'react'
-import verifyTransaction from '../../rippled/utils/flow/verifyTransaction'
-import VerifiedTransaction from '../../rippled/model/transaction/flow/VerifiedTransaction'
-import SignedTransaction from "../../rippled/model/transaction/flow/SignedTransaction";
 import { connect } from 'react-redux'
+import SignedTransaction from '../../xrpl/api/model/transaction/flow/SignedTransaction'
+import VerifiedTransaction from '../../xrpl/api/model/transaction/flow/VerifiedTransaction'
+import verifyTransaction from '../../xrpl/api/utils/flow/verifyTransaction'
 
 interface Props {
     signedTx: SignedTransaction

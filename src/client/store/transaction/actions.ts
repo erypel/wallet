@@ -1,5 +1,5 @@
 import { SET_TX_JSON, SET_SIGNED_TRANSACTION, SET_DEST_ADDRESS, SET_SRC_SECRET, SET_SRC_ADDRESS, SET_AMOUNT } from './types'
-import SignedTransaction from '../../rippled/model/transaction/flow/SignedTransaction'
+import SignedTransaction from '../../xrpl/api/model/transaction/flow/SignedTransaction'
 
 export const setAmount = (amount: string) => {
     return {type: SET_AMOUNT, payload: amount}

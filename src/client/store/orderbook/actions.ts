@@ -1,6 +1,6 @@
-import Bid from '../../rippled/model/transaction/Orderbook/Bid'
+import Bid from '../../xrpl/api/model/transaction/Orderbook/Bid'
 import { SET_ASKS, SET_BIDS, SetAsksAction, SetBidsAction, OrderbookActions, SET_LOADING, SetLoadingAction } from './types'
-import Ask from '../../rippled/model/transaction/Orderbook/Ask'
+import Ask from '../../xrpl/api/model/transaction/Orderbook/Ask'
 import { ActionCreator, Dispatch } from 'redux'
 import { orderbookService } from '../../services/orderbookService'
 
