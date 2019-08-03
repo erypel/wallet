@@ -9,7 +9,7 @@ export type AsksAndBids = {
 
 export type CurrencyCounterparty = {
     currency: string
-    counterparty: string
+    counterparty?: string
 }
 
 export default class Orderbook {

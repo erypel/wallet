@@ -2,10 +2,22 @@ import Amount from '../../Amount'
 
 // this has the same structure as Ask
 export default interface Bid {
-    specificaton: object //order
+    specificaton: Order
     properties: Properties
     data: object //can include lots of things
     state?: State
+}
+
+interface Order {
+    direction: string
+    quantity: Amount
+    totalPrice: Amount
+    expirationTime?: string
+    fillOrKill?: boolean
+    immediateOrCancel?: boolean
+    memos?: object[]
+    orderToReplace?: number
+    passive?: boolean
 }
 
 interface State {

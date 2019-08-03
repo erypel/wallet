@@ -25,10 +25,22 @@ function setLoading(isLoading: boolean): SetLoadingAction {
     }
 }
 
-export const fetchOrderbook: ActionCreator<any> = () => {
+export const fetchOrderbook: ActionCreator<any> = (
+    address: string, 
+    baseCurrency: string, 
+    baseCounterparty: string, 
+    counterCurrency: string,
+    counterCounterparty: string
+) => {
     return async (dispatch: Dispatch<OrderbookActions>) => {
         dispatch(setLoading(true))
-        const orders = await orderbookService.getOrderbook()
+        const orders = await orderbookService.getOrderbook(
+            address,
+            baseCurrency,
+            baseCounterparty,
+            counterCurrency,
+            counterCounterparty
+        )
         const { asks, bids } = orders
         dispatch(setAsks(asks))
         dispatch(setBids(bids))
