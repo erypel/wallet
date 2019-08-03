@@ -42,14 +42,14 @@ class Orderbook extends React.PureComponent<Props> {
     }
 
     render() {
-        const { bids, asks } = this.props
-        // const bids = [
-        //     {marketSize: 1,price: 2},{marketSize: 2,price: 2},{marketSize: 3,price: 2},{marketSize: 4,price: 2},{marketSize: 5,price: 2},{marketSize: 6,price: 2},{marketSize: 7,price: 2},{marketSize: 8,price: 2},{marketSize: 9,price: 2},{marketSize: 10,price: 2},{marketSize: 11,price: 2}
+        // const { bids, asks } = this.props
+        const bids = [
+            {marketSize: 1,price: 2},{marketSize: 2,price: 2},{marketSize: 3,price: 2},{marketSize: 4,price: 2},{marketSize: 5,price: 2},{marketSize: 6,price: 2},{marketSize: 7,price: 2},{marketSize: 8,price: 2},{marketSize: 9,price: 2},{marketSize: 10,price: 2},{marketSize: 11,price: 2}
 
-        // ]
-        // const asks = [
-        //     {marketSize: 1,price: 2},{marketSize: 2,price: 2},{marketSize: 3,price: 2},{marketSize: 4,price: 2},{marketSize: 5,price: 2},{marketSize: 6,price: 2},{marketSize: 7,price: 2},{marketSize: 8,price: 2},{marketSize: 9,price: 2},{marketSize: 10,price: 2},{marketSize: 11,price: 2}
-        // ]
+        ]
+        const asks = [
+            {marketSize: 1,price: 2},{marketSize: 2,price: 2},{marketSize: 3,price: 2},{marketSize: 4,price: 2},{marketSize: 5,price: 2},{marketSize: 6,price: 2},{marketSize: 7,price: 2},{marketSize: 8,price: 2},{marketSize: 9,price: 2},{marketSize: 10,price: 2},{marketSize: 11,price: 2}
+        ]
         const bidsSize = bids.length > 10 ? 10 : bids.length
         const asksSize = asks.length > 10 ? 10 : asks.length
         return <div className='orderbook'>
@@ -63,9 +63,9 @@ class Orderbook extends React.PureComponent<Props> {
                         {bids.slice(0, bidsSize).map(bid => {
                             return <tr className='green-text'>
                                 {/* <td>{bid.specificaton.quantity.value}</td>
-                                <td>{bid.specificaton.totalPrice.value}</td> */}
-                                {/* <td>{bid.marketSize}</td>
-                                <td>{bid.price}</td> */}
+                                <td>{bid.specificaton.totalPrice.value}</td> */} 
+                                <td>{bid.marketSize}</td>
+                                <td>{bid.price}</td>
                             </tr>
                         })}
                         <tr>
@@ -75,9 +75,9 @@ class Orderbook extends React.PureComponent<Props> {
                         {asks.slice(0, asksSize).map(ask => {
                             return <tr className='red-text'>
                                 {/* <td>{ask.specificaton.quantity.value}</td>
-                                <td>{ask.specificaton.totalPrice.value}</td> */}
-                                {/* <td>{ask.marketSize}</td>
-                                <td>{ask.price}</td> */}
+                                <td>{ask.specificaton.totalPrice.value}</td>  */}
+                                <td>{ask.marketSize}</td>
+                                <td>{ask.price}</td>
                             </tr>
                         })}
                     </tbody>
