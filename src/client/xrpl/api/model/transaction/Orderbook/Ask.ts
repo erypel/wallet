@@ -2,7 +2,7 @@ import Amount from '../../Amount'
 
 // this has the same structure as Bid
 export default interface Ask {
-    specificaton: Order
+    specification: Order
     properties: Properties
     data: object //can include lots of things
     state?: State

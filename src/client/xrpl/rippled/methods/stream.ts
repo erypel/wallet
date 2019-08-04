@@ -66,6 +66,7 @@ async function subscribeToBook(takerPays: string = 'XRP', takerGets: string = 'U
     const directOffers = (directOfferResults? directOfferResults.result.asks : [])
     const reverseOffers = (reverseOfferResults? reverseOfferResults.result.bids : [])
     const orderbook = await formatBidsAndAsks(orderbookInfo, [...directOffers, ...reverseOffers])
+    console.log(orderbook)
     return orderbook
   })
 }
