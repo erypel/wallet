@@ -9,7 +9,7 @@ import Bid from '../../xrpl/api/model/transaction/Orderbook/Bid'
 import Ask from '../../xrpl/api/model/transaction/Orderbook/Ask'
 import OrderbookBuilder from '../../xrpl/api/model/transaction/Orderbook/OrderbookBuilder'
 import getOrderbook from '../../xrpl/api/utils/getOrderbook'
-
+import { rippledStream } from '../../xrpl/rippled/methods/stream'
 interface Props {
     bids: Bid[]
     asks: Ask[]
@@ -29,55 +29,54 @@ class Orderbook extends React.PureComponent<Props> {
         props.loadOrderbook('', 'XRP', '', 'XRP', '')
     }
 
+    componentWillMount() {
+        this.props.loadOrderbook('', 'XRP', '', 'XRP', '')
+    }
 
     onClick = () => {
+        rippledStream.subscribeToBook().then(book => {
+            console.log('lookit', book)
+        })
         const orderbook = new OrderbookBuilder({
             currency: 'USD',
-            counterparty: 'rchGBxcD1A1C2tdxF6papQYZ8kjRKMYcL'
+            counterparty: 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'
         }, {
             currency: 'XRP',
             counterparty: 'rchGBxcD1A1C2tdxF6papQYZ8kjRKMYcL'
         }).setLimit(10).build()
-        getOrderbook('r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59', orderbook)
+        getOrderbook('rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq', orderbook).then(book=>{
+            console.log('thisone', book)
+        })
     }
 
     render() {
-        // const { bids, asks } = this.props
-        const bids = [
-            {marketSize: 1,price: 2},{marketSize: 2,price: 2},{marketSize: 3,price: 2},{marketSize: 4,price: 2},{marketSize: 5,price: 2},{marketSize: 6,price: 2},{marketSize: 7,price: 2},{marketSize: 8,price: 2},{marketSize: 9,price: 2},{marketSize: 10,price: 2},{marketSize: 11,price: 2}
-
-        ]
-        const asks = [
-            {marketSize: 1,price: 2},{marketSize: 2,price: 2},{marketSize: 3,price: 2},{marketSize: 4,price: 2},{marketSize: 5,price: 2},{marketSize: 6,price: 2},{marketSize: 7,price: 2},{marketSize: 8,price: 2},{marketSize: 9,price: 2},{marketSize: 10,price: 2},{marketSize: 11,price: 2}
-        ]
+        const { bids, asks } = this.props
         const bidsSize = bids.length > 10 ? 10 : bids.length
         const asksSize = asks.length > 10 ? 10 : asks.length
         return <div className='orderbook'>
                 <h1>Orderbook</h1>
                 <table>
                     <thead>
-                        <th>MarketSize</th>
-                        <th>Price</th>
+                        <tr>
+                            <th>MarketSize</th>
+                            <th>Price</th>
+                        </tr>
                     </thead>
                     <tbody>
-                        {bids.slice(0, bidsSize).map(bid => {
-                            return <tr className='green-text'>
-                                {/* <td>{bid.specificaton.quantity.value}</td>
-                                <td>{bid.specificaton.totalPrice.value}</td> */} 
-                                <td>{bid.marketSize}</td>
-                                <td>{bid.price}</td>
+                        {bids.slice(0, bidsSize).map((bid: Bid, idx: number) => {
+                            return <tr className='green-text' key={idx}>
+                                <td>{bid.specificaton.quantity.value}}</td>
+                                <td>{bid.specificaton.totalPrice.value}</td>
                             </tr>
                         })}
                         <tr>
                             <td>Spread</td>
                             <td>{'TBD'}</td>
                         </tr>
-                        {asks.slice(0, asksSize).map(ask => {
-                            return <tr className='red-text'>
-                                {/* <td>{ask.specificaton.quantity.value}</td>
-                                <td>{ask.specificaton.totalPrice.value}</td>  */}
-                                <td>{ask.marketSize}</td>
-                                <td>{ask.price}</td>
+                        {asks.slice(0, asksSize).map((ask: Ask, idx: number) => {
+                            return <tr className='red-text' key={idx}>
+                                <td>{ask.specification.quantity.value} {ask.specification.quantity.currency}</td>
+                                <td>{ask.specification.totalPrice.value} {ask.specification.totalPrice.currency}</td> 
                             </tr>
                         })}
                     </tbody>

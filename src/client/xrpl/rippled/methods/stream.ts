@@ -1,4 +1,5 @@
-import connector from '../RippledConnector';
+import { api_request } from '../Dispatch'
+import formatBidsAndAsks from '../../api/utils/formatBidsAndAsks'
 
 /**
  * Methods for subscribing and unsubscribing to streams
@@ -33,12 +34,41 @@ import connector from '../RippledConnector';
   }
 }
  */
-function subscribeToAccounts(...accounts: string[]){
+async function subscribeToAccounts(...accounts: string[]){
 	if(!accounts) {
 		accounts = []
   }
-	let json = '{"id": 1, "command": "subscribe", "accounts":'+ accounts +',"streams": ["server", "ledger"]}'
-	connector.send(json)
+	const json = '{"id": 1, "command": "subscribe", "accounts":'+ accounts +',"streams": ["server", "ledger"]}'
+	await api_request(json)
+}
+
+async function subscribeToBook(takerPays: string = 'XRP', takerGets: string = 'USD', issuer: string = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'/**Gatehub USD*/) {
+  const directOfferResultsJson = {"id": "direct", "command": "subscribe", "books": [{"taker_pays": {"currency": takerPays}, "taker_gets": {"currency": takerGets, "issuer": issuer}, "snapshot": true, "both": true}]}
+  const reverseOfferResultsJson = {"id": "reverse", "command": "subscribe", "books": [{"taker_pays": {"currency": takerGets, "issuer": issuer}, "taker_gets": {"currency": takerPays}, "snapshot": true, "both": true}]}
+  
+  const orderbookInfo = {
+    "base": {
+      "currency": takerPays,
+      "counterparty": issuer
+    },
+    "counter": {
+      "currency": takerGets,
+      "counterparty": issuer
+    }
+  }
+
+  return Promise.all(
+    [
+      await api_request(directOfferResultsJson),
+      await api_request(reverseOfferResultsJson)
+    ]
+  ).then(async ([directOfferResults, reverseOfferResults]) => {
+    const directOffers = (directOfferResults? directOfferResults.result.asks : [])
+    const reverseOffers = (reverseOfferResults? reverseOfferResults.result.bids : [])
+    const orderbook = await formatBidsAndAsks(orderbookInfo, [...directOffers, ...reverseOffers])
+    console.log(orderbook)
+    return orderbook
+  })
 }
 
 /**
@@ -55,15 +85,16 @@ function subscribeToAccounts(...accounts: string[]){
   "result": {}
 }
  */
-function unsubscribeFromAccounts(...accounts: string[]){
+async function unsubscribeFromAccounts(...accounts: string[]){
 	if(!accounts) {
 		accounts = []
   }
-	let json = '{"id": 1, "command": "unsubscribe", "accounts":'+ accounts +',"streams": ["server", "ledger"]}'
-	connector.send(json)
+	const json = '{"id": 1, "command": "unsubscribe", "accounts":'+ accounts +',"streams": ["server", "ledger"]}'
+	await api_request(json)
 }
 
 export const rippledStream = {
   subscribeToAccounts,
+  subscribeToBook,
   unsubscribeFromAccounts
 }
