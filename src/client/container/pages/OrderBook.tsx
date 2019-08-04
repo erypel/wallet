@@ -31,7 +31,9 @@ class Orderbook extends React.PureComponent<Props> {
 
 
     onClick = () => {
-        console.log('evan look', rippledStream.subscribeToBook())
+        rippledStream.subscribeToBook().then(book => {
+            console.log('lookit', book)
+        })
         const orderbook = new OrderbookBuilder({
             currency: 'USD',
             counterparty: 'rchGBxcD1A1C2tdxF6papQYZ8kjRKMYcL'

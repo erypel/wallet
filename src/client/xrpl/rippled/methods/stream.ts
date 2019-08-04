@@ -40,9 +40,9 @@ async function subscribeToAccounts(...accounts: string[]){
 	const json = '{"id": 1, "command": "subscribe", "accounts":'+ accounts +',"streams": ["server", "ledger"]}'
 	await api_request(json)
 }
-
+//rwYQjHp9HZiKKpZB4i4fvc8eQvAtA7vdY6
 async function subscribeToBook(issuer: string = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq') {
-  const json = {"id": "change", "command": "subscribe", "books": [{"taker_pays": {"currency": "XRP"}, "taker_gets": {"currency": "USD", "issuer": issuer}, "snapshot": true, "both": true}]}
+  const json = {"id": "change", "command": "subscribe", "books": [{"taker_pays": {"currency": "USD", "issuer": issuer}, "taker_gets": {"currency": "XRP"}, "snapshot": true, "both": true}]}
   const test = await api_request(json)
   return test
 }
