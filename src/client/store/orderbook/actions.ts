@@ -3,6 +3,8 @@ import { SET_ASKS, SET_BIDS, SetAsksAction, SetBidsAction, OrderbookActions, SET
 import Ask from '../../xrpl/api/model/transaction/Orderbook/Ask'
 import { ActionCreator, Dispatch } from 'redux'
 import { orderbookService } from '../../services/orderbookService'
+import { rippledStream } from '../../xrpl/rippled/methods/stream';
+import { bookService } from '../../xrpl/rippled/services/bookService';
 
 function setBids(bids: Bid[]): SetBidsAction {
     return {
@@ -34,16 +36,23 @@ export const fetchOrderbook: ActionCreator<any> = (
 ) => {
     return async (dispatch: Dispatch<OrderbookActions>) => {
         dispatch(setLoading(true))
-        const orders = await orderbookService.getOrderbook(
-            address,
-            baseCurrency,
-            baseCounterparty,
-            counterCurrency,
-            counterCounterparty
-        )
-        const { asks, bids } = orders
-        dispatch(setAsks(asks))
-        dispatch(setBids(bids))
-        dispatch(setLoading(false))
+
+        // this code will fetch a specific order book, but we want the autobridged one
+        // const orders = await orderbookService.getOrderbook(
+        //     address,
+        //     baseCurrency,
+        //     baseCounterparty,
+        //     counterCurrency,
+        //     counterCounterparty
+        // )
+        // const { asks, bids } = orders
+        rippledStream.subscribeToBook().then(result => {
+            bookService.getAsksAndBidsFromResult(result)
+
+            //dispatch(setAsks(asks))
+           // dispatch(setBids(bids))
+            dispatch(setLoading(false))
+        })
+        
     }
 }

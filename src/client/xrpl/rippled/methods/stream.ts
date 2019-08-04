@@ -1,4 +1,5 @@
 import { api_request } from '../Dispatch'
+import formatBidsAndAsks from '../../api/utils/formatBidsAndAsks'
 
 /**
  * Methods for subscribing and unsubscribing to streams
@@ -40,11 +41,33 @@ async function subscribeToAccounts(...accounts: string[]){
 	const json = '{"id": 1, "command": "subscribe", "accounts":'+ accounts +',"streams": ["server", "ledger"]}'
 	await api_request(json)
 }
-//rwYQjHp9HZiKKpZB4i4fvc8eQvAtA7vdY6
-async function subscribeToBook(issuer: string = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq') {
-  const json = {"id": "change", "command": "subscribe", "books": [{"taker_pays": {"currency": "USD", "issuer": issuer}, "taker_gets": {"currency": "XRP"}, "snapshot": true, "both": true}]}
-  const test = await api_request(json)
-  return test
+
+async function subscribeToBook(takerPays: string = 'XRP', takerGets: string = 'USD', issuer: string = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'/**Gatehub USD*/) {
+  const directOfferResultsJson = {"id": "direct", "command": "subscribe", "books": [{"taker_pays": {"currency": takerPays}, "taker_gets": {"currency": takerGets, "issuer": issuer}, "snapshot": true, "both": true}]}
+  const reverseOfferResultsJson = {"id": "reverse", "command": "subscribe", "books": [{"taker_pays": {"currency": takerGets, "issuer": issuer}, "taker_gets": {"currency": takerPays}, "snapshot": true, "both": true}]}
+  
+  const orderbookInfo = {
+    "base": {
+      "currency": takerPays,
+      "counterparty": issuer
+    },
+    "counter": {
+      "currency": takerGets,
+      "counterparty": issuer
+    }
+  }
+
+  return Promise.all(
+    [
+      await api_request(directOfferResultsJson),
+      await api_request(reverseOfferResultsJson)
+    ]
+  ).then(async ([directOfferResults, reverseOfferResults]) => {
+    const directOffers = (directOfferResults? directOfferResults.result.asks : [])
+    const reverseOffers = (reverseOfferResults? reverseOfferResults.result.bids : [])
+    const orderbook = await formatBidsAndAsks(orderbookInfo, [...directOffers, ...reverseOffers])
+    return orderbook
+  })
 }
 
 /**

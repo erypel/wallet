@@ -36,12 +36,14 @@ class Orderbook extends React.PureComponent<Props> {
         })
         const orderbook = new OrderbookBuilder({
             currency: 'USD',
-            counterparty: 'rchGBxcD1A1C2tdxF6papQYZ8kjRKMYcL'
+            counterparty: 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'
         }, {
             currency: 'XRP',
             counterparty: 'rchGBxcD1A1C2tdxF6papQYZ8kjRKMYcL'
         }).setLimit(10).build()
-        getOrderbook('r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59', orderbook)
+        getOrderbook('rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq', orderbook).then(book=>{
+            console.log('thisone', book)
+        })
     }
 
     render() {
