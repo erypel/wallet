@@ -9,7 +9,7 @@ import Bid from '../../xrpl/api/model/transaction/Orderbook/Bid'
 import Ask from '../../xrpl/api/model/transaction/Orderbook/Ask'
 import OrderbookBuilder from '../../xrpl/api/model/transaction/Orderbook/OrderbookBuilder'
 import getOrderbook from '../../xrpl/api/utils/getOrderbook'
-
+import { rippledStream } from '../../xrpl/rippled/methods/stream'
 interface Props {
     bids: Bid[]
     asks: Ask[]
@@ -31,6 +31,7 @@ class Orderbook extends React.PureComponent<Props> {
 
 
     onClick = () => {
+        console.log('evan look', rippledStream.subscribeToBook())
         const orderbook = new OrderbookBuilder({
             currency: 'USD',
             counterparty: 'rchGBxcD1A1C2tdxF6papQYZ8kjRKMYcL'
