@@ -1,8 +1,7 @@
 import React from 'react'
 import Tabs from '../container/Tabs'
 import Input from '../library/Input'
-import Switch from './Switch';
-import Dropdown from './Dropdown';
+import Switch from './Switch'
 
 
 interface Props {
@@ -11,21 +10,29 @@ interface Props {
 }
 
 interface State {
+    isBuy: boolean
     amount: number
     limitPrice: number
     stopPrice: number
     showAdvanced: boolean
+    timeInForce: string
+    isPostOnly: boolean
 }
+
+type FormFields = keyof State
 
 class OfferForm extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props)
 
         this.state = {
+            isBuy: false,
             amount: 0.00,
             limitPrice: 0.00,
             stopPrice: 0.00,
-            showAdvanced: false
+            showAdvanced: false,
+            timeInForce: 'Good Til Cancelled',
+            isPostOnly: false
         }
     }
 
@@ -35,72 +42,87 @@ class OfferForm extends React.PureComponent<Props, State> {
         })
     }
 
+    handleChange = (event: React.FormEvent<HTMLInputElement>) => {
+        const { currentTarget } = event
+        const { value, id } = currentTarget
+
+        this.setState({
+            [id]: value as any
+        } as Pick<State, FormFields>)
+    }
+
+    handleCheckbox = (event: React.FormEvent<HTMLInputElement>) => {
+        const { currentTarget } = event
+        const { checked, id } = currentTarget
+
+        this.setState({
+            [id]: checked as any
+        } as Pick<State, FormFields>)
+    }
+
+    handleSelector = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const { currentTarget } = event
+        const { value } = currentTarget
+
+        this.setState({
+            timeInForce: value as any
+        } as Pick<State, FormFields>)
+    }
+
+    onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        const { state, props } = this
+        const { isBuy, amount, limitPrice, stopPrice, showAdvanced, timeInForce, isPostOnly } = state
+        console.log('here')
+    }
+
     render() {
-        const { amount, limitPrice, stopPrice, showAdvanced } = this.state
-        const { bidCurrency, askCurrency } = this.props
-        return <form>
+        const { state, props, handleChange } = this
+        const { amount, limitPrice, stopPrice, showAdvanced } = state
+        const { bidCurrency, askCurrency } = props
+        return <form onSubmit={this.onSubmit}>
             <span>
                 <div>BUY</div>
-                <Switch id='buyOrSell' onValue='BUY' offValue='SELL'/>
+                <Switch id='isBuy' onValue='BUY' offValue='SELL' onChange={handleChange}/>
                 <p>SELL</p>
             </span>
             <Tabs>
                 <div data-label='market'>
                     <label>
                         Amount
-                        <Input id='amount' type='number' value={amount}/> {bidCurrency}
+                        <Input id='amount' type='number' value={amount} onChange={handleChange}/> {bidCurrency}
                     </label>
                 </div>
                 <div data-label='limit'>
                     <label>
                         Amount
-                        <Input id='amount' type='number' value={amount}/> {askCurrency}
+                        <Input id='amount' type='number' value={amount} onChange={handleChange}/> {askCurrency}
                     </label>
                     <br/>
                     <label>
                         Limit Price
-                        <Input id='limitPrice' type='number' value={limitPrice}/> {bidCurrency}
+                        <Input id='limitPrice' type='number' value={limitPrice} onChange={handleChange}/> {bidCurrency}
                     </label>
                     <br/>
                     <label>
                         Advanced
-                        <Input id='showAdvanced' type='checkbox' value={false} onClick={this.toggleAdvanced}/>
+                        <Input id='showAdvanced' type='checkbox' value={showAdvanced} onChange={this.handleCheckbox}/>
                     </label>
                     {showAdvanced && <div>
                         <label>
                             Time in force Policy
-                            <Dropdown title='Select' list={[{
-                                    id: 0,
-                                    title: 'Good Til Cancelled',
-                                    selected: false,
-                                    key: 'timeInForcePolicy'
-                                },
-                                {
-                                    id: 1,
-                                    title: 'Good Til Time',
-                                    selected: false,
-                                    key: 'timeInForcePolicy'
-                                },
-                                {
-                                    id: 1,
-                                    title: 'Immediate or Cancel',
-                                    selected: false,
-                                    key: 'timeInForcePolicy'
-                                },
-                                {
-                                    id: 1,
-                                    title: 'Fill or Kill',
-                                    selected: false,
-                                    key: 'timeInForcePolicy'
-                                }
-                            ]}
-                            />
+                            <select onChange={this.handleSelector}>
+                                <option value='Good Til Cancelled'>Good Til Cancelled</option>
+                                <option value='Good Til Time'>Good Til Time</option>
+                                <option value='Immediate or Cancel'>Immediate or Cancel</option>
+                                <option value='Fill or Kill'>Fill or Kill</option>
+                            </select>
                         </label>
                         <br/>
                         <label>
                             Execution
                             <div>Post Only</div>
-                            <Switch id='execution'/>
+                            <Switch id='isPostOnly' onChange={handleChange}/>
                             <div>AllowTaker</div>
                         </label>
                     </div>
@@ -123,6 +145,7 @@ class OfferForm extends React.PureComponent<Props, State> {
                     </label>
                 </div>
             </Tabs>
+            <Input id='submit' type='submit' value='Submit Order'/>
         </form>
     }
 }
