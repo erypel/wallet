@@ -306,6 +306,61 @@ a {
     color: red;
 }
 
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 50px;
+}
+  
+.switch input {display:none;}
+  
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+  
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 43px;
+    width: 43px;
+    left: 4px;
+    bottom: 3px;
+    background-color: #fff;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+  
+input:checked + .slider {
+    background-color: green;
+}
+  
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+  
+input:checked + .slider:before {
+    -webkit-transform: translateX(50px);
+    -ms-transform: translateX(50px);
+    transform: translateX(50px);
+}
+
+  /* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+  
+.slider.round:before {
+    border-radius: 50%;
+}
 /*
 .feature-2 {
     background-color: #F09A9D;

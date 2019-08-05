@@ -1,6 +1,8 @@
 import React from 'react'
 import Tabs from '../container/Tabs'
 import Input from '../library/Input'
+import Switch from './Switch';
+
 
 interface Props {
     bidCurrency: string
@@ -28,6 +30,11 @@ class OfferForm extends React.PureComponent<Props, State> {
         const { amount, limitPrice, stopPrice } = this.state
         const { bidCurrency, askCurrency } = this.props
         return <form>
+            <span>
+                <div>BUY</div>
+                <Switch id='buyOrSell' onValue='BUY' offValue='SELL'/>
+                <p>SELL</p>
+            </span>
             <Tabs>
                 <div data-label='market'>
                     <label>
