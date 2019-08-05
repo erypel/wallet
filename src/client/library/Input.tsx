@@ -1,6 +1,6 @@
 import React from 'react'
 
-type InputTypes = 'text' | 'number' | 'submit' | 'password'
+type InputTypes = 'text' | 'number' | 'submit' | 'password' | 'checkbox'
 
 interface InputProps {
     id: string

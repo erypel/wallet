@@ -1,6 +1,6 @@
 import { BookOfferBuilder } from './BookOfferBuilder'
 import { BookOffer } from './BookOffer'
-import toJsonObject from '../../../../utils/toJsonObjectectectect'
+import toJsonObject from '../../../../utils/toJsonObject'
 
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({
