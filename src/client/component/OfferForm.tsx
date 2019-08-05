@@ -51,13 +51,21 @@ class OfferForm extends React.PureComponent<Props, State> {
         } as Pick<State, FormFields>)
     }
 
-    handleCheckbox = (event: React.FormEvent<HTMLInputElement>) => {
+    handleAdvanced = (event: React.FormEvent<HTMLInputElement>) => {
         const { currentTarget } = event
-        const { checked, id } = currentTarget
+        const { checked } = currentTarget
 
-        this.setState({
-            [id]: checked as any
-        } as Pick<State, FormFields>)
+        if (!checked) {
+            this.setState({
+                timeInForce: 'Good Til Cancelled',
+                isPostOnly: false,
+                showAdvanced: checked
+            })
+        } else {
+            this.setState({
+                showAdvanced: checked
+            })
+        }
     }
 
     handleSelector = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -65,8 +73,8 @@ class OfferForm extends React.PureComponent<Props, State> {
         const { value } = currentTarget
 
         this.setState({
-            timeInForce: value as any
-        } as Pick<State, FormFields>)
+            timeInForce: value
+        })
     }
 
     onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -74,6 +82,17 @@ class OfferForm extends React.PureComponent<Props, State> {
         const { state, props } = this
         const { isBuy, amount, limitPrice, stopPrice, showAdvanced, timeInForce, isPostOnly } = state
         console.log('here')
+    }
+
+    clearOfferTabState = () => {
+        this.setState({
+            amount: 0.00,
+            limitPrice: 0.00,
+            stopPrice: 0.00,
+            showAdvanced: false,
+            timeInForce: 'Good Til Cancelled',
+            isPostOnly: false
+        })
     }
 
     render() {
@@ -86,7 +105,7 @@ class OfferForm extends React.PureComponent<Props, State> {
                 <Switch id='isBuy' onValue='BUY' offValue='SELL' onChange={handleChange}/>
                 <p>SELL</p>
             </span>
-            <Tabs>
+            <Tabs onTabSwitch={this.clearOfferTabState}>
                 <div data-label='market'>
                     <label>
                         Amount
@@ -106,7 +125,7 @@ class OfferForm extends React.PureComponent<Props, State> {
                     <br/>
                     <label>
                         Advanced
-                        <Input id='showAdvanced' type='checkbox' value={showAdvanced} onChange={this.handleCheckbox}/>
+                        <Input id='showAdvanced' type='checkbox' value={showAdvanced} onChange={this.handleAdvanced}/>
                     </label>
                     {showAdvanced && <div>
                         <label>

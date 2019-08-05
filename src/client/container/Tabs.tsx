@@ -3,6 +3,7 @@ import Tab from '../component/Tab'
 
 interface TabsProps {
     children: JSX.Element[]
+    onTabSwitch?: () => void
 }
 
 interface TabsState {
@@ -19,6 +20,11 @@ class Tabs extends React.PureComponent<TabsProps, TabsState> {
     }
 
     onClickTabItem = (label: string) => {
+        const { state, props } = this
+        const { onTabSwitch } = props
+        if(onTabSwitch && label !== state.activeTab) {
+            onTabSwitch()
+        }
         this.setState({ activeTab: label })
     }
 
