@@ -10,7 +10,7 @@ interface Props {
 }
 
 interface State {
-    isBuy: boolean
+    isSell: boolean
     amount: number
     limitPrice: number
     stopPrice: number
@@ -26,7 +26,7 @@ class OfferForm extends React.PureComponent<Props, State> {
         super(props)
 
         this.state = {
-            isBuy: false,
+            isSell: false,
             amount: 0.00,
             limitPrice: 0.00,
             stopPrice: 0.00,
@@ -36,18 +36,19 @@ class OfferForm extends React.PureComponent<Props, State> {
         }
     }
 
-    toggleAdvanced = () => {
-        this.setState({
-            showAdvanced: !this.state.showAdvanced
-        })
-    }
-
     handleChange = (event: React.FormEvent<HTMLInputElement>) => {
         const { currentTarget } = event
         const { value, id } = currentTarget
-
         this.setState({
             [id]: value as any
+        } as Pick<State, FormFields>)
+    }
+
+    handleCheckbox = (event: React.FormEvent<HTMLInputElement>) => {
+        const { currentTarget } = event
+        const { checked, id } = currentTarget
+        this.setState({
+            [id]: checked as any
         } as Pick<State, FormFields>)
     }
 
@@ -80,7 +81,7 @@ class OfferForm extends React.PureComponent<Props, State> {
     onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const { state, props } = this
-        const { isBuy, amount, limitPrice, stopPrice, showAdvanced, timeInForce, isPostOnly } = state
+        const { isSell: isBuy, amount, limitPrice, stopPrice, showAdvanced, timeInForce, isPostOnly } = state
         console.log('here')
     }
 
@@ -96,13 +97,13 @@ class OfferForm extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { state, props, handleChange } = this
+        const { state, props, handleChange, handleCheckbox } = this
         const { amount, limitPrice, stopPrice, showAdvanced } = state
         const { bidCurrency, askCurrency } = props
         return <form onSubmit={this.onSubmit}>
             <span>
                 <div>BUY</div>
-                <Switch id='isBuy' onValue='BUY' offValue='SELL' onChange={handleChange}/>
+                <Switch id='isBuy' onChange={handleCheckbox}/>
                 <p>SELL</p>
             </span>
             <Tabs onTabSwitch={this.clearOfferTabState}>
@@ -141,7 +142,7 @@ class OfferForm extends React.PureComponent<Props, State> {
                         <label>
                             Execution
                             <div>Post Only</div>
-                            <Switch id='isPostOnly' onChange={handleChange}/>
+                            <Switch id='isPostOnly' onChange={handleCheckbox}/>
                             <div>AllowTaker</div>
                         </label>
                     </div>
