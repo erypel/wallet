@@ -48,8 +48,8 @@ class WalletTable extends React.PureComponent<Props> {
         if ( !justWallets || justWallets.length < 1 ){
             return <div className='width-2-3'>
                 <Subheader title='Accounts'/>
-                <GenerateWalletButton className='button-green'/
-            ></div>
+                <GenerateWalletButton className='button-green'/>
+            </div>
         }
 
         return <div className='width-2-3'>

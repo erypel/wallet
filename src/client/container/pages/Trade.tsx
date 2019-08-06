@@ -10,7 +10,7 @@ import Ask from '../../xrpl/api/model/transaction/Orderbook/Ask'
 import OrderbookBuilder from '../../xrpl/api/model/transaction/Orderbook/OrderbookBuilder'
 import getOrderbook from '../../xrpl/api/utils/getOrderbook'
 import { rippledStream } from '../../xrpl/rippled/methods/stream'
-import OfferForm from '../../component/OfferForm';
+import OfferForm from '../../component/OfferForm'
 interface Props {
     bids: Bid[]
     asks: Ask[]
@@ -55,7 +55,7 @@ class Orderbook extends React.PureComponent<Props> {
         const bidsSize = bids.length > 10 ? 10 : bids.length
         const asksSize = asks.length > 10 ? 10 : asks.length
         return <div>
-            <OfferForm bidCurrency='USD' askCurrency='XRP'/>
+            <OfferForm account='rNsjHCBJWAa8JWTTCA2EEd5uREDTeyZiDM' secret='sn8rAKRa16eo7YT8HmkKF9pQgKZbv' bidCurrency='USD' askCurrency='XRP'/>
             <div className='orderbook'>
                 <h1>Orderbook</h1>
                 <table>

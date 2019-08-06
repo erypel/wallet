@@ -1,16 +1,16 @@
 import OfferCreate from './OfferCreate'
-import Amount from '../../Amount'
-import { TransactionBuilder } from '../TransactionBuilder';
+import { TransactionBuilder } from '../TransactionBuilder'
+import Amount, { IssuerAmount } from '../../Amount'
 
 export class OfferCreateBuilder {
     private _expiration?: number = undefined
     private _offerSequence?: number = undefined
-    private _takeGets: Amount
-    private _takerPays: Amount
+    private _takeGets: IssuerAmount | string
+    private _takerPays: IssuerAmount | string
 
-    constructor(takerGets: Amount, takerPays: Amount) {
-        this._takeGets = takerGets
-        this._takerPays = takerPays
+    constructor(takerGets: Amount | string, takerPays: Amount | string) {
+        this._takeGets = (takerGets instanceof Amount) ? takerGets.toIssuerAmount() : takerGets
+        this._takerPays = (takerPays instanceof Amount) ? takerPays.toIssuerAmount() : takerPays
     }
 
     build(transactionBuilder: TransactionBuilder) {

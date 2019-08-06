@@ -1,12 +1,7 @@
 import Transaction from  '../Transaction'
 import { TransactionBuilder } from  '../TransactionBuilder'
-import Amount from  '../../Amount'
 import { OfferCreateBuilder } from  './OfferCreateBuilder'
-
-const RippleAPI = require('ripple-lib').RippleAPI
-const api = new RippleAPI({
-	server: 'wss://s.altnet.rippletest.net:51233'
-})
+import { IssuerAmount } from '../../Amount'
 
 // Flags
 
@@ -42,25 +37,25 @@ const tf_FILL_OR_KILL = 262144
 */
 const tf_SELL = 524288
 
+export const OfferCreateFlags = {
+    tf_PASSIVE,
+    tf_IMMEDIATE_OR_CANCEL,
+    tf_FILL_OR_KILL,
+    tf_SELL
+}
+
 export default class OfferCreate extends Transaction {
     expiration?: number // time must be since the Ripple Epoch
     offerSequence?: number
-    takerGets: Amount
-    takerPays: Amount
+    TakerGets: IssuerAmount | string
+    TakerPays: IssuerAmount | string
 
 
     constructor(transactionBuilder: TransactionBuilder, offerCreateBuilder: OfferCreateBuilder) {
         super(transactionBuilder)
-        this.takerGets = offerCreateBuilder.takerGets
-        this.takerPays = offerCreateBuilder.takerPays
+        this.TakerGets = offerCreateBuilder.takerGets
+        this.TakerPays = offerCreateBuilder.takerPays
         this.expiration = offerCreateBuilder.expiration
         this.offerSequence = offerCreateBuilder.offerSequence
-    }
-
-    private flagCheck = () => {
-        const flags = this.flags
-        if (flags && flags.has(tf_IMMEDIATE_OR_CANCEL) && flags.has(tf_FILL_OR_KILL)) {
-            throw Error( 'Invalid flags ')
-        }
     }
 }

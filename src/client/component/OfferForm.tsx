@@ -2,11 +2,14 @@ import React from 'react'
 import Tabs from '../container/Tabs'
 import Input from '../library/Input'
 import Switch from './Switch'
+import { offerService } from '../services/offerService'
 
 
 interface Props {
     bidCurrency: string
     askCurrency: string
+    account: string
+    secret: string
 }
 
 interface State {
@@ -81,8 +84,10 @@ class OfferForm extends React.PureComponent<Props, State> {
     onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const { state, props } = this
-        const { isSell: isBuy, amount, limitPrice, stopPrice, showAdvanced, timeInForce, isPostOnly } = state
-        console.log('here')
+        const { account, secret } = props
+        const { isSell, amount, limitPrice, stopPrice, showAdvanced, timeInForce, isPostOnly } = state
+        const offer = offerService.buildCreateOffer(account, isSell, amount, limitPrice, stopPrice, showAdvanced, timeInForce, isPostOnly)
+        offerService.sendOffer(offer, secret)
     }
 
     clearOfferTabState = () => {
