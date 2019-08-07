@@ -12,17 +12,33 @@ import SubmittedTransaction from '../xrpl/api/model/transaction/flow/SubmittedTr
 import VerifiedTransaction from '../xrpl/api/model/transaction/flow/VerifiedTransaction'
 import Amount from '../xrpl/api/model/Amount'
 import Currency from '../xrpl/api/model/Currency'
+import xrpToDrops from '../xrpl/api/utils/xrpToDrops'
 
-function createTakerGets(isSell: boolean) {
-    if (isSell) {
-
-    } else { //isBuy
-
+function formatCurrency(amount: Amount): Amount | string {
+    const { currency } = amount
+    if (currency === 'drops') {
+        return amount.value
+    } else if (currency === 'XRP') {
+        return xrpToDrops(amount.value)
+    } else {
+        return amount
     }
 }
 
-function createTakerPays() {
+function createTakerGets(isSell: boolean, amount: Amount, limit: Amount): Amount | string {
+    if (isSell) {
+        return formatCurrency(amount)
+    } else { //isBuy
+        return formatCurrency(limit)
+    }
+}
 
+function createTakerPays(isSell: boolean, amount: Amount, limit: Amount): Amount | string {
+    if (isSell) {
+        return formatCurrency(limit)
+    } else {
+        return formatCurrency(amount)
+    }
 }
 
 function buildCreateOffer(
