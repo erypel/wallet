@@ -10,8 +10,20 @@ import SignedTransaction from '../xrpl/api/model/transaction/flow/SignedTransact
 import verifyTransaction from '../xrpl/api/utils/flow/verifyTransaction'
 import SubmittedTransaction from '../xrpl/api/model/transaction/flow/SubmittedTransaction'
 import VerifiedTransaction from '../xrpl/api/model/transaction/flow/VerifiedTransaction'
-import Amount from '../xrpl/api/model/Amount';
-import Currency from '../xrpl/api/model/Currency';
+import Amount from '../xrpl/api/model/Amount'
+import Currency from '../xrpl/api/model/Currency'
+
+function createTakerGets(isSell: boolean) {
+    if (isSell) {
+
+    } else { //isBuy
+
+    }
+}
+
+function createTakerPays() {
+
+}
 
 function buildCreateOffer(
     account: string,
@@ -25,11 +37,14 @@ function buildCreateOffer(
 ) {
     const transactionBuilder = new TransactionBuilder(account, 'OfferCreate')
     const currency = new Currency('USD', '$')
-    const takerPays = new Amount(currency, '10', 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq')
+    const fakeTakerPays = new Amount(currency, '10', 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq')
         
-    const takerGets = '100000000'
-    const offerBuilder = new OfferCreateBuilder(takerGets, takerPays)
+    const fakeTakerGets = '100000000'
+    const offerBuilder = new OfferCreateBuilder(fakeTakerGets, fakeTakerPays)
 
+    const takerGets = createTakerGets(isSell)
+    const takerPays = createTakerPays()
+    
     if (showAdvanced) {
         switch(timeInForce) {
             case 'Good Til Cancelled':
@@ -94,9 +109,9 @@ async function prepareOffer(offer: OfferCreate): Promise<PreparedTransaction | n
 }
 
 async function signOffer(preparedTx: PreparedTransaction, secret: string): Promise<SignedTransaction | null> {
-    //const test = '{"Flags":2147483648,"TransactionType":"OfferCreate","Account":"rNsjHCBJWAa8JWTTCA2EEd5uREDTeyZiDM","TakerGets":"2000000","TakerPays":{"value":"10.1","currency":"USD","issuer":"rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq"},"LastLedgerSequence":21611142,"Fee":"12","Sequence":4}'
+    const test = '{"Flags":2147483648,"TransactionType":"OfferCreate","Account":"rNsjHCBJWAa8JWTTCA2EEd5uREDTeyZiDM","TakerGets":"2000000","TakerPays":{"currency":"USD","issuer":"rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq"},"LastLedgerSequence":21611142,"Fee":"12","Sequence":4}'
 
-    return await signTransaction(preparedTx.txJSON, secret)
+    return await signTransaction(test, secret)
 }
 
 async function submitOffer(signedTx: SignedTransaction): Promise<SubmittedTransaction | null> {
