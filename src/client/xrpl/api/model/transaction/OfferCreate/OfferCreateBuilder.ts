@@ -3,7 +3,7 @@ import { TransactionBuilder } from '../TransactionBuilder'
 import Amount, { IssuerAmount } from '../../Amount'
 
 export class OfferCreateBuilder {
-    private _expiration?: number = undefined
+    private _expiration?: string = undefined
     private _offerSequence?: number = undefined
     private _takeGets: IssuerAmount | string
     private _takerPays: IssuerAmount | string
@@ -17,7 +17,7 @@ export class OfferCreateBuilder {
         return new OfferCreate(transactionBuilder, this)
     }
 
-    setExpiration(expiration: number) {
+    setExpiration(expiration: string) {
         this._expiration = expiration
         return this
     }

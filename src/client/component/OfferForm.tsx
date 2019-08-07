@@ -3,6 +3,8 @@ import Tabs from '../container/Tabs'
 import Input from '../library/Input'
 import Switch from './Switch'
 import { offerService } from '../services/offerService'
+import Amount from '../xrpl/api/model/Amount';
+import Currency from '../xrpl/api/model/Currency';
 
 
 interface Props {
@@ -86,7 +88,16 @@ class OfferForm extends React.PureComponent<Props, State> {
         const { state, props } = this
         const { account, secret } = props
         const { isSell, amount, limitPrice, stopPrice, showAdvanced, timeInForce, isPostOnly } = state
-        const offer = offerService.buildCreateOffer(account, isSell, amount, limitPrice, stopPrice, showAdvanced, timeInForce, isPostOnly)
+        const offer = offerService.buildCreateOffer(
+            account, 
+            isSell, 
+            new Amount(new Currency('XRP', 'X'), amount.toString()), 
+            new Amount(new Currency('USD', '$'), limitPrice.toString(), 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'), 
+            stopPrice, 
+            showAdvanced, 
+            timeInForce, 
+            isPostOnly
+        )
         offerService.sendOffer(offer, secret)
     }
 

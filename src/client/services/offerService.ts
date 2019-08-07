@@ -13,6 +13,7 @@ import VerifiedTransaction from '../xrpl/api/model/transaction/flow/VerifiedTran
 import Amount from '../xrpl/api/model/Amount'
 import Currency from '../xrpl/api/model/Currency'
 import xrpToDrops from '../xrpl/api/utils/xrpToDrops'
+import iso8601ToRippleTime from '../xrpl/api/utils/iso8601ToRippleTime';
 
 function formatCurrency(amount: Amount): Amount | string {
     const { currency } = amount
@@ -44,30 +45,30 @@ function createTakerPays(isSell: boolean, amount: Amount, limit: Amount): Amount
 function buildCreateOffer(
     account: string,
     isSell: boolean, 
-    amount: number, 
-    limitPrice: number, 
-    stopPrice: number, 
+    amount: Amount, 
+    limitPrice: Amount, 
+    stopPrice: number, //need to think about this one... may need to build serverside
     showAdvanced: boolean, 
     timeInForce: string, 
     isPostOnly: boolean
 ) {
-    const transactionBuilder = new TransactionBuilder(account, 'OfferCreate')
-    const currency = new Currency('USD', '$')
-    const fakeTakerPays = new Amount(currency, '10', 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq')
-        
-    const fakeTakerGets = '100000000'
-    const offerBuilder = new OfferCreateBuilder(fakeTakerGets, fakeTakerPays)
+    const takerGets = createTakerGets(isSell, amount, limitPrice)
+    const takerPays = createTakerPays(isSell, amount, limitPrice)
 
-    const takerGets = createTakerGets(isSell)
-    const takerPays = createTakerPays()
+    const transactionBuilder = new TransactionBuilder(account, 'OfferCreate')
+    const offerBuilder = new OfferCreateBuilder(takerGets, takerPays)
     
     if (showAdvanced) {
         switch(timeInForce) {
             case 'Good Til Cancelled':
-                //TODO
+                // Nothing needs to be done
                 break
             case 'Good Til Time':
-                offerBuilder.setExpiration(1) //TODO
+                const today = new Date()
+                const tomorrow = new Date(today.getTime() + (24 * 60 * 60 * 1000))
+                const iso = tomorrow.toISOString()
+                const rippleTime = iso8601ToRippleTime(iso)
+                offerBuilder.setExpiration(rippleTime) //TODO add other expiration times
                 break 
             case 'Immediate or Cancel':
                 transactionBuilder.setFlags(OfferCreateFlags.tf_IMMEDIATE_OR_CANCEL)
@@ -79,7 +80,7 @@ function buildCreateOffer(
                 break
         }
 
-        //TODO isPostOnly fields
+        //TODO isPostOnly fields (if isPostOnly, reject offer if any part of it would be filled immediately)
     }
     
     const offer = new OfferCreate(transactionBuilder, offerBuilder)
