@@ -41,6 +41,16 @@ export class TransactionBuilder {
         return this
     }
 
+    addFlag(flag: number) {
+        if (!this._flags) {
+            this._flags = new Set<number>()
+            this._flags.add(flag)
+        } else {
+            this._flags.add(flag)
+        }
+        return this
+    }
+
     setFlags(...flags: number[]) {
         this._flags = new Set(flags)
         return this

@@ -2,11 +2,16 @@ import React from 'react'
 import Tabs from '../container/Tabs'
 import Input from '../library/Input'
 import Switch from './Switch'
+import { offerService } from '../services/offerService'
+import Amount from '../xrpl/api/model/Amount';
+import Currency from '../xrpl/api/model/Currency';
 
 
 interface Props {
     bidCurrency: string
     askCurrency: string
+    account: string
+    secret: string
 }
 
 interface State {
@@ -81,8 +86,19 @@ class OfferForm extends React.PureComponent<Props, State> {
     onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const { state, props } = this
-        const { isSell: isBuy, amount, limitPrice, stopPrice, showAdvanced, timeInForce, isPostOnly } = state
-        console.log('here')
+        const { account, secret } = props
+        const { isSell, amount, limitPrice, stopPrice, showAdvanced, timeInForce, isPostOnly } = state
+        const offer = offerService.buildCreateOffer(
+            account, 
+            isSell, 
+            new Amount(new Currency('XRP', 'X'), amount.toString()), 
+            new Amount(new Currency('USD', '$'), limitPrice.toString(), 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'), 
+            stopPrice, 
+            showAdvanced, 
+            timeInForce, 
+            isPostOnly
+        )
+        offerService.sendOffer(offer, secret)
     }
 
     clearOfferTabState = () => {

@@ -1,5 +1,4 @@
-import { Reducer } from "redux"
-import SignedTransaction from "../../xrpl/model/transaction/flow/SignedTransaction";
+import { Reducer } from 'redux'
 import { SET_SIGNED_TRANSACTION, SET_TX_JSON, SET_DEST_ADDRESS, SET_SRC_SECRET, SET_SRC_ADDRESS, SET_AMOUNT, TransactionState } from "./types";
 
 const initialState: TransactionState = {
@@ -25,7 +24,7 @@ const reducer:Reducer<TransactionState> = (state = initialState, action) => {
         case SET_TX_JSON:
             return {...state, txJSON: payload as string}
         case SET_SIGNED_TRANSACTION:
-            return {...state, signedTransaction: payload as SignedTransaction}
+            return {...state, signedTransaction: payload}
         default:
             return state
     }
