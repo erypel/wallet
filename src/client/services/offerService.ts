@@ -11,9 +11,59 @@ import verifyTransaction from '../xrpl/api/utils/flow/verifyTransaction'
 import SubmittedTransaction from '../xrpl/api/model/transaction/flow/SubmittedTransaction'
 import VerifiedTransaction from '../xrpl/api/model/transaction/flow/VerifiedTransaction'
 import Amount from '../xrpl/api/model/Amount'
-import Currency from '../xrpl/api/model/Currency'
 import xrpToDrops from '../xrpl/api/utils/xrpToDrops'
-import iso8601ToRippleTime from '../xrpl/api/utils/iso8601ToRippleTime';
+import iso8601ToRippleTime from '../xrpl/api/utils/iso8601ToRippleTime'
+
+function buildMarketOrder(account: string, isSell: boolean, amount: Amount) {
+    //TODO will also want a parameter for what is being bought/sold
+}
+
+function buildLimitOrder(
+    account: string, 
+    isSell: boolean, 
+    amount: Amount, 
+    limitPrice: Amount, 
+    showAdvanced: boolean, 
+    timeInForce: string, 
+    isPostOnly: boolean
+) {
+    const takerGets = createTakerGets(isSell, amount, limitPrice)
+    const takerPays = createTakerPays(isSell, amount, limitPrice)
+
+    const transactionBuilder = new TransactionBuilder(account, 'OfferCreate')
+    const offerBuilder = new OfferCreateBuilder(takerGets, takerPays)
+    
+    if (isSell) {
+        transactionBuilder.addFlag(OfferCreateFlags.tf_SELL)
+    }
+
+    if (showAdvanced) {
+        switch(timeInForce) {
+            case 'Good Til Cancelled':
+                // Nothing needs to be done
+                break
+            case 'Good Til Time':
+                const today = new Date()
+                const tomorrow = new Date(today.getTime() + (24 * 60 * 60 * 1000))
+                const iso = tomorrow.toISOString()
+                const rippleTime = iso8601ToRippleTime(iso)
+                offerBuilder.setExpiration(rippleTime) //TODO add other expiration times
+                break 
+            case 'Immediate or Cancel':
+                transactionBuilder.addFlag(OfferCreateFlags.tf_IMMEDIATE_OR_CANCEL)
+                break
+            case 'Fill or Kill':
+                transactionBuilder.addFlag(OfferCreateFlags.tf_FILL_OR_KILL)
+                break
+            default:
+                break
+        }
+
+        //TODO isPostOnly fields (if isPostOnly, reject offer if any part of it would be filled immediately)
+    }
+    const offer = new OfferCreate(transactionBuilder, offerBuilder)
+    return offer
+}
 
 function formatCurrency(amount: Amount): Amount | string {
     const { currency } = amount
@@ -52,39 +102,13 @@ function buildCreateOffer(
     timeInForce: string, 
     isPostOnly: boolean
 ) {
-    const takerGets = createTakerGets(isSell, amount, limitPrice)
-    const takerPays = createTakerPays(isSell, amount, limitPrice)
-
-    const transactionBuilder = new TransactionBuilder(account, 'OfferCreate')
-    const offerBuilder = new OfferCreateBuilder(takerGets, takerPays)
-    
-    if (showAdvanced) {
-        switch(timeInForce) {
-            case 'Good Til Cancelled':
-                // Nothing needs to be done
-                break
-            case 'Good Til Time':
-                const today = new Date()
-                const tomorrow = new Date(today.getTime() + (24 * 60 * 60 * 1000))
-                const iso = tomorrow.toISOString()
-                const rippleTime = iso8601ToRippleTime(iso)
-                offerBuilder.setExpiration(rippleTime) //TODO add other expiration times
-                break 
-            case 'Immediate or Cancel':
-                transactionBuilder.setFlags(OfferCreateFlags.tf_IMMEDIATE_OR_CANCEL)
-                break
-            case 'Fill or Kill':
-                transactionBuilder.setFlags(OfferCreateFlags.tf_FILL_OR_KILL)
-                break
-            default:
-                break
-        }
-
-        //TODO isPostOnly fields (if isPostOnly, reject offer if any part of it would be filled immediately)
+    if(limitPrice.value !== '0') { //TODO pass in order type and use that
+        return buildLimitOrder(
+            account, isSell, amount, limitPrice, showAdvanced, timeInForce, isPostOnly
+        )
+    } else {
+        return buildMarketOrder(account, isSell, amount)
     }
-    
-    const offer = new OfferCreate(transactionBuilder, offerBuilder)
-    return offer
 }
 
 function validateCreateOffer(offer: OfferCreate) {
