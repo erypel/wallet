@@ -13,9 +13,67 @@ import VerifiedTransaction from '../xrpl/api/model/transaction/flow/VerifiedTran
 import Amount from '../xrpl/api/model/Amount'
 import xrpToDrops from '../xrpl/api/utils/xrpToDrops'
 import iso8601ToRippleTime from '../xrpl/api/utils/iso8601ToRippleTime'
+import { orderbookService } from './orderbookService'
+import { rippledStream } from '../xrpl/rippled/methods/stream'
+import Ask from '../xrpl/api/model/transaction/Orderbook/Ask'
+import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
 
-function buildMarketOrder(account: string, isSell: boolean, amount: Amount) {
+function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
+    if (offers.length === 0) {
+        
+    }
+    var remainingValue = value
+    for(let i = 0; i < offers.length; i++) {
+        const offer = offers[i]
+        //TODO will eventually want to deal with the state of the offer and whether it's been partially filled
+        const { totalPrice } = offer.specification
+        const bidCost = totalPrice.value
+        remainingValue -= bidCost
+        if(remainingValue <= 0) {
+            return totalPrice
+        }
+    }
+
+    throw Error('Not enough order book depth for order. Try placing a limit order.')
+}
+
+
+
+async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amount: Amount): Promise<Amount> {
+    //TODOThis is not the right way to do it, but it will work for now before the DEX refactor
+    const book = await rippledStream.subscribeToBook().then((result: {asks: Ask[], bids: Bid[]}) => {
+        return result
+    })
+    const bids = book.bids
+    const asks = book.asks
+    
+    if (isSell) {
+        //get bids
+        return findBidLimitPrice(bids, Number(amount.value)) //TODO probably unsafe
+        //This is the right way to do things
+        //orderbookService.getBids(adress, amount.currency, ...)
+    } else { //isBuy
+        //get asks
+        return findBidLimitPrice(asks, Number(amount.value)) //TODO probably unsafe
+    }
+}
+
+async function buildMarketOrder(account: string, isSell: boolean, amount: Amount): Promise<OfferCreate> {
     //TODO will also want a parameter for what is being bought/sold
+    const limitPrice = await buildMarketOrderLimitPrice('', isSell, amount)
+
+    const takerGets = createTakerGets(isSell, amount, limitPrice)
+    const takerPays = createTakerPays(isSell, amount, limitPrice)
+
+    const transactionBuilder = new TransactionBuilder(account, 'OfferCreate')
+    const offerBuilder = new OfferCreateBuilder(takerGets, takerPays)
+
+    if (isSell) {
+        transactionBuilder.addFlag(OfferCreateFlags.tf_SELL)
+    }
+
+    const offer = new OfferCreate(transactionBuilder, offerBuilder)
+    return offer
 }
 
 function buildLimitOrder(
@@ -26,7 +84,7 @@ function buildLimitOrder(
     showAdvanced: boolean, 
     timeInForce: string, 
     isPostOnly: boolean
-) {
+): OfferCreate {
     const takerGets = createTakerGets(isSell, amount, limitPrice)
     const takerPays = createTakerPays(isSell, amount, limitPrice)
 
@@ -92,22 +150,22 @@ function createTakerPays(isSell: boolean, amount: Amount, limit: Amount): Amount
     }
 }
 
-function buildCreateOffer(
+async function buildCreateOffer(
     account: string,
     isSell: boolean, 
     amount: Amount, 
     limitPrice: Amount, 
-    stopPrice: number, //need to think about this one... may need to build serverside
+    stopPrice: number, //need to think about this one... may need to build serverside listener
     showAdvanced: boolean, 
     timeInForce: string, 
     isPostOnly: boolean
-) {
+): Promise<OfferCreate> {
     if(limitPrice.value !== '0') { //TODO pass in order type and use that
         return buildLimitOrder(
             account, isSell, amount, limitPrice, showAdvanced, timeInForce, isPostOnly
         )
     } else {
-        return buildMarketOrder(account, isSell, amount)
+        return await buildMarketOrder(account, isSell, amount)
     }
 }
 
@@ -150,9 +208,8 @@ async function prepareOffer(offer: OfferCreate): Promise<PreparedTransaction | n
 }
 
 async function signOffer(preparedTx: PreparedTransaction, secret: string): Promise<SignedTransaction | null> {
-    const test = '{"Flags":2147483648,"TransactionType":"OfferCreate","Account":"rNsjHCBJWAa8JWTTCA2EEd5uREDTeyZiDM","TakerGets":"2000000","TakerPays":{"currency":"USD","issuer":"rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq"},"LastLedgerSequence":21611142,"Fee":"12","Sequence":4}'
-
-    return await signTransaction(test, secret)
+    //const test = '{"Flags":2147483648,"TransactionType":"OfferCreate","Account":"rNsjHCBJWAa8JWTTCA2EEd5uREDTeyZiDM","TakerGets":"2000000","TakerPays":{"currency":"USD","issuer":"rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq"},"LastLedgerSequence":21611142,"Fee":"12","Sequence":4}'
+    return await signTransaction(preparedTx.txJSON, secret)
 }
 
 async function submitOffer(signedTx: SignedTransaction): Promise<SubmittedTransaction | null> {

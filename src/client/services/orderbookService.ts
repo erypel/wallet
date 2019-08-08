@@ -1,6 +1,36 @@
 import Orderbook, { AsksAndBids, CurrencyCounterparty } from '../xrpl/api/model/transaction/Orderbook/Orderbook'
 import callForOrderbook from '../xrpl/api/utils/getOrderbook'
 import OrderbookBuilder from '../xrpl/api/model/transaction/Orderbook/OrderbookBuilder'
+import Ask from '../xrpl/api/model/transaction/Orderbook/Ask'
+import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
+
+async function getBids(
+    address: string, 
+    baseCurrency: string, 
+    baseCounterparty: string, 
+    counterCurrency: string,
+    counterCounterparty: string
+    ): Promise<Bid[]> {
+        return await getOrderbook(
+            address, baseCurrency, baseCounterparty, counterCurrency, counterCounterparty
+        ).then((asksAndBids: AsksAndBids) => {
+            return asksAndBids.bids
+        })
+}
+
+async function getAsks(
+    address: string, 
+    baseCurrency: string, 
+    baseCounterparty: string, 
+    counterCurrency: string,
+    counterCounterparty: string
+): Promise<Ask[]> {
+    return await getOrderbook(
+        address, baseCurrency, baseCounterparty, counterCurrency, counterCounterparty
+    ).then((asksAndBids: AsksAndBids) => {
+        return asksAndBids.asks
+    })
+}
 
 async function getOrderbook(
     address: string, 
@@ -39,5 +69,7 @@ function buildOrderbook(
 }
 
 export const orderbookService = {
-    getOrderbook
+    getOrderbook,
+    getAsks,
+    getBids
 }

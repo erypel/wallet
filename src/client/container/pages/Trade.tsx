@@ -38,16 +38,16 @@ class Orderbook extends React.PureComponent<Props> {
         rippledStream.subscribeToBook().then(book => {
             console.log('lookit', book)
         })
-        const orderbook = new OrderbookBuilder({
-            currency: 'USD',
-            counterparty: 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'
-        }, {
-            currency: 'XRP',
-            counterparty: 'rchGBxcD1A1C2tdxF6papQYZ8kjRKMYcL'
-        }).setLimit(10).build()
-        getOrderbook('rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq', orderbook).then(book=>{
-            console.log('thisone', book)
-        })
+        // const orderbook = new OrderbookBuilder({
+        //     currency: 'USD',
+        //     counterparty: 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'
+        // }, {
+        //     currency: 'XRP',
+        //     counterparty: 'rchGBxcD1A1C2tdxF6papQYZ8kjRKMYcL'
+        // }).setLimit(10).build()
+        // getOrderbook('rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq', orderbook).then(book=>{
+        //     console.log('thisone', book)
+        // })
     }
 
     render() {
