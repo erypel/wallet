@@ -88,7 +88,7 @@ class OfferForm extends React.PureComponent<Props, State> {
         const { state, props } = this
         const { account, secret } = props
         const { isSell, amount, limitPrice, stopPrice, showAdvanced, timeInForce, isPostOnly } = state
-        const offer = offerService.buildCreateOffer(
+        const offer = await offerService.buildCreateOffer(
             account, 
             isSell, 
             new Amount(new Currency('XRP', 'X'), amount.toString()), 

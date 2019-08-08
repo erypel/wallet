@@ -16,6 +16,10 @@ export default class Amount {
   }
 }
 
+export function amountToIssuerAmount(amount: Amount) {
+  return new IssuerAmount(amount.currency, amount.value, amount.counterparty) 
+}
+
 export class IssuerAmount {
   currency: string
   value: string

@@ -68,8 +68,8 @@ class Orderbook extends React.PureComponent<Props> {
                     <tbody>
                         {bids.slice(0, bidsSize).map((bid: Bid, idx: number) => {
                             return <tr className='green-text' key={idx}>
-                                <td>{bid.specificaton.quantity.value}}</td>
-                                <td>{bid.specificaton.totalPrice.value}</td>
+                                <td>{bid.specification.quantity.value}}</td>
+                                <td>{bid.specification.totalPrice.value}</td>
                             </tr>
                         })}
                         <tr>

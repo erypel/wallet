@@ -1,6 +1,6 @@
 import OfferCreate from './OfferCreate'
 import { TransactionBuilder } from '../TransactionBuilder'
-import Amount, { IssuerAmount } from '../../Amount'
+import Amount, { IssuerAmount, amountToIssuerAmount } from '../../Amount'
 
 export class OfferCreateBuilder {
     private _expiration?: string = undefined
@@ -9,8 +9,8 @@ export class OfferCreateBuilder {
     private _takerPays: IssuerAmount | string
 
     constructor(takerGets: Amount | string, takerPays: Amount | string) {
-        this._takeGets = (takerGets instanceof Amount) ? takerGets.toIssuerAmount() : takerGets
-        this._takerPays = (takerPays instanceof Amount) ? takerPays.toIssuerAmount() : takerPays
+        this._takeGets = !(typeof takerGets === 'string') ? amountToIssuerAmount(takerGets) : takerGets
+        this._takerPays = !(typeof takerPays === 'string') ? amountToIssuerAmount(takerPays) : takerPays
     }
 
     build(transactionBuilder: TransactionBuilder) {

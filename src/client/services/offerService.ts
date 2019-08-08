@@ -20,7 +20,7 @@ import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
 
 function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
     if (offers.length === 0) {
-        
+        throw Error('Not enough order book depth for order. Try placing a limit order.')
     }
     var remainingValue = value
     for(let i = 0; i < offers.length; i++) {
@@ -71,6 +71,8 @@ async function buildMarketOrder(account: string, isSell: boolean, amount: Amount
     if (isSell) {
         transactionBuilder.addFlag(OfferCreateFlags.tf_SELL)
     }
+
+    transactionBuilder.addFlag(OfferCreateFlags.tf_FILL_OR_KILL)
 
     const offer = new OfferCreate(transactionBuilder, offerBuilder)
     return offer
