@@ -5,8 +5,8 @@ export default class Amount {
   value: string
   counterparty?: string
   
-  constructor(currency: Currency, value: string, counterparty?: string){
-    this.currency = currency.code
+  constructor(currency: Currency | string, value: string, counterparty?: string) {
+    this.currency = (typeof currency === 'string') ? currency : currency.code
     this.value = value
     this.counterparty = counterparty
   }
