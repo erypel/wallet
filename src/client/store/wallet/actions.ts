@@ -18,7 +18,7 @@ function setList(wallets: WalletMap): SetListAction {
     }
 }
 
-function setAtciveWallet(wallet: Wallet): SetActiveWalletAction {
+function setActive(wallet: Wallet): SetActiveWalletAction {
     return {
         type: SET_ACTIVE_WALLET,
         payload: wallet
@@ -70,11 +70,11 @@ export const loadWallets: ActionCreator<any> = (userId: string) => {
 
 export const setActiveWallet: ActionCreator<any> = (wallet: Wallet) => {
     return async (dispatch: Dispatch) => {
-        // refresh wallet balance
-        const balances = await getBalances(wallet.publicKey)
-        //TODO change balance on Wallet to balances
-        wallet.balance = balances[0].value
-        const updatedWallet = wallet
-        dispatch(setActiveWallet(updatedWallet))
+        // // refresh wallet balance
+        // const balances = await getBalances(wallet.publicKey)
+        // //TODO change balance on Wallet to balances
+        // wallet.balance = balances[0].value
+        // const updatedWallet = wallet
+        dispatch(setActive(wallet))
     }
 }
