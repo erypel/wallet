@@ -45,7 +45,7 @@ export const OfferCreateFlags = {
 }
 
 export default class OfferCreate extends Transaction {
-    expiration?: number // time must be since the Ripple Epoch
+    expiration?: string // time must be since the Ripple Epoch
     offerSequence?: number
     TakerGets: IssuerAmount | string
     TakerPays: IssuerAmount | string

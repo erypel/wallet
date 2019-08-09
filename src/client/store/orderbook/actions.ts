@@ -44,7 +44,7 @@ export const fetchOrderbook: ActionCreator<any> = (
         //     counterCounterparty
         // )
         // const { asks, bids } = orders
-        rippledStream.subscribeToBook().then((result: {asks: Ask[], bids: Bid[]}) => {
+        rippledStream.subscribeToBook(baseCurrency, counterCurrency).then((result: {asks: Ask[], bids: Bid[]}) => {
             const { asks, bids } = result
             dispatch(setAsks(asks))
             dispatch(setBids(bids))

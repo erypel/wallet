@@ -5,8 +5,8 @@ export default class Amount {
   value: string
   counterparty?: string
   
-  constructor(currency: Currency, value: string, counterparty?: string){
-    this.currency = currency.code
+  constructor(currency: Currency | string, value: string, counterparty?: string) {
+    this.currency = (typeof currency === 'string') ? currency : currency.code
     this.value = value
     this.counterparty = counterparty
   }
@@ -14,6 +14,10 @@ export default class Amount {
   toIssuerAmount() {
     return new IssuerAmount(this.currency, this.value, this.counterparty)
   }
+}
+
+export function amountToIssuerAmount(amount: Amount) {
+  return new IssuerAmount(amount.currency, amount.value, amount.counterparty) 
 }
 
 export class IssuerAmount {

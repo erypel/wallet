@@ -3,13 +3,13 @@ import Tabs from '../container/Tabs'
 import Input from '../library/Input'
 import Switch from './Switch'
 import { offerService } from '../services/offerService'
-import Amount from '../xrpl/api/model/Amount';
-import Currency from '../xrpl/api/model/Currency';
+import Amount from '../xrpl/api/model/Amount'
+import Currency from '../xrpl/api/model/Currency'
 
 
 interface Props {
-    bidCurrency: string
-    askCurrency: string
+    baseCurrency: string
+    quoteCurrency: string
     account: string
     secret: string
 }
@@ -86,17 +86,22 @@ class OfferForm extends React.PureComponent<Props, State> {
     onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const { state, props } = this
-        const { account, secret } = props
+        const { account, secret, baseCurrency, quoteCurrency } = props
         const { isSell, amount, limitPrice, stopPrice, showAdvanced, timeInForce, isPostOnly } = state
-        const offer = offerService.buildCreateOffer(
+        const offerAmount = (limitPrice > 0) ? new Amount(baseCurrency, amount.toString(), 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq') 
+            : (isSell) ? new Amount(baseCurrency, amount.toString()) : new Amount(quoteCurrency, amount.toString())
+        const limit = new Amount(quoteCurrency, limitPrice.toString(), 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq')
+        const offer = await offerService.buildCreateOffer(
             account, 
             isSell, 
-            new Amount(new Currency('XRP', 'X'), amount.toString()), 
-            new Amount(new Currency('USD', '$'), limitPrice.toString(), 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'), 
+            offerAmount, 
+            limit, 
             stopPrice, 
             showAdvanced, 
             timeInForce, 
-            isPostOnly
+            isPostOnly,
+            baseCurrency,
+            quoteCurrency
         )
         offerService.sendOffer(offer, secret)
     }
@@ -115,74 +120,86 @@ class OfferForm extends React.PureComponent<Props, State> {
     render() {
         const { state, props, handleChange, handleCheckbox } = this
         const { amount, limitPrice, stopPrice, showAdvanced } = state
-        const { bidCurrency, askCurrency } = props
-        return <form onSubmit={this.onSubmit}>
-            <span>
-                <div>BUY</div>
-                <Switch id='isBuy' onChange={handleCheckbox}/>
-                <p>SELL</p>
-            </span>
-            <Tabs onTabSwitch={this.clearOfferTabState}>
-                <div data-label='market'>
-                    <label>
-                        Amount
-                        <Input id='amount' type='number' value={amount} onChange={handleChange}/> {bidCurrency}
-                    </label>
-                </div>
-                <div data-label='limit'>
-                    <label>
-                        Amount
-                        <Input id='amount' type='number' value={amount} onChange={handleChange}/> {askCurrency}
-                    </label>
-                    <br/>
-                    <label>
-                        Limit Price
-                        <Input id='limitPrice' type='number' value={limitPrice} onChange={handleChange}/> {bidCurrency}
-                    </label>
-                    <br/>
-                    <label>
-                        Advanced
-                        <Input id='showAdvanced' type='checkbox' value={showAdvanced} onChange={this.handleAdvanced}/>
-                    </label>
-                    {showAdvanced && <div>
+        const { isSell, timeInForce } = state
+        const isGoodTilTime = timeInForce === 'Good Til Time'
+        const { baseCurrency, quoteCurrency } = props
+        return <div>
+            <h3>{baseCurrency}-{quoteCurrency}</h3>
+            <form onSubmit={this.onSubmit}>
+                <span>
+                    <div>BUY</div>
+                    <Switch id='isSell' onChange={handleCheckbox}/>
+                    <p>SELL</p>
+                </span>
+                <Tabs onTabSwitch={this.clearOfferTabState}>
+                    <div data-label='market'>
                         <label>
-                            Time in force Policy
-                            <select onChange={this.handleSelector}>
-                                <option value='Good Til Cancelled'>Good Til Cancelled</option>
-                                <option value='Good Til Time'>Good Til Time</option>
-                                <option value='Immediate or Cancel'>Immediate or Cancel</option>
-                                <option value='Fill or Kill'>Fill or Kill</option>
-                            </select>
+                            Amount
+                            <Input id='amount' type='number' value={amount} onChange={handleChange}/> {isSell ? baseCurrency : quoteCurrency}
+                        </label>
+                    </div>
+                    <div data-label='limit'>
+                        <label>
+                            Amount
+                            <Input id='amount' type='number' value={amount} onChange={handleChange}/> {baseCurrency}
                         </label>
                         <br/>
                         <label>
-                            Execution
-                            <div>Post Only</div>
-                            <Switch id='isPostOnly' onChange={handleCheckbox}/>
-                            <div>AllowTaker</div>
+                            Limit Price
+                            <Input id='limitPrice' type='number' value={limitPrice} onChange={handleChange}/> {quoteCurrency}
                         </label>
+                        <br/>
+                        <label>
+                            Advanced
+                            <Input id='showAdvanced' type='checkbox' value={showAdvanced} onChange={this.handleAdvanced}/>
+                        </label>
+                        {showAdvanced && <div>
+                            <label>
+                                Time in force Policy
+                                <select onChange={this.handleSelector}>
+                                    <option value='Good Til Cancelled'>Good Til Cancelled</option>
+                                    <option value='Good Til Time'>Good Til Time</option>
+                                    <option value='Immediate or Cancel'>Immediate or Cancel</option>
+                                    <option value='Fill or Kill'>Fill or Kill</option>
+                                </select>
+                                {isGoodTilTime && <p>Good Til: Tomorrow</p>}
+                            </label>
+                            <br/>
+                            <label>
+                                Execution
+                                <div>Post Only</div>
+                                <Switch id='isPostOnly' onChange={handleCheckbox}/>
+                                <div>AllowTaker</div>
+                            </label>
+                        </div>
+                        }
                     </div>
-                    }
-                </div>
-                <div data-label='stop'>
-                    <label>
-                        Stop Price
-                        <Input id='amount' type='number' value={stopPrice}/> {bidCurrency}
-                    </label>
-                    <br/>
-                    <label>
-                        Amount
-                        <Input id='amount' type='number' value={amount}/> {askCurrency}
-                    </label>
-                    <br/>
-                    <label>
-                        Limit Price
-                        <Input id='limitPrice' type='number' value={limitPrice}/> {bidCurrency}
-                    </label>
-                </div>
-            </Tabs>
-            <Input id='submit' type='submit' value='Submit Order'/>
-        </form>
+                    {/* 
+                    
+                    Leaving this unimplemented for now since it will probably require creating an order
+                    book listener serverside to execute trades as they become available. Client side 
+                    support is good enough for the DEX
+                    
+                    <div data-label='stop'>
+                        <label>
+                            Stop Price
+                            <Input id='amount' type='number' value={stopPrice}/> {baseCurrency}
+                        </label>
+                        <br/>
+                        <label>
+                            Amount
+                            <Input id='amount' type='number' value={amount}/> {quoteCurrency}
+                        </label>
+                        <br/>
+                        <label>
+                            Limit Price
+                            <Input id='limitPrice' type='number' value={limitPrice}/> {baseCurrency}
+                        </label>
+                    </div> */}
+                </Tabs>
+                <Input id='submit' type='submit' value='Submit Order'/>
+            </form>
+        </div>
     }
 }
 

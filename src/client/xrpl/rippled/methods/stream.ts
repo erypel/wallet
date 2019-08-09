@@ -42,7 +42,7 @@ async function subscribeToAccounts(...accounts: string[]){
 	await api_request(json)
 }
 
-async function subscribeToBook(takerPays: string = 'XRP', takerGets: string = 'USD', issuer: string = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'/**Gatehub USD*/) {
+async function subscribeToBook(takerPays: string, takerGets: string, issuer: string = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'/**Gatehub USD*/) {
   const directOfferResultsJson = {"id": "direct", "command": "subscribe", "books": [{"taker_pays": {"currency": takerPays}, "taker_gets": {"currency": takerGets, "issuer": issuer}, "snapshot": true, "both": true}]}
   const reverseOfferResultsJson = {"id": "reverse", "command": "subscribe", "books": [{"taker_pays": {"currency": takerGets, "issuer": issuer}, "taker_gets": {"currency": takerPays}, "snapshot": true, "both": true}]}
   
