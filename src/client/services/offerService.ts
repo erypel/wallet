@@ -26,11 +26,11 @@ function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
     for(let i = 0; i < offers.length; i++) {
         const offer = offers[i]
         //TODO will eventually want to deal with the state of the offer and whether it's been partially filled
-        const { totalPrice } = offer.specification
+        const { totalPrice, quantity } = offer.specification
         const bidCost = totalPrice.value
         remainingValue -= bidCost
         if(remainingValue <= 0) {
-            return totalPrice
+            return quantity
         }
     }
 
@@ -68,6 +68,10 @@ async function buildMarketOrder(account: string, isSell: boolean, amount: Amount
     // THIS IS WRONG. RECIEVING 2 USD AMOUNTS
     const takerGets = createTakerGets(isSell, amount, limitPrice)
     const takerPays = createTakerPays(isSell, amount, limitPrice)
+
+    if(typeof takerPays !== 'string' && takerPays.counterparty === undefined) {
+        takerPays.counterparty = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'
+    }
 
     const transactionBuilder = new TransactionBuilder(account, 'OfferCreate')
     const offerBuilder = new OfferCreateBuilder(takerGets, takerPays)
