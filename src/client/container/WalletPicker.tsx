@@ -1,66 +1,63 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import GenerateWalletButton from '../library/GenerateWalletButton'
 import User from '../model/User'
 import { AppState } from '../store/rootReducer'
 import { WalletMap } from '../store/wallet/types'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
-import Subheader from '../component/Subheader'
-import { history } from '../utils/history'
-import { loadWallets } from '../store/wallet/actions'
+import { loadWallets, setActiveWallet } from '../store/wallet/actions'
+import Menu from '../component/Menu'
+import Wallet from '../model/Wallet'
 
 const mapStateToProps = (store: AppState) => {
+    const { wallet, user } = store
+    const { wallets, activeWallet } = wallet
     return {
-        wallets: store.wallet.wallets,
-        user: store.user.user
+        wallets: wallets,
+        activeWallet: activeWallet,
+        user: user.user
     }
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
-        load: (userId: string) => dispatch(loadWallets(userId))
+        load: (userId: string) => dispatch(loadWallets(userId)),
+        setActive: (wallet: Wallet) => dispatch(setActiveWallet(wallet))
     }
 }
 
 interface Props {
     wallets: WalletMap
+    activeWallet?: Wallet
     user?: User
     load: (userId: string) => Promise<any>
+    setActive: (wallet: Wallet) => Promise<any>
 }
 
-class WalletTable extends React.PureComponent<Props> {
+class WalletPicker extends React.PureComponent<Props> {
     componentWillMount() {
         const { load, user } = this.props
         load(user!!.id!!)
     }
 
-    handleClick(publicKey: string) {
-        history.push(`/wallet/${publicKey}`)
+    handleClick(wallet: Wallet) {
+        this.props.setActive(wallet)
     }
 
     render() {
-        const { wallets } = this.props
+        const { wallets, activeWallet } = this.props
 
         // for IE
         var justWallets = Array.from(Object.values(wallets))
 
-        if ( !justWallets || justWallets.length < 1 ){
-            return <div className='width-2-3'>
-                <Subheader title='Accounts'/>
-                <GenerateWalletButton className='button-green'/>
-            </div>
-        }
-
-        return <div className='width-2-3'>
-            <Subheader title='Accounts'/>
+        return <Menu title={activeWallet ? activeWallet.publicKey : 'Select a wallet'}>
             {justWallets.map(wallet => {
                 const { publicKey } = wallet
                 var { balance } = wallet
                 if (!balance) {
                     balance = 'ERROR'
                 }
-                return <table className="wallet-table" onClick={() => this.handleClick(publicKey)}>
+                return <table className="wallet-table" onClick={() => this.handleClick(wallet)}>
                     <tbody>
                         <tr>
                             <td className="wallet-table-label">Account #:</td>
@@ -73,9 +70,8 @@ class WalletTable extends React.PureComponent<Props> {
                     </tbody>
                 </table>
             })}
-            <GenerateWalletButton className='button-green'/>
-        </div>
+            </Menu>
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(WalletTable)
+export default connect(mapStateToProps, mapDispatchToProps)(WalletPicker)

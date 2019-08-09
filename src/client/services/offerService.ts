@@ -28,7 +28,7 @@ function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
         //TODO will eventually want to deal with the state of the offer and whether it's been partially filled
         const { totalPrice, quantity } = offer.specification
         const bidCost = totalPrice.value
-        remainingValue -= bidCost
+        remainingValue -= Number(bidCost)
         if(remainingValue <= 0) {
             return quantity
         }

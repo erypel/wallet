@@ -1,9 +1,10 @@
-import { WalletState, ADD_WALLET, SET_LIST, WalletMap } from './types'
+import { WalletState, ADD_WALLET, SET_LIST, WalletMap, SET_ACTIVE_WALLET } from './types'
 import { Reducer } from 'redux'
 import Wallet from '../../model/Wallet'
 
 const initialState: WalletState = {
-    wallets: {}
+    wallets: {},
+    activeWallet: undefined
 }
 
 const reducer:Reducer<WalletState> = (state = initialState, action) => {
@@ -21,6 +22,8 @@ const reducer:Reducer<WalletState> = (state = initialState, action) => {
             return {
                 wallets: payload as WalletMap
             }
+        case SET_ACTIVE_WALLET:
+            return {...state, activeWallet: payload}
         default:
             return state
     }

@@ -1,4 +1,4 @@
-import { ADD_WALLET, AddWalletAction, WalletMap, SetListAction, SET_LIST } from './types'
+import { ADD_WALLET, AddWalletAction, WalletMap, SetListAction, SET_LIST, SetActiveWalletAction, SET_ACTIVE_WALLET } from './types'
 import Wallet from '../../model/Wallet'
 import { walletService } from '../../services/walletService'
 import { ActionCreator, Dispatch } from 'redux'
@@ -18,13 +18,20 @@ function setList(wallets: WalletMap): SetListAction {
     }
 }
 
+function setAtciveWallet(wallet: Wallet): SetActiveWalletAction {
+    return {
+        type: SET_ACTIVE_WALLET,
+        payload: wallet
+    }
+}
+
 export const create: ActionCreator<any> = (newWallet: Wallet, userId: string) => {
     return async (dispatch: Dispatch) => {
         newWallet.balance = '0'
         dispatch(addWalletAction(newWallet))
         walletService.create(newWallet).then((newWallet?: Wallet) => {
             if (newWallet) {
-                load(userId)
+                loadWallets(userId)
             } else {
                 const error = new Error('wallet is undefined')
                 console.log(error)
@@ -35,7 +42,7 @@ export const create: ActionCreator<any> = (newWallet: Wallet, userId: string) =>
     }
 }
 
-export const load: ActionCreator<any> = (userId: string) => {
+export const loadWallets: ActionCreator<any> = (userId: string) => {
     return async (dispatch: Dispatch) => {
         walletService.loadList(userId).then(async (wallets: WalletMap) => {
            const walletsWithBalances: WalletMap = {}
@@ -58,5 +65,16 @@ export const load: ActionCreator<any> = (userId: string) => {
                 dispatch(setList(walletsWithBalances))
             }
         })
+    }
+}
+
+export const setActiveWallet: ActionCreator<any> = (wallet: Wallet) => {
+    return async (dispatch: Dispatch) => {
+        // refresh wallet balance
+        const balances = await getBalances(wallet.publicKey)
+        //TODO change balance on Wallet to balances
+        wallet.balance = balances[0].value
+        const updatedWallet = wallet
+        dispatch(setActiveWallet(updatedWallet))
     }
 }
