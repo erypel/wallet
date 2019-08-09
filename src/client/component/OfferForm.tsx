@@ -99,7 +99,9 @@ class OfferForm extends React.PureComponent<Props, State> {
             stopPrice, 
             showAdvanced, 
             timeInForce, 
-            isPostOnly
+            isPostOnly,
+            baseCurrency,
+            quoteCurrency
         )
         offerService.sendOffer(offer, secret)
     }

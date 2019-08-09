@@ -39,17 +39,20 @@ function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
 
 
 
-async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amount: Amount): Promise<Amount> {
+async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<Amount> {
     //TODOThis is not the right way to do it, but it will work for now before the DEX refactor
-    const book = await rippledStream.subscribeToBook().then((result: {asks: Ask[], bids: Bid[]}) => {
+    const book = await rippledStream.subscribeToBook(baseCurrency, quoteCurrency).then((result: {asks: Ask[], bids: Bid[]}) => {
         return result
     })
     const bids = book.bids
     const asks = book.asks
     
+    const formattedAmount = formatCurrency(amount)
+    const value = typeof formattedAmount === 'string' ? formattedAmount : formattedAmount.value
+
     if (isSell) {
         //get bids
-        return findBidLimitPrice(bids, Number(amount.value)) //TODO probably unsafe
+        return findBidLimitPrice(bids, Number(value)) //TODO probably unsafe
         //This is the right way to do things
         //orderbookService.getBids(adress, amount.currency, ...)
     } else { //isBuy
@@ -58,10 +61,11 @@ async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amou
     }
 }
 
-async function buildMarketOrder(account: string, isSell: boolean, amount: Amount): Promise<OfferCreate> {
+async function buildMarketOrder(account: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<OfferCreate> {
     //TODO will also want a parameter for what is being bought/sold
-    const limitPrice = await buildMarketOrderLimitPrice('', isSell, amount)
+    const limitPrice = await buildMarketOrderLimitPrice('', isSell, amount, baseCurrency, quoteCurrency)
 
+    // THIS IS WRONG. RECIEVING 2 USD AMOUNTS
     const takerGets = createTakerGets(isSell, amount, limitPrice)
     const takerPays = createTakerPays(isSell, amount, limitPrice)
 
@@ -160,14 +164,16 @@ async function buildCreateOffer(
     stopPrice: number, //need to think about this one... may need to build serverside listener
     showAdvanced: boolean, 
     timeInForce: string, 
-    isPostOnly: boolean
+    isPostOnly: boolean,
+    baseCurrency: string,
+    quoteCurrency: string
 ): Promise<OfferCreate> {
     if(limitPrice.value !== '0') { //TODO pass in order type and use that
         return buildLimitOrder(
             account, isSell, amount, limitPrice, showAdvanced, timeInForce, isPostOnly
         )
     } else {
-        return await buildMarketOrder(account, isSell, amount)
+        return await buildMarketOrder(account, isSell, amount, baseCurrency, quoteCurrency)
     }
 }
 

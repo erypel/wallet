@@ -5,8 +5,8 @@ import Orderbook from '../Orderbook'
 class Trade extends React.PureComponent {
     render() {
         return <div>
-            <OfferForm account='rNsjHCBJWAa8JWTTCA2EEd5uREDTeyZiDM' secret='sn8rAKRa16eo7YT8HmkKF9pQgKZbv' baseCurrency='USD' quoteCurrency='XRP'/>
-            <Orderbook />
+            <OfferForm account='rNsjHCBJWAa8JWTTCA2EEd5uREDTeyZiDM' secret='sn8rAKRa16eo7YT8HmkKF9pQgKZbv' baseCurrency='XRP' quoteCurrency='USD'/>
+            <Orderbook baseCurrency='XRP' quoteCurrency='USD'/>
         </div>
     }
 }

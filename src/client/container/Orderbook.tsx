@@ -10,6 +10,8 @@ import Ask from '../xrpl/api/model/transaction/Orderbook/Ask'
 import { rippledStream } from '../xrpl/rippled/methods/stream'
 
 interface Props {
+    baseCurrency: string,
+    quoteCurrency: string,
     bids: Bid[]
     asks: Ask[]
     loadOrderbook: (
@@ -29,11 +31,11 @@ class Orderbook extends React.PureComponent<Props> {
     }
 
     componentWillMount() {
-        this.props.loadOrderbook('', 'XRP', '', 'XRP', '')
+        this.props.loadOrderbook('', 'XRP', '', 'USD', '')
     }
 
     onClick = () => {
-        rippledStream.subscribeToBook().then(book => {
+        rippledStream.subscribeToBook('XRP', 'USD').then(book => {
             console.log('lookit', book)
         })
     }
