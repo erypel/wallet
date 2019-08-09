@@ -18,7 +18,7 @@ class Balance extends React.PureComponent<Props, State> {
         }
     }
 
-    componentDidMount() {
+    setBalance = () => {
         getBalances(this.props.address).then((balances) => {
             try {
                 this.setState({xrpBalance: balances[0].value})
@@ -26,6 +26,14 @@ class Balance extends React.PureComponent<Props, State> {
                 this.setState({xrpBalance: "ERROR"})
             }
         })
+    }
+
+    componentDidMount() {
+        this.setBalance()
+    }
+
+    componentDidUpdate() {
+        this.setBalance()
     }
 
     render() {
