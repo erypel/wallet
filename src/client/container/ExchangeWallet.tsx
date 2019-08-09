@@ -5,14 +5,14 @@ import Balance from './Balance'
 import WalletPicker from './WalletPicker'
 
 interface Props {
-    activeWallet: Wallet
+    activeWallet?: Wallet
 }
 
 class ExchangeWallet extends React.PureComponent<Props> {
     render() {
         const { activeWallet } = this.props
         return <>
-            <WalletPicker/>
+            <WalletPicker activeWallet={activeWallet}/>
             {activeWallet && <div className='content'>
                 <div className='width-2-3'>
                     <Balance address={activeWallet.publicKey}/>
@@ -22,10 +22,4 @@ class ExchangeWallet extends React.PureComponent<Props> {
     }
 }
 
-const mapStateToProps = (store: any) => {
-    return {
-        activeWallet: store.wallet.activeWallet
-    }
-}
-
-export default connect(mapStateToProps)(ExchangeWallet)
+export default ExchangeWallet

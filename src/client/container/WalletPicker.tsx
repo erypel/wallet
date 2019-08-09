@@ -11,10 +11,9 @@ import Wallet from '../model/Wallet'
 
 const mapStateToProps = (store: AppState) => {
     const { wallet, user } = store
-    const { wallets, activeWallet } = wallet
+    const { wallets } = wallet
     return {
         wallets: wallets,
-        activeWallet: activeWallet,
         user: user.user
     }
 }
