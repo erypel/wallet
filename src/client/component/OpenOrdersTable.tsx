@@ -1,11 +1,10 @@
 import Offer from '../xrpl/rippled/model/Offer'
 import React from 'react'
-import { currencyService } from '../services/currencyService';
-import Button from './Button';
-import { orderbookService } from '../services/orderbookService';
-import { offerService } from '../services/offerService';
-import Wallet from '../model/Wallet';
-import { fetchOpenOrders } from '../store/orderbook/actions';
+import { currencyService } from '../services/currencyService'
+import Button from './Button'
+import { offerService } from '../services/offerService'
+import Wallet from '../model/Wallet'
+import { fetchOpenOrders } from '../store/orderbook/actions'
 
 interface Props {
     openOrders: Offer[]
