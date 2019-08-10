@@ -5,7 +5,7 @@ import WalletPicker from './WalletPicker'
 
 interface Props {
     activeWallet?: Wallet
-    displayCurrency: 'XRP'
+    displayCurrency: string
 }
 
 class ExchangeWallet extends React.PureComponent<Props> {
