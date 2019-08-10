@@ -17,6 +17,9 @@ import { orderbookService } from './orderbookService'
 import { rippledStream } from '../xrpl/rippled/methods/stream'
 import Ask from '../xrpl/api/model/transaction/Orderbook/Ask'
 import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
+import OrderCancellation from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellation';
+import { OrderCancellationBuilder } from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellationBuilder';
+import Transaction from '../xrpl/api/model/transaction/Transaction';
 
 function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
     if (offers.length === 0) {
@@ -129,7 +132,7 @@ function buildLimitOrder(
 
         //TODO isPostOnly fields (if isPostOnly, reject offer if any part of it would be filled immediately)
     }
-    const offer = new OrderCreate(transactionBuilder, offerBuilder)
+    const offer = offerBuilder.build(transactionBuilder)
     return offer
 }
 
@@ -158,6 +161,13 @@ function createTakerPays(isSell: boolean, amount: Amount, limit: Amount): Amount
     } else {
         return formatCurrency(amount)
     }
+}
+
+
+function buildOrderCancellation(account: string, orderSequence: number): OrderCancellation {
+    const transactionBuilder = new TransactionBuilder(account, 'OfferCancel')
+    const orderCancellationBuilder = new OrderCancellationBuilder(orderSequence)
+    return orderCancellationBuilder.build(transactionBuilder)
 }
 
 async function buildCreateOffer(
@@ -193,7 +203,7 @@ function flagCheck(offer: OrderCreate) {
     }
 }
 
-async function sendOffer(offer: OrderCreate, secret: string) {
+async function sendOffer(offer: Transaction, secret: string) {
     prepareOffer(offer).then((preppedTx: PreparedTransaction | null) => {
         if(preppedTx === null) {
             throw Error('Error prepping tx')
@@ -211,7 +221,7 @@ async function sendOffer(offer: OrderCreate, secret: string) {
     })
 }
 
-async function prepareOffer(offer: OrderCreate): Promise<PreparedTransaction | null> {
+async function prepareOffer(offer: Transaction): Promise<PreparedTransaction | null> {
     const offerJson = toJsonObject(offer)
     return await prepareTransaction(offerJson).then((preparedTx: PreparedTransaction) => {
         console.log(preparedTx)
@@ -233,6 +243,7 @@ async function verifyOffer(txId: string): Promise<VerifiedTransaction | null> {
 }
 
 export const offerService = {
+    buildOrderCancellation,
     buildCreateOffer,
     validateCreateOffer,
     sendOffer
