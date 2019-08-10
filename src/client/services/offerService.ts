@@ -163,6 +163,10 @@ function createTakerPays(isSell: boolean, amount: Amount, limit: Amount): Amount
     }
 }
 
+function cancelOffer(account: string, secret: string, orderSequence: number) {
+    const orderCancellation = buildOrderCancellation(account, orderSequence)
+    sendOffer(orderCancellation, secret)
+}
 
 function buildOrderCancellation(account: string, orderSequence: number): OrderCancellation {
     const transactionBuilder = new TransactionBuilder(account, 'OfferCancel')
@@ -246,5 +250,6 @@ export const offerService = {
     buildOrderCancellation,
     buildCreateOffer,
     validateCreateOffer,
-    sendOffer
+    sendOffer, 
+    cancelOffer
 }

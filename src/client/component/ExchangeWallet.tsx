@@ -1,7 +1,7 @@
 import React from 'react'
 import Wallet from '../model/Wallet'
-import Balance from './Balance'
-import WalletPicker from './WalletPicker'
+import Balance from '../container/Balance'
+import WalletPicker from '../container/WalletPicker'
 
 interface Props {
     activeWallet?: Wallet
