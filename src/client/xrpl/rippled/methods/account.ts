@@ -1,3 +1,5 @@
+import { api_request } from '../Dispatch'
+
 /**
  * Methods for interacting with XRP accounts
  */
@@ -27,11 +29,9 @@
   }
 }
  */
-function account_info(account){
-	if(!account)
-		return "Please supply account information";
-	let json = '{"id": 1,"command": "account_info","account": "' + account + '"}';
-	webSocket.send(json);
+function account_info(account: string){
+	let json = '{"id": 1,"command": "account_info","account": "' + account + '"}'
+	api_request(json)
 }
 
 /**
@@ -60,11 +60,9 @@ function account_info(account){
     "validated": false
   }
  */
-function account_lines(account){
-	if(!account)
-		return "Please supply account information";
-	let json = '{"id": 1,"command": "account_lines","account": "' + account + '", "ledger": "current"}';
-	webSocket.send(json);
+function account_lines(account: string){
+	let json = '{"id": 1,"command": "account_lines","account": "' + account + '", "ledger": "current"}'
+	api_request(json)
 }
 
 /**
@@ -83,11 +81,9 @@ function account_lines(account){
   }
 }
  */
-function account_offers(account){
-	if(!account)
-		return "Please supply account information";
-	let json = '{"id": 1,"command": "account_offers","account": "' + account + '", "ledger": "current"}';
-	webSocket.send(json);
+function account_offers(account: string){
+	let json = `{"id": "${account}_account_offers","command": "account_offers","account": "${account}"}`
+	api_request(json)
 }
 
 /**
@@ -200,11 +196,9 @@ function account_offers(account){
   }
 }
  */
-function account_tx(account){
-	if(!account)
-		return "Please supply account information";
-	let json = '{"id": 4,"command": "account_tx","account": "' + account + '","ledger_index_min": -1,"ledger_index_max": -1,"binary": false,"count": false,"limit": 10,"forward": false}';
-	webSocket.send(json);
+function account_tx(account: string){
+	let json = '{"id": 4,"command": "account_tx","account": "' + account + '","ledger_index_min": -1,"ledger_index_max": -1,"binary": false,"count": false,"limit": 10,"forward": false}'
+	api_request(json)
 }
 
 /**
@@ -244,9 +238,15 @@ function account_tx(account){
   }
 }
  */
-function account_currencies(account){
-	if(!account)
-		return "Please supply account information";
-	let json = '{"id": 5,"command": "account_currencies","account": "' + account + '","strict": true,"ledger_index": "validated","account_index": 0}';
-	webSocket.send(json);
+function account_currencies(account: string){
+	let json = '{"id": 5,"command": "account_currencies","account": "' + account + '","strict": true,"ledger_index": "validated","account_index": 0}'
+	api_request(json)
+}
+
+export const rippledAccount = {
+  account_currencies,
+  account_tx,
+  account_offers,
+  account_lines,
+  account_info
 }
