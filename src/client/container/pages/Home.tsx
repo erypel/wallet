@@ -5,7 +5,7 @@ export default class Home extends React.PureComponent {
     
     render() {
         return <div>
-                <WalletTable/>
+                <WalletTable displayCurrency='XRP'/>
                 <br/>
             </div>
             
