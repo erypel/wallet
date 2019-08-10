@@ -1,5 +1,5 @@
-import Instructions from "../../model/Instructions";
-import PreparedTransaction from "../../model/transaction/flow/PreparedTransaction";
+import Instructions from '../../model/Instructions'
+import PreparedTransaction from '../../model/transaction/flow/PreparedTransaction'
 import winston from '../../../../utils/logger'
 
 const logger = winston(__filename)

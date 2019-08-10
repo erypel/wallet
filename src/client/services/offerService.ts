@@ -1,5 +1,5 @@
-import OfferCreate, { OfferCreateFlags } from '../xrpl/api/model/transaction/OfferCreate/OfferCreate'
-import { OfferCreateBuilder } from '../xrpl/api/model/transaction/OfferCreate/OfferCreateBuilder'
+import OrderCreate, { OrderCreateFlags } from '../xrpl/api/model/transaction/OrderCreate/OrderCreate'
+import { OrderCreateBuilder } from '../xrpl/api/model/transaction/OrderCreate/OrderCreateBuilder'
 import { TransactionBuilder } from '../xrpl/api/model/transaction/TransactionBuilder'
 import prepareTransaction from '../xrpl/api/utils/flow/prepareTransacton'
 import PreparedTransaction from '../xrpl/api/model/transaction/flow/PreparedTransaction'
@@ -17,6 +17,9 @@ import { orderbookService } from './orderbookService'
 import { rippledStream } from '../xrpl/rippled/methods/stream'
 import Ask from '../xrpl/api/model/transaction/Orderbook/Ask'
 import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
+import OrderCancellation from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellation'
+import { OrderCancellationBuilder } from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellationBuilder'
+import Transaction from '../xrpl/api/model/transaction/Transaction'
 
 function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
     if (offers.length === 0) {
@@ -61,7 +64,7 @@ async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amou
     }
 }
 
-async function buildMarketOrder(account: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<OfferCreate> {
+async function buildMarketOrder(account: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<OrderCreate> {
     //TODO will also want a parameter for what is being bought/sold
     const limitPrice = await buildMarketOrderLimitPrice('', isSell, amount, baseCurrency, quoteCurrency)
 
@@ -74,15 +77,15 @@ async function buildMarketOrder(account: string, isSell: boolean, amount: Amount
     }
 
     const transactionBuilder = new TransactionBuilder(account, 'OfferCreate')
-    const offerBuilder = new OfferCreateBuilder(takerGets, takerPays)
+    const offerBuilder = new OrderCreateBuilder(takerGets, takerPays)
 
     if (isSell) {
-        transactionBuilder.addFlag(OfferCreateFlags.tf_SELL)
+        transactionBuilder.addFlag(OrderCreateFlags.tf_SELL)
     }
 
-    transactionBuilder.addFlag(OfferCreateFlags.tf_FILL_OR_KILL)
+    transactionBuilder.addFlag(OrderCreateFlags.tf_FILL_OR_KILL)
 
-    const offer = new OfferCreate(transactionBuilder, offerBuilder)
+    const offer = new OrderCreate(transactionBuilder, offerBuilder)
     return offer
 }
 
@@ -94,15 +97,15 @@ function buildLimitOrder(
     showAdvanced: boolean, 
     timeInForce: string, 
     isPostOnly: boolean
-): OfferCreate {
+): OrderCreate {
     const takerGets = createTakerGets(isSell, amount, limitPrice)
     const takerPays = createTakerPays(isSell, amount, limitPrice)
 
     const transactionBuilder = new TransactionBuilder(account, 'OfferCreate')
-    const offerBuilder = new OfferCreateBuilder(takerGets, takerPays)
+    const offerBuilder = new OrderCreateBuilder(takerGets, takerPays)
     
     if (isSell) {
-        transactionBuilder.addFlag(OfferCreateFlags.tf_SELL)
+        transactionBuilder.addFlag(OrderCreateFlags.tf_SELL)
     }
 
     if (showAdvanced) {
@@ -118,10 +121,10 @@ function buildLimitOrder(
                 offerBuilder.setExpiration(rippleTime) //TODO add other expiration times
                 break 
             case 'Immediate or Cancel':
-                transactionBuilder.addFlag(OfferCreateFlags.tf_IMMEDIATE_OR_CANCEL)
+                transactionBuilder.addFlag(OrderCreateFlags.tf_IMMEDIATE_OR_CANCEL)
                 break
             case 'Fill or Kill':
-                transactionBuilder.addFlag(OfferCreateFlags.tf_FILL_OR_KILL)
+                transactionBuilder.addFlag(OrderCreateFlags.tf_FILL_OR_KILL)
                 break
             default:
                 break
@@ -129,7 +132,7 @@ function buildLimitOrder(
 
         //TODO isPostOnly fields (if isPostOnly, reject offer if any part of it would be filled immediately)
     }
-    const offer = new OfferCreate(transactionBuilder, offerBuilder)
+    const offer = offerBuilder.build(transactionBuilder)
     return offer
 }
 
@@ -160,6 +163,13 @@ function createTakerPays(isSell: boolean, amount: Amount, limit: Amount): Amount
     }
 }
 
+
+function buildOrderCancellation(account: string, orderSequence: number): OrderCancellation {
+    const transactionBuilder = new TransactionBuilder(account, 'OfferCancel')
+    const orderCancellationBuilder = new OrderCancellationBuilder(orderSequence)
+    return orderCancellationBuilder.build(transactionBuilder)
+}
+
 async function buildCreateOffer(
     account: string,
     isSell: boolean, 
@@ -171,7 +181,7 @@ async function buildCreateOffer(
     isPostOnly: boolean,
     baseCurrency: string,
     quoteCurrency: string
-): Promise<OfferCreate> {
+): Promise<OrderCreate> {
     if(limitPrice.value !== '0') { //TODO pass in order type and use that
         return buildLimitOrder(
             account, isSell, amount, limitPrice, showAdvanced, timeInForce, isPostOnly
@@ -181,19 +191,19 @@ async function buildCreateOffer(
     }
 }
 
-function validateCreateOffer(offer: OfferCreate) {
+function validateCreateOffer(offer: OrderCreate) {
     flagCheck(offer)
 }
 
-function flagCheck(offer: OfferCreate) {
+function flagCheck(offer: OrderCreate) {
     const flags = offer.flags
-    const { tf_IMMEDIATE_OR_CANCEL, tf_FILL_OR_KILL } = OfferCreateFlags
+    const { tf_IMMEDIATE_OR_CANCEL, tf_FILL_OR_KILL } = OrderCreateFlags
     if (flags && flags.has(tf_IMMEDIATE_OR_CANCEL) && flags.has(tf_FILL_OR_KILL)) {
         throw Error( 'Invalid flags ')
     }
 }
 
-async function sendOffer(offer: OfferCreate, secret: string) {
+async function sendOffer(offer: Transaction, secret: string) {
     prepareOffer(offer).then((preppedTx: PreparedTransaction | null) => {
         if(preppedTx === null) {
             throw Error('Error prepping tx')
@@ -211,7 +221,7 @@ async function sendOffer(offer: OfferCreate, secret: string) {
     })
 }
 
-async function prepareOffer(offer: OfferCreate): Promise<PreparedTransaction | null> {
+async function prepareOffer(offer: Transaction): Promise<PreparedTransaction | null> {
     const offerJson = toJsonObject(offer)
     return await prepareTransaction(offerJson).then((preparedTx: PreparedTransaction) => {
         console.log(preparedTx)
@@ -233,6 +243,7 @@ async function verifyOffer(txId: string): Promise<VerifiedTransaction | null> {
 }
 
 export const offerService = {
+    buildOrderCancellation,
     buildCreateOffer,
     validateCreateOffer,
     sendOffer

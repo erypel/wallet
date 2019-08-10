@@ -1,6 +1,6 @@
 import Transaction from  '../Transaction'
 import { TransactionBuilder } from  '../TransactionBuilder'
-import { OfferCreateBuilder } from  './OfferCreateBuilder'
+import { OrderCreateBuilder } from  './OrderCreateBuilder'
 import { IssuerAmount } from '../../Amount'
 
 // Flags
@@ -37,25 +37,25 @@ const tf_FILL_OR_KILL = 262144
 */
 const tf_SELL = 524288
 
-export const OfferCreateFlags = {
+export const OrderCreateFlags = {
     tf_PASSIVE,
     tf_IMMEDIATE_OR_CANCEL,
     tf_FILL_OR_KILL,
     tf_SELL
 }
 
-export default class OfferCreate extends Transaction {
+export default class OrderCreate extends Transaction {
     expiration?: string // time must be since the Ripple Epoch
     offerSequence?: number
     TakerGets: IssuerAmount | string
     TakerPays: IssuerAmount | string
 
 
-    constructor(transactionBuilder: TransactionBuilder, offerCreateBuilder: OfferCreateBuilder) {
+    constructor(transactionBuilder: TransactionBuilder, orderCreateBuilder: OrderCreateBuilder) {
         super(transactionBuilder)
-        this.TakerGets = offerCreateBuilder.takerGets
-        this.TakerPays = offerCreateBuilder.takerPays
-        this.expiration = offerCreateBuilder.expiration
-        this.offerSequence = offerCreateBuilder.offerSequence
+        this.TakerGets = orderCreateBuilder.takerGets
+        this.TakerPays = orderCreateBuilder.takerPays
+        this.expiration = orderCreateBuilder.expiration
+        this.offerSequence = orderCreateBuilder.offerSequence
     }
 }

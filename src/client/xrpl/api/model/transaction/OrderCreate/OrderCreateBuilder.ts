@@ -1,8 +1,8 @@
-import OfferCreate from './OfferCreate'
+import OrderCreate from './OrderCreate'
 import { TransactionBuilder } from '../TransactionBuilder'
 import Amount, { IssuerAmount, amountToIssuerAmount } from '../../Amount'
 
-export class OfferCreateBuilder {
+export class OrderCreateBuilder {
     private _expiration?: string = undefined
     private _offerSequence?: number = undefined
     private _takeGets: IssuerAmount | string
@@ -14,7 +14,7 @@ export class OfferCreateBuilder {
     }
 
     build(transactionBuilder: TransactionBuilder) {
-        return new OfferCreate(transactionBuilder, this)
+        return new OrderCreate(transactionBuilder, this)
     }
 
     setExpiration(expiration: string) {
