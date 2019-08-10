@@ -13,7 +13,7 @@ class Trade extends React.PureComponent<Props> {
     render() {
         const { activeWallet } = this.props
         return <div>
-            <ExchangeWallet activeWallet={activeWallet}/>
+            <ExchangeWallet activeWallet={activeWallet} displayCurrency='XRP'/>
             {activeWallet && <OfferForm account={activeWallet.publicKey} secret={activeWallet.privateKey} baseCurrency='XRP' quoteCurrency='USD'/>}
             <Orderbook baseCurrency='XRP' quoteCurrency='USD'/>
         </div>

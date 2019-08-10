@@ -8,6 +8,7 @@ import { AnyAction } from 'redux'
 import { loadWallets, setActiveWallet } from '../store/wallet/actions'
 import Menu from '../component/Menu'
 import Wallet from '../model/Wallet'
+import { walletService } from '../services/walletService'
 
 const mapStateToProps = (store: AppState) => {
     const { wallet, user } = store
@@ -27,6 +28,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
 
 interface Props {
     wallets: WalletMap
+    displayCurrency: string
     activeWallet?: Wallet
     user?: User
     load: (userId: string) => Promise<any>
@@ -44,7 +46,7 @@ class WalletPicker extends React.PureComponent<Props> {
     }
 
     render() {
-        const { wallets, activeWallet } = this.props
+        const { wallets, activeWallet, displayCurrency } = this.props
 
         // for IE
         var justWallets = Array.from(Object.values(wallets))
@@ -52,10 +54,8 @@ class WalletPicker extends React.PureComponent<Props> {
         return <Menu title={activeWallet ? activeWallet.publicKey : 'Select a wallet'}>
             {justWallets.map(wallet => {
                 const { publicKey } = wallet
-                var { balance } = wallet
-                if (!balance) {
-                    balance = 'ERROR'
-                }
+                var { balances } = wallet
+                const balance = balances ? walletService.findBalance(displayCurrency, balances) : 'Could not fetch balances'
                 return <table className="wallet-table" onClick={() => this.handleClick(wallet)}>
                     <tbody>
                         <tr>

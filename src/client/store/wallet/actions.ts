@@ -27,7 +27,7 @@ function setActive(wallet: Wallet): SetActiveWalletAction {
 
 export const create: ActionCreator<any> = (newWallet: Wallet, userId: string) => {
     return async (dispatch: Dispatch) => {
-        newWallet.balance = '0'
+        newWallet.balances = []
         dispatch(addWalletAction(newWallet))
         walletService.create(newWallet).then((newWallet?: Wallet) => {
             if (newWallet) {
@@ -49,14 +49,13 @@ export const loadWallets: ActionCreator<any> = (userId: string) => {
            var justWallets = Array.from(Object.values(wallets))
            try {
                 for(const wallet of justWallets) {
-                // await justWallets.forEach(async wallet => {
                     try {
                         const balances = await getBalances(wallet.publicKey)
-                        wallet.balance = balances[0].value
+                        wallet.balances = balances
                         const walletWithBalance = wallet
                         walletsWithBalances[wallet.publicKey] = walletWithBalance
                     } catch (error) {
-                        wallet.balance = '0'
+                        wallet.balances = []
                         const walletWithBalance = wallet
                         walletsWithBalances[wallet.publicKey] = walletWithBalance
                     }

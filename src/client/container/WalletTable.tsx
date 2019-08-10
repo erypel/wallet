@@ -9,6 +9,7 @@ import { AnyAction } from 'redux'
 import Subheader from '../component/Subheader'
 import { history } from '../utils/history'
 import { loadWallets } from '../store/wallet/actions'
+import { walletService } from '../services/walletService'
 
 const mapStateToProps = (store: AppState) => {
     return {
@@ -25,6 +26,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
 
 interface Props {
     wallets: WalletMap
+    displayCurrency: string
     user?: User
     load: (userId: string) => Promise<any>
 }
@@ -40,7 +42,8 @@ class WalletTable extends React.PureComponent<Props> {
     }
 
     render() {
-        const { wallets } = this.props
+        const { props, handleClick } = this
+        const { wallets, displayCurrency } = props
 
         // for IE
         var justWallets = Array.from(Object.values(wallets))
@@ -56,11 +59,9 @@ class WalletTable extends React.PureComponent<Props> {
             <Subheader title='Accounts'/>
             {justWallets.map(wallet => {
                 const { publicKey } = wallet
-                var { balance } = wallet
-                if (!balance) {
-                    balance = 'ERROR'
-                }
-                return <table className="wallet-table" onClick={() => this.handleClick(publicKey)}>
+                var { balances } = wallet
+                const balance = balances ? walletService.findBalance(displayCurrency, balances) : 'Could not fetch balances'
+                return <table className="wallet-table" onClick={() => handleClick(publicKey)}>
                     <tbody>
                         <tr>
                             <td className="wallet-table-label">Account #:</td>
