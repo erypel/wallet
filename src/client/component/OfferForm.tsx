@@ -1,6 +1,6 @@
 import React from 'react'
 import Tabs from '../container/Tabs'
-import Input from '../library/Input'
+import Input from './Input'
 import Switch from './Switch'
 import { offerService } from '../services/offerService'
 import Amount from '../xrpl/api/model/Amount'

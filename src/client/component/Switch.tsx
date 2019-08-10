@@ -1,5 +1,5 @@
 import React from 'react'
-import Input from '../library/Input'
+import Input from './Input'
 
 interface Props {
     id: string

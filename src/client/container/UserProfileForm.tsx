@@ -1,6 +1,6 @@
 import React from 'react'
 import Subheader from '../component/Subheader'
-import Input from '../library/Input'
+import Input from '../component/Input'
 import { Link } from 'react-router-dom'
 import { ThunkDispatch } from 'redux-thunk'
 import { AppState } from '../store/rootReducer'

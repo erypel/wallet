@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import GenerateWalletButton from '../library/GenerateWalletButton'
+import GenerateWalletButton from './GenerateWalletButton'
 import User from '../model/User'
 import { AppState } from '../store/rootReducer'
 import { WalletMap } from '../store/wallet/types'

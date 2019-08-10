@@ -1,5 +1,5 @@
 import React from 'react'
-import SendForm from '../../library/SendForm'
+import SendForm from '../../component/SendForm'
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { setAmount, setDestAddress, setTxJson } from '../../store/transaction/actions'

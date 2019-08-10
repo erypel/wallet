@@ -1,5 +1,5 @@
 import React from 'react'
-import Input from '../library/Input'
+import Input from '../component/Input'
 import { Link } from 'react-router-dom'
 import validatePassword from '../utils/validatePassword'
 import { createUser } from '../store/user/actions'

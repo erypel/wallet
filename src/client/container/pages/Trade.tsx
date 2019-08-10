@@ -1,7 +1,7 @@
 import React from 'react'
 import OfferForm from '../../component/OfferForm'
 import Orderbook from '../Orderbook'
-import ExchangeWallet from '../ExchangeWallet'
+import ExchangeWallet from '../../component/ExchangeWallet'
 import { connect } from 'react-redux'
 import Wallet from '../../model/Wallet'
 

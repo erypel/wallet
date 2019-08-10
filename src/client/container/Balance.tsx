@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Td, Tbody, Tr } from '../library/Table'
+import { Table, Td, Tbody, Tr } from '../component/Table'
 import getBalances from '../xrpl/api/utils/getBalances'
 
 interface Props {
