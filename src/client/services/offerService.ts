@@ -17,9 +17,9 @@ import { orderbookService } from './orderbookService'
 import { rippledStream } from '../xrpl/rippled/methods/stream'
 import Ask from '../xrpl/api/model/transaction/Orderbook/Ask'
 import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
-import OrderCancellation from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellation';
-import { OrderCancellationBuilder } from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellationBuilder';
-import Transaction from '../xrpl/api/model/transaction/Transaction';
+import OrderCancellation from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellation'
+import { OrderCancellationBuilder } from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellationBuilder'
+import Transaction from '../xrpl/api/model/transaction/Transaction'
 
 function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
     if (offers.length === 0) {
