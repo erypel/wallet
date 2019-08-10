@@ -81,9 +81,9 @@ function account_lines(account: string){
   }
 }
  */
-function account_offers(account: string){
-	let json = `{"id": "${account}_account_offers","command": "account_offers","account": "${account}"}`
-	api_request(json)
+async function account_offers(account: string){
+	const json = {"id": `${account}_account_offers`,"command": "account_offers","account": account}
+	return await api_request(json)
 }
 
 /**

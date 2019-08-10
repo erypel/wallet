@@ -9,6 +9,7 @@ import { loadWallets, setActiveWallet } from '../store/wallet/actions'
 import Menu from '../component/Menu'
 import Wallet from '../model/Wallet'
 import { walletService } from '../services/walletService'
+import { fetchOpenOrders } from '../store/orderbook/actions'
 
 const mapStateToProps = (store: AppState) => {
     const { wallet, user } = store
@@ -22,7 +23,8 @@ const mapStateToProps = (store: AppState) => {
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
         load: (userId: string) => dispatch(loadWallets(userId)),
-        setActive: (wallet: Wallet) => dispatch(setActiveWallet(wallet))
+        setActive: (wallet: Wallet) => dispatch(setActiveWallet(wallet)),
+        getOpenOrders: (address: string) => dispatch(fetchOpenOrders(address))
     }
 }
 
@@ -33,6 +35,7 @@ interface Props {
     user?: User
     load: (userId: string) => Promise<any>
     setActive: (wallet: Wallet) => Promise<any>
+    getOpenOrders: (address: string) => void
 }
 
 class WalletPicker extends React.PureComponent<Props> {
@@ -43,6 +46,7 @@ class WalletPicker extends React.PureComponent<Props> {
 
     handleClick(wallet: Wallet) {
         this.props.setActive(wallet)
+        this.loadOpenOrders(wallet.publicKey) //TODO most likely want to subscribe
     }
 
     render() {
@@ -70,6 +74,11 @@ class WalletPicker extends React.PureComponent<Props> {
                 </table>
             })}
             </Menu>
+    }
+
+    loadOpenOrders = (publicKey: string) => {
+        const { getOpenOrders } = this.props
+        getOpenOrders(publicKey)
     }
 }
 

@@ -4,7 +4,7 @@ export default interface Offer {
     flags: Set<number>
     quality: string
     seq: number
-    takerGets: string | IssuerAmount
-    takerPays: string | IssuerAmount
+    taker_gets: string | IssuerAmount
+    taker_pays: string | IssuerAmount
     expiration?: number
 }
