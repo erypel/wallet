@@ -1,4 +1,5 @@
 import Currency from './Currency'
+import dropsToXrp from '../utils/dropsToXrp';
 
 export default class Amount {
   currency: string
@@ -22,7 +23,7 @@ export function amountToIssuerAmount(amount: Amount) {
 
 export function issuerAmountToAmount(amount: string | IssuerAmount) {
   if (typeof amount === 'string') {
-    return amount
+    return new Amount('XRP', dropsToXrp(amount))
   } else {
     return new Amount(amount.currency, amount.value, amount.issuer)
   }

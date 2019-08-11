@@ -26,9 +26,9 @@ const reducer:Reducer<OrderbookState> = (state = initialState, action) => {
         case SET_QUOTE_CURRECY:
             return {...state, quoteCurrency: payload}
         case ADD_ASK:
-            return {...state, asks: state.asks.push(payload)}
+            return {...state, asks: [...state.asks, payload]}
         case ADD_BID:
-            return {...state, bids: state.bids.push(payload)}
+            return {...state, bids: [...state.bids, payload]}
         default:
             return state
     }
