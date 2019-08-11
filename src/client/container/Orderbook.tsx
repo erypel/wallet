@@ -26,7 +26,7 @@ interface Props {
 class Orderbook extends React.PureComponent<Props> {
     constructor(props: Props) {
         super(props)
-        //TODO refresh every second or so
+        //TODO maker sure there is a subscription to the orderbook
         props.loadOrderbook('', 'XRP', '', 'USD', '')
     }
 
@@ -49,7 +49,6 @@ class Orderbook extends React.PureComponent<Props> {
                 <table>
                     <thead>
                         <tr>
-                            <th>idx</th>
                             <th>MarketSize</th>
                             <th>Price</th>
                         </tr>
@@ -57,7 +56,6 @@ class Orderbook extends React.PureComponent<Props> {
                     <tbody>
                         {bids.slice(0, bidsSize).map((bid: Bid, idx: number) => {
                             return <tr className='green-text' key={idx}>
-                                <td>{idx}</td>
                                 <td>{bid.specification.quantity.value} {bid.specification.quantity.currency}</td>
                                 <td>{bid.specification.totalPrice.value} {bid.specification.totalPrice.currency}</td>
                             </tr>
@@ -68,7 +66,6 @@ class Orderbook extends React.PureComponent<Props> {
                         </tr>
                         {asks.slice(0, asksSize).map((ask: Ask, idx: number) => {
                             return <tr className='red-text' key={idx}>
-                                <td>{idx}</td>
                                 <td>{ask.specification.quantity.value} {ask.specification.quantity.currency}</td>
                                 <td>{ask.specification.totalPrice.value} {ask.specification.totalPrice.currency}</td> 
                             </tr>

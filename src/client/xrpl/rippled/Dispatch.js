@@ -1,5 +1,5 @@
 import connector from './RippledConnector'
-import { orderbookService } from '../../services/orderbookService';
+import { orderbookService } from '../../services/orderbookService'
 
 const AWAITING = {}
 const handleResponse = function(data) {

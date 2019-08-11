@@ -5,7 +5,7 @@ import Ask from '../xrpl/api/model/transaction/Orderbook/Ask'
 import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
 import OrderCreate from '../xrpl/api/model/transaction/OrderCreate/OrderCreate'
 import { addOrderToBook } from '../store/orderbook/actions'
-import { getStore } from '../../App';
+import { getStore } from '../../App'
 
 async function getBids(
     address: string, 

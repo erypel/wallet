@@ -8,9 +8,8 @@ import Offer from '../../xrpl/rippled/model/Offer'
 import RippledResponse from '../../xrpl/rippled/model/RippledResponse'
 import OrderCreate from '../../xrpl/api/model/transaction/OrderCreate/OrderCreate'
 import { currencyService } from '../../services/currencyService'
-import { AppState } from '../rootReducer';
-import formatBidsAndAsks from '../../xrpl/api/utils/formatBidsAndAsks';
-import Amount, { issuerAmountToAmount } from '../../xrpl/api/model/Amount';
+import { AppState } from '../rootReducer'
+import  { issuerAmountToAmount } from '../../xrpl/api/model/Amount'
 
 function setOpenOrders(orders: Offer[]): SetOpenOrdersAction {
     return {

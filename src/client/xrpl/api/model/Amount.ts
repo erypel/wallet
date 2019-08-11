@@ -1,5 +1,5 @@
 import Currency from './Currency'
-import dropsToXrp from '../utils/dropsToXrp';
+import dropsToXrp from '../utils/dropsToXrp'
 
 export default class Amount {
   currency: string

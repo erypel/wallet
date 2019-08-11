@@ -5,9 +5,9 @@ import Button from './Button'
 import { offerService } from '../services/offerService'
 import Wallet from '../model/Wallet'
 import { fetchOpenOrders } from '../store/orderbook/actions'
-import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
-import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk'
+import { AnyAction } from 'redux'
+import { connect } from 'react-redux'
 
 interface Props {
     openOrders: Offer[]
