@@ -57,7 +57,7 @@ async function subscribeToBook(takerPays: string, takerGets: string, issuer: str
     }
   }
 
-  return Promise.all(
+  return await Promise.all(
     [
       await api_request(directOfferResultsJson),
       await api_request(reverseOfferResultsJson)
@@ -66,7 +66,7 @@ async function subscribeToBook(takerPays: string, takerGets: string, issuer: str
     const directOffers = (directOfferResults? directOfferResults.result.asks : [])
     const reverseOffers = (reverseOfferResults? reverseOfferResults.result.bids : [])
     const orderbook = await formatBidsAndAsks(orderbookInfo, [...directOffers, ...reverseOffers])
-    console.log(orderbook)
+    console.log('lookey', orderbook)
     return orderbook
   })
 }

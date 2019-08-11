@@ -27,7 +27,7 @@ class Orderbook extends React.PureComponent<Props> {
     constructor(props: Props) {
         super(props)
         //TODO refresh every second or so
-        props.loadOrderbook('', 'XRP', '', 'XRP', '')
+        props.loadOrderbook('', 'XRP', '', 'USD', '')
     }
 
     componentWillMount() {
@@ -42,13 +42,14 @@ class Orderbook extends React.PureComponent<Props> {
 
     render() {
         const { bids, asks } = this.props
-        const bidsSize = bids.length > 10 ? 10 : bids.length
-        const asksSize = asks.length > 10 ? 10 : asks.length
+        const bidsSize = bids.length > 100 ? 100 : bids.length
+        const asksSize = asks.length > 100 ? 100 : asks.length
         return <div className='orderbook'>
                 <h1>Orderbook</h1>
                 <table>
                     <thead>
                         <tr>
+                            <th>idx</th>
                             <th>MarketSize</th>
                             <th>Price</th>
                         </tr>
@@ -56,8 +57,9 @@ class Orderbook extends React.PureComponent<Props> {
                     <tbody>
                         {bids.slice(0, bidsSize).map((bid: Bid, idx: number) => {
                             return <tr className='green-text' key={idx}>
-                                <td>{bid.specification.quantity.value}}</td>
-                                <td>{bid.specification.totalPrice.value}</td>
+                                <td>{idx}</td>
+                                <td>{bid.specification.quantity.value} {bid.specification.quantity.currency}</td>
+                                <td>{bid.specification.totalPrice.value} {bid.specification.totalPrice.currency}</td>
                             </tr>
                         })}
                         <tr>
@@ -66,6 +68,7 @@ class Orderbook extends React.PureComponent<Props> {
                         </tr>
                         {asks.slice(0, asksSize).map((ask: Ask, idx: number) => {
                             return <tr className='red-text' key={idx}>
+                                <td>{idx}</td>
                                 <td>{ask.specification.quantity.value} {ask.specification.quantity.currency}</td>
                                 <td>{ask.specification.totalPrice.value} {ask.specification.totalPrice.currency}</td> 
                             </tr>
