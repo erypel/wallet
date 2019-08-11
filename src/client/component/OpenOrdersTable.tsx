@@ -5,10 +5,14 @@ import Button from './Button'
 import { offerService } from '../services/offerService'
 import Wallet from '../model/Wallet'
 import { fetchOpenOrders } from '../store/orderbook/actions'
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
+import { connect } from 'react-redux';
 
 interface Props {
     openOrders: Offer[]
     activeWallet: Wallet
+    getOpenOrders: (address: string) => void
 }
 
 class OpenOrdersTable extends React.PureComponent<Props> {
@@ -48,10 +52,19 @@ class OpenOrdersTable extends React.PureComponent<Props> {
     }
 
     cancelOrder = (seq: number) => {
-        const { publicKey, privateKey } = this.props.activeWallet
-        offerService.cancelOffer(publicKey, privateKey, seq)
-        fetchOpenOrders(publicKey)
+        const { getOpenOrders, activeWallet } = this.props
+        const { publicKey, privateKey } = activeWallet
+        offerService.cancelOffer(publicKey, privateKey, seq).then(() => {
+            getOpenOrders(publicKey)
+        })
+        
     }
 }
 
-export default OpenOrdersTable
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return {
+        getOpenOrders: (address: string) => dispatch(fetchOpenOrders(address))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(OpenOrdersTable)

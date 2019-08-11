@@ -163,9 +163,9 @@ function createTakerPays(isSell: boolean, amount: Amount, limit: Amount): Amount
     }
 }
 
-function cancelOffer(account: string, secret: string, orderSequence: number) {
+async function cancelOffer(account: string, secret: string, orderSequence: number) {
     const orderCancellation = buildOrderCancellation(account, orderSequence)
-    sendOffer(orderCancellation, secret)
+    return await sendOffer(orderCancellation, secret)
 }
 
 function buildOrderCancellation(account: string, orderSequence: number): OrderCancellation {
@@ -208,17 +208,17 @@ function flagCheck(offer: OrderCreate) {
 }
 
 async function sendOffer(offer: Transaction, secret: string) {
-    prepareOffer(offer).then((preppedTx: PreparedTransaction | null) => {
+    return await prepareOffer(offer).then(async (preppedTx: PreparedTransaction | null) => {
         if(preppedTx === null) {
             throw Error('Error prepping tx')
         }
         console.log('prepped offer', preppedTx)
-        signOffer(preppedTx, secret).then((signedTx: SignedTransaction | null) =>{
+        return await signOffer(preppedTx, secret).then(async (signedTx: SignedTransaction | null) => {
             if(signedTx === null) {
                 throw Error('Error signing tx')
             }
             console.log('signed', signedTx)
-            submitOffer(signedTx).then((submittedTx: SubmittedTransaction | null) => {
+            return await submitOffer(signedTx).then((submittedTx: SubmittedTransaction | null) => {
                 console.log('submitted', submittedTx)
             })
         })

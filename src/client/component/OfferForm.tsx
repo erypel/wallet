@@ -4,7 +4,10 @@ import Input from './Input'
 import Switch from './Switch'
 import { offerService } from '../services/offerService'
 import Amount from '../xrpl/api/model/Amount'
-import Currency from '../xrpl/api/model/Currency'
+import { fetchOpenOrders } from '../store/orderbook/actions'
+import { ThunkDispatch } from 'redux-thunk'
+import { AnyAction } from 'redux'
+import { connect } from 'react-redux'
 
 
 interface Props {
@@ -12,6 +15,7 @@ interface Props {
     quoteCurrency: string
     account: string
     secret: string
+    getOpenOrders: (address: string) => void
 }
 
 interface State {
@@ -86,7 +90,7 @@ class OfferForm extends React.PureComponent<Props, State> {
     onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const { state, props } = this
-        const { account, secret, baseCurrency, quoteCurrency } = props
+        const { account, secret, baseCurrency, quoteCurrency, getOpenOrders } = props
         const { isSell, amount, limitPrice, stopPrice, showAdvanced, timeInForce, isPostOnly } = state
         const offerAmount = (limitPrice > 0) ? new Amount(baseCurrency, amount.toString(), 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq') 
             : (isSell) ? new Amount(baseCurrency, amount.toString()) : new Amount(quoteCurrency, amount.toString())
@@ -103,7 +107,9 @@ class OfferForm extends React.PureComponent<Props, State> {
             baseCurrency,
             quoteCurrency
         )
-        offerService.sendOffer(offer, secret)
+        offerService.sendOffer(offer, secret).then(() => {
+            getOpenOrders(account)
+        })
     }
 
     clearOfferTabState = () => {
@@ -203,4 +209,10 @@ class OfferForm extends React.PureComponent<Props, State> {
     }
 }
 
-export default OfferForm
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return {
+        getOpenOrders: (address: string) => dispatch(fetchOpenOrders(address))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(OfferForm)
