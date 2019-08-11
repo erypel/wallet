@@ -1,4 +1,4 @@
-export default interface Balance {
+export interface Balance {
     value: string
     currency: string
     counterparty?: string

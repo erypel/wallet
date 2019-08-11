@@ -1,4 +1,4 @@
-import Balance from '../xrpl/api/model/Balance'
+import { Balance } from '../xrpl/api/model/Balance'
 
 export default interface Wallet {
     publicKey: string
