@@ -46,7 +46,7 @@ class WalletPicker extends React.PureComponent<Props> {
 
     handleClick(wallet: Wallet) {
         this.props.setActive(wallet)
-        this.loadOpenOrders(wallet.publicKey) //TODO most likely want to subscribe
+        this.loadOpenOrders(wallet.publicKey)
     }
 
     render() {
