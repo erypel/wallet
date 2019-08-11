@@ -34,7 +34,7 @@ class OpenOrdersTable extends React.PureComponent<Props> {
         const { openOrders } = this.props
         return openOrders.map((order: Offer) => {
             const { taker_gets: takerGets, taker_pays: takerPays, seq } = order
-            return <tr>
+            return <tr key={`${seq}`}>
                 <td>{currencyService.createCurrencyString(takerGets)}</td>
                 <td>{currencyService.createCurrencyString(takerPays)}</td>
                 <td><Button buttonText='Cancel Order' onClick={() => this.cancelOrder(seq)}/></td>

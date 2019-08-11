@@ -5,17 +5,18 @@ import WalletPicker from '../container/WalletPicker'
 
 interface Props {
     activeWallet?: Wallet
-    displayCurrency: string
+    baseCurrency: string
+    quoteCurrency: string
 }
 
 class ExchangeWallet extends React.PureComponent<Props> {
     render() {
-        const { activeWallet, displayCurrency } = this.props
+        const { activeWallet, baseCurrency, quoteCurrency } = this.props
         return <>
-            <WalletPicker displayCurrency={displayCurrency} activeWallet={activeWallet}/>
+            <WalletPicker displayCurrency={baseCurrency} activeWallet={activeWallet}/>
             {activeWallet && <div className='content'>
                 <div className='width-2-3'>
-                    <Balance address={activeWallet.publicKey}/>
+                    <Balance address={activeWallet.publicKey} currencies={[baseCurrency, quoteCurrency]}/>
                 </div>
             </div>}
         </>

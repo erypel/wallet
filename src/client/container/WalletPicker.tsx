@@ -60,13 +60,13 @@ class WalletPicker extends React.PureComponent<Props> {
                 const { publicKey } = wallet
                 var { balances } = wallet
                 const balance = balances ? walletService.findBalance(displayCurrency, balances) : 'Could not fetch balances'
-                return <table className="wallet-table" onClick={() => this.handleClick(wallet)}>
+                return <table key={`wallet-picker-${publicKey}`} className="wallet-table" onClick={() => this.handleClick(wallet)}>
                     <tbody>
-                        <tr>
+                        <tr key={publicKey}>
                             <td className="wallet-table-label">Account #:</td>
                             <td className="wallet-table-value">{publicKey}</td>
                         </tr>
-                        <tr>
+                        <tr key={`${publicKey}${balance}`}>
                             <td className="wallet-table-label">Balance:</td>
                             <td className="wallet-table-value">{balance}</td>
                         </tr>
