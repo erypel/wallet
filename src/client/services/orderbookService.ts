@@ -3,6 +3,9 @@ import callForOrderbook from '../xrpl/api/utils/getOrderbook'
 import OrderbookBuilder from '../xrpl/api/model/transaction/Orderbook/OrderbookBuilder'
 import Ask from '../xrpl/api/model/transaction/Orderbook/Ask'
 import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
+import OrderCreate from '../xrpl/api/model/transaction/OrderCreate/OrderCreate'
+import { addOrderToBook } from '../store/orderbook/actions'
+import { getStore } from '../../App';
 
 async function getBids(
     address: string, 
@@ -61,6 +64,11 @@ function createCurrencyCounterpartyObject(
     }
 }
 
+function handleIncomingOrderCreate(order: OrderCreate) {
+    console.log(`recieved order ${order.TransactionType}`)
+    getStore().dispatch(addOrderToBook(order))
+}
+
 function buildOrderbook(
     base: CurrencyCounterparty, counter: CurrencyCounterparty
 ): Orderbook {
@@ -71,5 +79,6 @@ function buildOrderbook(
 export const orderbookService = {
     getOrderbook,
     getAsks,
-    getBids
+    getBids,
+    handleIncomingOrderCreate
 }

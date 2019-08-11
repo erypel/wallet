@@ -10,8 +10,8 @@ export default interface Bid {
 
 interface Order {
     direction: string
-    quantity: Amount
-    totalPrice: Amount
+    quantity: Amount | string
+    totalPrice: Amount | string
     expirationTime?: string
     fillOrKill?: boolean
     immediateOrCancel?: boolean

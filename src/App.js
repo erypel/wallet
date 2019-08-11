@@ -44,4 +44,6 @@ class App extends React.PureComponent {
   }
 }
 
+export const getStore = () => { return store }
+
 export default App

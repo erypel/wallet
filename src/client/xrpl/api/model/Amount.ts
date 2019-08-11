@@ -20,6 +20,14 @@ export function amountToIssuerAmount(amount: Amount) {
   return new IssuerAmount(amount.currency, amount.value, amount.counterparty) 
 }
 
+export function issuerAmountToAmount(amount: string | IssuerAmount) {
+  if (typeof amount === 'string') {
+    return amount
+  } else {
+    return new Amount(amount.currency, amount.value, amount.issuer)
+  }
+}
+
 export class IssuerAmount {
   currency: string
   value: string

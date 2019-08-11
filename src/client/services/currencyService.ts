@@ -9,6 +9,15 @@ function createCurrencyString(amount: Amount | IssuerAmount | string) {
     }
 }
 
+function createAmount(amount: Amount | IssuerAmount | string) {
+    if(typeof amount === 'string') {
+        return new Amount('XRP', dropsToXrp(amount))
+    } else {
+        return new Amount(amount.currency, amount.value)
+    }
+}
+
 export const currencyService = {
-    createCurrencyString
+    createCurrencyString,
+    createAmount
 }

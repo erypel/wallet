@@ -6,12 +6,38 @@ export const SET_ASKS = 'SET_ASKS'
 export const SET_BIDS = 'SET_BIDS'
 export const SET_OPEN_ORDERS = 'SET_OPEN_ORDERS'
 export const SET_LOADING = 'SET_LOADING'
+export const ADD_BID = 'ADD_BID'
+export const ADD_ASK = 'ADD_ASK'
+export const SET_BASE_CURRENCY = 'SET_BASE'
+export const SET_QUOTE_CURRECY = 'SET_QUOTE'
 
 export interface OrderbookState {
+    baseCurrency: string,
+    quoteCurrency: string,
     asks: Ask[]
     bids: Bid[]
     openOrders: Offer[]
     isLoading: boolean
+}
+
+export interface AddBidAction {
+    type: typeof ADD_BID
+    payload: Bid
+}
+
+export interface AddAskAction {
+    type: typeof ADD_ASK
+    payload: Ask
+}
+
+export interface SetBaseAction {
+    type: typeof SET_BASE_CURRENCY
+    payload: string
+}
+
+export interface SetQuoteAction {
+    type: typeof SET_QUOTE_CURRECY
+    payload: string
 }
 
 export interface SetOpenOrdersAction {
@@ -35,4 +61,5 @@ export interface SetLoadingAction {
 }
 
 export type OrderbookActions = SetBidsAction | SetAsksAction | SetLoadingAction 
-    | SetOpenOrdersAction
+    | SetOpenOrdersAction | AddBidAction | AddAskAction | SetBaseAction 
+    | SetQuoteAction
