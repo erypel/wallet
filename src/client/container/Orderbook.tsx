@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
 import Ask from '../xrpl/api/model/transaction/Orderbook/Ask'
 import { rippledStream } from '../xrpl/rippled/methods/stream'
+import subscribe from '../xrpl/api/utils/subscribe';
 
 interface Props {
     baseCurrency: string,
@@ -38,6 +39,7 @@ class Orderbook extends React.PureComponent<Props> {
         rippledStream.subscribeToBook('XRP', 'USD').then(book => {
             console.log('lookit', book)
         })
+        subscribe('XRP', 'USD')
     }
 
     render() {
