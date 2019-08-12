@@ -36,9 +36,9 @@ class Orderbook extends React.PureComponent<Props> {
     }
 
     onClick = () => {
-        rippledStream.subscribeToBook('XRP', 'USD').then(book => {
-            console.log('lookit', book)
-        })
+        // rippledStream.subscribeToBook('XRP', 'USD').then(book => {
+        //     console.log('lookit', book)
+        // })
         subscribe('XRP', 'USD')
     }
 

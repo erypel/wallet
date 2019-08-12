@@ -1,4 +1,6 @@
 import formatBidsAndAsks from './formatBidsAndAsks'
+import { AsksAndBids } from '../model/transaction/Orderbook/Orderbook'
+import { orderbookService } from '../../../services/orderbookService'
 
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({
@@ -11,10 +13,18 @@ export default async function subscribe(takerPays: string, takerGets: string, is
     api.connect().then(async () => { // Omit this if you are already connected
 
     // 'transaction' can be replaced with the relevant `type` from the table above
-    api.connection.on('transaction', (event: any) => {
-
-        // Do something useful with `event`
-        console.log(JSON.stringify(event, null, 2))
+    api.connection.on('transaction', (tx: any) => {
+        const { transaction, meta, ledger_index, validated } = tx
+        const { TransactionType, Account } = transaction
+        switch(transaction.TransactionType) {
+            case 'OfferCreate':
+            return orderbookService.handleIncomingOrderCreate(transaction)
+        }
+        console.log(TransactionType + " transaction sent by " +
+                    Account +
+                    "\n  Result: " + meta.TransactionResult +
+                    " in ledger " + ledger_index +
+                    "\n  Validated? " + validated)
     })
 
     return await api.request('subscribe', {
@@ -22,11 +32,23 @@ export default async function subscribe(takerPays: string, takerGets: string, is
             {taker_pays: {currency: takerPays}, taker_gets: {currency: takerGets, issuer: issuer}, snapshot: true, both: true},
             {taker_pays: {currency: takerGets, issuer: issuer}, taker_gets: {currency: takerPays}, snapshot: true, both: true}
          ]
-    }).then(async (result: any) => {
-        //result is bids and asks object
-        console.log("tada", result)
+    }).then(async (result: AsksAndBids) => {
+        const orderbookInfo = {
+            "base": {
+              "currency": takerPays,
+              "counterparty": issuer
+            },
+            "counter": {
+              "currency": takerGets,
+              "counterparty": issuer
+            }
+          }
+        const directOffers = (result? result.asks : [])
+        const reverseOffers = (result? result.bids : [])
+        const orderbook = await formatBidsAndAsks(orderbookInfo, [...directOffers, ...reverseOffers])
+        console.log('lookey tado', orderbook)
+        return orderbook
     }).catch((error: any) => {
-        // Handle `error`
         console.log(error)
     })
     })

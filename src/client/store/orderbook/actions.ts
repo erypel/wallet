@@ -10,6 +10,7 @@ import OrderCreate from '../../xrpl/api/model/transaction/OrderCreate/OrderCreat
 import { currencyService } from '../../services/currencyService'
 import { AppState } from '../rootReducer'
 import  { issuerAmountToAmount } from '../../xrpl/api/model/Amount'
+import subscribe from '../../xrpl/api/utils/subscribe';
 
 function setOpenOrders(orders: Offer[]): SetOpenOrdersAction {
     return {
@@ -147,7 +148,7 @@ export const fetchOrderbook: ActionCreator<any> = (
         //     counterCounterparty
         // )
         // const { asks, bids } = orders
-        rippledStream.subscribeToBook(baseCurrency, counterCurrency).then((result: {asks: Ask[], bids: Bid[]}) => {
+        subscribe(baseCurrency, counterCurrency).then((result: any) => {
             const { asks, bids } = result
             dispatch(setAsks(asks))
             dispatch(setBids(bids))
