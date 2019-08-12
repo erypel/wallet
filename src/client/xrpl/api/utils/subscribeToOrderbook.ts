@@ -45,13 +45,13 @@ export default async function subscribeToBook(takerPays: string, takerGets: stri
             }
           }
         const directOffers = (result? result.asks : [])
-        const reverseOffers = (result? result.bids : [])
+        //const reverseOffers = (result? result.bids : [])
         const orderbook = await formatBidsAndAsks(orderbookInfo, [...directOffers])
         console.log('lookey tado', orderbook)
         return orderbook
-    }).catch((error: any) => {
-        console.log(error)
-    })
+      }).catch((error: any) => {
+          console.log(error)
+      })
     })
 }
   

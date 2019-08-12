@@ -1,5 +1,9 @@
 import { Reducer } from 'redux'
-import { OrderbookState, SET_BIDS, SET_ASKS, SET_LOADING, SET_OPEN_ORDERS, SET_BASE_CURRENCY, SET_QUOTE_CURRECY, ADD_ASK, ADD_BID, REMOVE_ASK, REMOVE_BID } from './types'
+import { 
+    OrderbookState, SET_BIDS, SET_ASKS, SET_LOADING, SET_OPEN_ORDERS, 
+    SET_BASE_CURRENCY, SET_QUOTE_CURRECY, ADD_ASK, ADD_BID, REMOVE_ASK, 
+    REMOVE_BID 
+} from './types'
 
 const initialState: OrderbookState = {
     baseCurrency: '',

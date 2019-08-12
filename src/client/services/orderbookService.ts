@@ -6,7 +6,7 @@ import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
 import OrderCreate from '../xrpl/api/model/transaction/OrderCreate/OrderCreate'
 import { addOrderToBook, removeOrderFromBook } from '../store/orderbook/actions'
 import { getStore } from '../../App'
-import OrderCancellation from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellation';
+import OrderCancellation from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellation'
 
 async function getBids(
     address: string, 

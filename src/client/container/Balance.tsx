@@ -22,8 +22,8 @@ class Balance extends React.PureComponent<Props, State> {
         }
     }
 
-    setBalance = async (account?: string) => {
-        await getBalances(account ? account : this.props.address).then((balances: Balances[]) => {
+    setBalance = (account?: string) => {
+        getBalances(account ? account : this.props.address).then((balances: Balances[]) => {
             const balanceMap: BalanceMap = {}
             for(let i=0; i < balances.length; i++){
                 const balance = balances[i]

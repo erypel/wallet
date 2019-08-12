@@ -19,6 +19,7 @@ import OrderCancellation from '../xrpl/api/model/transaction/OrderCancellation/O
 import { OrderCancellationBuilder } from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellationBuilder'
 import Transaction from '../xrpl/api/model/transaction/Transaction'
 import subscribeToBook from '../xrpl/api/utils/subscribeToOrderbook'
+import { AsksAndBids } from '../xrpl/api/model/transaction/Orderbook/Orderbook';
 
 function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
     if (offers.length === 0) {
@@ -43,7 +44,7 @@ function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
 
 async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<Amount> {
     //TODOThis is not the right way to do it, but it will work for now before the DEX refactor
-    const book = await subscribeToBook(baseCurrency, quoteCurrency).then((result: any) => {
+    const book = await subscribeToBook(baseCurrency, quoteCurrency).then((result: AsksAndBids) => {
         return result
     })
     const bids = book.bids

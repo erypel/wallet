@@ -1,5 +1,11 @@
 import Bid from '../../xrpl/api/model/transaction/Orderbook/Bid'
-import { SET_ASKS, SET_BIDS, SetAsksAction, SetBidsAction, OrderbookActions, SET_LOADING, SetLoadingAction, SetOpenOrdersAction, SET_OPEN_ORDERS, ADD_BID, AddBidAction, AddAskAction, ADD_ASK, OrderbookState, SetBaseAction, SET_BASE_CURRENCY, SET_QUOTE_CURRECY, SetQuoteAction, RemoveBidAction, RemoveAskAction, REMOVE_BID, REMOVE_ASK } from './types'
+import { 
+    SET_ASKS, SET_BIDS, SetAsksAction, SetBidsAction, OrderbookActions,
+    SET_LOADING, SetLoadingAction, SetOpenOrdersAction, SET_OPEN_ORDERS, ADD_BID, 
+    AddBidAction, AddAskAction, ADD_ASK, SetBaseAction, SET_BASE_CURRENCY, 
+    SET_QUOTE_CURRECY, SetQuoteAction, RemoveBidAction, RemoveAskAction, 
+    REMOVE_BID, REMOVE_ASK 
+} from './types'
 import Ask from '../../xrpl/api/model/transaction/Orderbook/Ask'
 import { ActionCreator, Dispatch } from 'redux'
 import { rippledAccount } from '../../xrpl/rippled/methods/account'
@@ -10,7 +16,8 @@ import { currencyService } from '../../services/currencyService'
 import { AppState } from '../rootReducer'
 import  { issuerAmountToAmount } from '../../xrpl/api/model/Amount'
 import subscribeToBook from '../../xrpl/api/utils/subscribeToOrderbook'
-import OrderCancellation from '../../xrpl/api/model/transaction/OrderCancellation/OrderCancellation';
+import OrderCancellation from '../../xrpl/api/model/transaction/OrderCancellation/OrderCancellation'
+import { AsksAndBids } from '../../xrpl/api/model/transaction/Orderbook/Orderbook';
 
 function setOpenOrders(orders: Offer[]): SetOpenOrdersAction {
     return {
@@ -106,17 +113,14 @@ export const setQuoteCurrency: ActionCreator<any> = (quote: string) => {
 export const removeOrderFromBook: ActionCreator<any> = (order: OrderCancellation) => {
     return async (dispatch: Dispatch<OrderbookActions>, getState: () => AppState) => {
         const { orderbook } = getState()
-        const { bids: b, asks:a } = orderbook
-        var bids = b
-        var asks = a
-        console.log(order)
+        const { bids, asks } = orderbook
         const {Account: account, OfferSequence: accountSequence } = order
         for (let i = 0; i < bids.length; i++) {
             const bid = bids[i]
             const { maker, sequence } = bid.properties
             if (maker === account && sequence === accountSequence) {
                 dispatch(removeBid(bid))
-                break
+                return
             }
         }
         for(let i = 0; i < asks.length; i++) {
@@ -124,7 +128,7 @@ export const removeOrderFromBook: ActionCreator<any> = (order: OrderCancellation
             const { maker, sequence } = ask.properties
             if (maker === account && sequence === accountSequence) {
                 dispatch(removeAsk(ask))
-                break
+                return
             }
         }
     }
@@ -189,7 +193,7 @@ export const fetchOrderbook: ActionCreator<any> = (
         //     counterCounterparty
         // )
         // const { asks, bids } = orders
-        subscribeToBook(baseCurrency, counterCurrency).then((result: any) => {
+        subscribeToBook(baseCurrency, counterCurrency).then((result: AsksAndBids) => {
             const { asks, bids } = result
             dispatch(setAsks(asks))
             dispatch(setBids(bids))
