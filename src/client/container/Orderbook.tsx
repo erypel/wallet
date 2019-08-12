@@ -7,7 +7,8 @@ import { fetchOrderbook } from '../store/orderbook/actions'
 import { connect } from 'react-redux'
 import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
 import Ask from '../xrpl/api/model/transaction/Orderbook/Ask'
-import { rippledStream } from '../xrpl/rippled/methods/stream'
+import subscribeToBook from '../xrpl/api/utils/subscribeToOrderbook'
+import unsubscribeFromBook from '../xrpl/api/utils/unsubscribeFromOrderbook'
 
 interface Props {
     baseCurrency: string,
@@ -24,20 +25,18 @@ interface Props {
 }
 
 class Orderbook extends React.PureComponent<Props> {
-    constructor(props: Props) {
-        super(props)
-        //TODO maker sure there is a subscription to the orderbook
-        props.loadOrderbook('', 'XRP', '', 'USD', '')
+    componentWillMount() {
+        const { baseCurrency, quoteCurrency } = this.props
+        this.props.loadOrderbook('', baseCurrency, '', quoteCurrency, '')
     }
 
-    componentWillMount() {
-        this.props.loadOrderbook('', 'XRP', '', 'USD', '')
+    componentWillUnmount() {
+        const { baseCurrency, quoteCurrency } = this.props
+        unsubscribeFromBook(baseCurrency, quoteCurrency)
     }
 
     onClick = () => {
-        rippledStream.subscribeToBook('XRP', 'USD').then(book => {
-            console.log('lookit', book)
-        })
+        subscribeToBook('XRP', 'USD')
     }
 
     render() {

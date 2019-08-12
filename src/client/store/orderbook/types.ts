@@ -10,6 +10,8 @@ export const ADD_BID = 'ADD_BID'
 export const ADD_ASK = 'ADD_ASK'
 export const SET_BASE_CURRENCY = 'SET_BASE'
 export const SET_QUOTE_CURRECY = 'SET_QUOTE'
+export const REMOVE_ASK = 'REMOVE_ASK'
+export const REMOVE_BID = 'REMOVE_BID'
 
 export interface OrderbookState {
     baseCurrency: string,
@@ -27,6 +29,16 @@ export interface AddBidAction {
 
 export interface AddAskAction {
     type: typeof ADD_ASK
+    payload: Ask
+}
+
+export interface RemoveBidAction {
+    type: typeof REMOVE_BID
+    payload: Bid
+}
+
+export interface RemoveAskAction {
+    type: typeof REMOVE_ASK
     payload: Ask
 }
 
@@ -62,4 +74,4 @@ export interface SetLoadingAction {
 
 export type OrderbookActions = SetBidsAction | SetAsksAction | SetLoadingAction 
     | SetOpenOrdersAction | AddBidAction | AddAskAction | SetBaseAction 
-    | SetQuoteAction
+    | SetQuoteAction | RemoveAskAction | RemoveBidAction
