@@ -17,7 +17,9 @@ export default async function subscribeToBook(takerPays: string, takerGets: stri
         const { TransactionType, Account } = transaction
         switch(transaction.TransactionType) {
             case 'OfferCreate':
-            return orderbookService.handleIncomingOrderCreate(transaction)
+              return orderbookService.handleIncomingOrderCreate(transaction)
+            case 'OfferCancel':
+              return orderbookService.handleIncomingOrderCancel(transaction)
         }
         console.log(TransactionType + " transaction sent by " +
                     Account +

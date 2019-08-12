@@ -4,8 +4,9 @@ import OrderbookBuilder from '../xrpl/api/model/transaction/Orderbook/OrderbookB
 import Ask from '../xrpl/api/model/transaction/Orderbook/Ask'
 import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
 import OrderCreate from '../xrpl/api/model/transaction/OrderCreate/OrderCreate'
-import { addOrderToBook } from '../store/orderbook/actions'
+import { addOrderToBook, removeOrderFromBook } from '../store/orderbook/actions'
 import { getStore } from '../../App'
+import OrderCancellation from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellation';
 
 async function getBids(
     address: string, 
@@ -69,6 +70,10 @@ function handleIncomingOrderCreate(order: OrderCreate) {
     getStore().dispatch(addOrderToBook(order))
 }
 
+function handleIncomingOrderCancel(order: OrderCancellation) {
+    getStore().dispatch(removeOrderFromBook(order))
+}
+
 function buildOrderbook(
     base: CurrencyCounterparty, counter: CurrencyCounterparty
 ): Orderbook {
@@ -80,5 +85,6 @@ export const orderbookService = {
     getOrderbook,
     getAsks,
     getBids,
-    handleIncomingOrderCreate
+    handleIncomingOrderCreate,
+    handleIncomingOrderCancel
 }

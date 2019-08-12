@@ -25,12 +25,6 @@ interface Props {
 }
 
 class Orderbook extends React.PureComponent<Props> {
-    // constructor(props: Props) {
-    //     super(props)
-    //     //TODO maker sure there is a subscription to the orderbook
-    //     props.loadOrderbook('', 'XRP', '', 'USD', '')
-    // }
-
     componentWillMount() {
         const { baseCurrency, quoteCurrency } = this.props
         this.props.loadOrderbook('', baseCurrency, '', quoteCurrency, '')
