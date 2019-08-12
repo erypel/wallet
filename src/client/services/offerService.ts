@@ -13,14 +13,12 @@ import VerifiedTransaction from '../xrpl/api/model/transaction/flow/VerifiedTran
 import Amount from '../xrpl/api/model/Amount'
 import xrpToDrops from '../xrpl/api/utils/xrpToDrops'
 import iso8601ToRippleTime from '../xrpl/api/utils/iso8601ToRippleTime'
-import { orderbookService } from './orderbookService'
-import { rippledStream } from '../xrpl/rippled/methods/stream'
 import Ask from '../xrpl/api/model/transaction/Orderbook/Ask'
 import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
 import OrderCancellation from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellation'
 import { OrderCancellationBuilder } from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellationBuilder'
 import Transaction from '../xrpl/api/model/transaction/Transaction'
-import subscribe from '../xrpl/api/utils/subscribe';
+import subscribeToBook from '../xrpl/api/utils/subscribeToOrderbook'
 
 function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
     if (offers.length === 0) {
@@ -45,7 +43,7 @@ function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
 
 async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<Amount> {
     //TODOThis is not the right way to do it, but it will work for now before the DEX refactor
-    const book = await subscribe(baseCurrency, quoteCurrency).then((result: any) => {
+    const book = await subscribeToBook(baseCurrency, quoteCurrency).then((result: any) => {
         return result
     })
     const bids = book.bids

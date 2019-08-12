@@ -9,10 +9,9 @@ const api = new RippleAPI({
 
 const account = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq' // Replace with the account you want notifications for
 
-export default async function subscribe(takerPays: string, takerGets: string, issuer: string = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'/**Gatehub USD*/) {
-    api.connect().then(async () => { // Omit this if you are already connected
+export default async function subscribeToBook(takerPays: string, takerGets: string, issuer: string = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'/**Gatehub USD*/): Promise<AsksAndBids> {
+    return await api.connect().then(async () => { // Omit this if you are already connected
 
-    // 'transaction' can be replaced with the relevant `type` from the table above
     api.connection.on('transaction', (tx: any) => {
         const { transaction, meta, ledger_index, validated } = tx
         const { TransactionType, Account } = transaction
@@ -45,7 +44,7 @@ export default async function subscribe(takerPays: string, takerGets: string, is
           }
         const directOffers = (result? result.asks : [])
         const reverseOffers = (result? result.bids : [])
-        const orderbook = await formatBidsAndAsks(orderbookInfo, [...directOffers, ...reverseOffers])
+        const orderbook = await formatBidsAndAsks(orderbookInfo, [...directOffers])
         console.log('lookey tado', orderbook)
         return orderbook
     }).catch((error: any) => {

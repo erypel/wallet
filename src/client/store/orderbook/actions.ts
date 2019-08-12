@@ -2,7 +2,6 @@ import Bid from '../../xrpl/api/model/transaction/Orderbook/Bid'
 import { SET_ASKS, SET_BIDS, SetAsksAction, SetBidsAction, OrderbookActions, SET_LOADING, SetLoadingAction, SetOpenOrdersAction, SET_OPEN_ORDERS, ADD_BID, AddBidAction, AddAskAction, ADD_ASK, OrderbookState, SetBaseAction, SET_BASE_CURRENCY, SET_QUOTE_CURRECY, SetQuoteAction } from './types'
 import Ask from '../../xrpl/api/model/transaction/Orderbook/Ask'
 import { ActionCreator, Dispatch } from 'redux'
-import { rippledStream } from '../../xrpl/rippled/methods/stream'
 import { rippledAccount } from '../../xrpl/rippled/methods/account'
 import Offer from '../../xrpl/rippled/model/Offer'
 import RippledResponse from '../../xrpl/rippled/model/RippledResponse'
@@ -10,7 +9,7 @@ import OrderCreate from '../../xrpl/api/model/transaction/OrderCreate/OrderCreat
 import { currencyService } from '../../services/currencyService'
 import { AppState } from '../rootReducer'
 import  { issuerAmountToAmount } from '../../xrpl/api/model/Amount'
-import subscribe from '../../xrpl/api/utils/subscribe';
+import subscribeToBook from '../../xrpl/api/utils/subscribeToOrderbook'
 
 function setOpenOrders(orders: Offer[]): SetOpenOrdersAction {
     return {
@@ -148,7 +147,7 @@ export const fetchOrderbook: ActionCreator<any> = (
         //     counterCounterparty
         // )
         // const { asks, bids } = orders
-        subscribe(baseCurrency, counterCurrency).then((result: any) => {
+        subscribeToBook(baseCurrency, counterCurrency).then((result: any) => {
             const { asks, bids } = result
             dispatch(setAsks(asks))
             dispatch(setBids(bids))

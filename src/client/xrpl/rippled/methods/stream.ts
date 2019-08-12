@@ -93,8 +93,9 @@ async function unsubscribeFromAccounts(...accounts: string[]){
 	await api_request(json)
 }
 
-export const rippledStream = {
-  subscribeToAccounts,
-  subscribeToBook,
-  unsubscribeFromAccounts
-}
+// Not currently using a Rippled server
+// export const rippledStream = {
+//   subscribeToAccounts,
+//   subscribeToBook,
+//   unsubscribeFromAccounts
+// }
