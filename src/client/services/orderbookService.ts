@@ -11,9 +11,9 @@ import OrderCancellation from '../xrpl/api/model/transaction/OrderCancellation/O
 async function getBids(
     address: string, 
     baseCurrency: string, 
-    baseCounterparty: string, 
+    baseCounterparty: string = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq', 
     counterCurrency: string,
-    counterCounterparty: string
+    counterCounterparty: string = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'
     ): Promise<Bid[]> {
         return await getOrderbook(
             address, baseCurrency, baseCounterparty, counterCurrency, counterCounterparty

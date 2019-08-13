@@ -17,7 +17,7 @@ import { AppState } from '../rootReducer'
 import  { issuerAmountToAmount } from '../../xrpl/api/model/Amount'
 import subscribeToBook from '../../xrpl/api/utils/subscribeToOrderbook'
 import OrderCancellation from '../../xrpl/api/model/transaction/OrderCancellation/OrderCancellation'
-import { AsksAndBids } from '../../xrpl/api/model/transaction/Orderbook/Orderbook';
+import { AsksAndBids } from '../../xrpl/api/model/transaction/Orderbook/Orderbook'
 
 function setOpenOrders(orders: Offer[]): SetOpenOrdersAction {
     return {
@@ -139,16 +139,17 @@ export const addOrderToBook: ActionCreator<any> = (order: OrderCreate) => {
         const { orderbook } = getState()
         const { baseCurrency, quoteCurrency } = orderbook
         const currency = currencyService.createAmount(order.TakerGets).currency
+        const { TakerGets, TakerPays, Account, offerSequence } = order
         if (baseCurrency === currency) {
             dispatch(addAsk({
                 specification: {
                     direction: 'BUY',
-                    quantity: issuerAmountToAmount(order.TakerGets),
-                    totalPrice: issuerAmountToAmount(order.TakerPays)
+                    quantity: issuerAmountToAmount(TakerGets),
+                    totalPrice: issuerAmountToAmount(TakerPays)
                 },
                 properties: {
-                    maker: '',
-                    sequence: 0,
+                    maker: Account,
+                    sequence: offerSequence!!,
                     makerExchangeRate: ''
                 },
                 data: {}
@@ -157,12 +158,12 @@ export const addOrderToBook: ActionCreator<any> = (order: OrderCreate) => {
             dispatch(addBid({
                 specification: {
                     direction: 'SELL',
-                    quantity: issuerAmountToAmount(order.TakerGets),
-                    totalPrice: issuerAmountToAmount(order.TakerPays)
+                    quantity: issuerAmountToAmount(TakerGets),
+                    totalPrice: issuerAmountToAmount(TakerPays)
                 },
                 properties: {
-                    maker: '',
-                    sequence: 0,
+                    maker: Account,
+                    sequence: offerSequence!!,
                     makerExchangeRate: ''
                 },
                 data: {}
@@ -174,25 +175,13 @@ export const addOrderToBook: ActionCreator<any> = (order: OrderCreate) => {
 }
 
 export const fetchOrderbook: ActionCreator<any> = (
-    address: string, 
     baseCurrency: string, 
-    baseCounterparty: string, 
-    counterCurrency: string,
-    counterCounterparty: string
+    counterCurrency: string
 ) => {
     return async (dispatch: Dispatch<OrderbookActions>) => {
         dispatch(setLoading(true))
         dispatch(setBase(baseCurrency))
         dispatch(setQuote(counterCurrency))
-        // this code will fetch a specific order book, but we want the autobridged one
-        // const orders = await orderbookService.getOrderbook(
-        //     address,
-        //     baseCurrency,
-        //     baseCounterparty,
-        //     counterCurrency,
-        //     counterCounterparty
-        // )
-        // const { asks, bids } = orders
         subscribeToBook(baseCurrency, counterCurrency).then((result: AsksAndBids) => {
             const { asks, bids } = result
             dispatch(setAsks(asks))

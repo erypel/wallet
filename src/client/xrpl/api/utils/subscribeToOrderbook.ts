@@ -7,8 +7,6 @@ const api = new RippleAPI({
 	server: 'wss://s.altnet.rippletest.net:51233'
 })
 
-const account = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq' // Replace with the account you want notifications for
-
 export default async function subscribeToBook(takerPays: string, takerGets: string, issuer: string = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'/**Gatehub USD*/): Promise<AsksAndBids> {
     return await api.connect().then(async () => { // Omit this if you are already connected
 

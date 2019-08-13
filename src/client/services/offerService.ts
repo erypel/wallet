@@ -18,8 +18,7 @@ import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
 import OrderCancellation from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellation'
 import { OrderCancellationBuilder } from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellationBuilder'
 import Transaction from '../xrpl/api/model/transaction/Transaction'
-import subscribeToBook from '../xrpl/api/utils/subscribeToOrderbook'
-import { AsksAndBids } from '../xrpl/api/model/transaction/Orderbook/Orderbook'
+import { orderbookService } from './orderbookService'
 
 function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
     if (offers.length === 0) {
@@ -43,29 +42,24 @@ function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
 
 
 async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<Amount> {
-    //TODOThis is not the right way to do it, but it will work for now before the DEX refactor
-    const book = await subscribeToBook(baseCurrency, quoteCurrency).then((result: AsksAndBids) => {
-        return result
-    })
-    const bids = book.bids
-    const asks = book.asks
-    
     const formattedAmount = formatCurrency(amount)
     const value = typeof formattedAmount === 'string' ? formattedAmount : formattedAmount.value
 
     if (isSell) {
         //get bids
+        const bids = await orderbookService.getBids(address, baseCurrency, amount.counterparty!!, quoteCurrency, amount.counterparty!!)
         return findBidLimitPrice(bids, Number(value)) //TODO probably unsafe
         //This is the right way to do things
         //orderbookService.getBids(adress, amount.currency, ...)
     } else { //isBuy
         //get asks
+        const asks = await orderbookService.getAsks(address, baseCurrency, amount.counterparty!!, quoteCurrency, amount.counterparty!!)
         return findBidLimitPrice(asks, Number(amount.value)) //TODO probably unsafe
     }
 }
 
 async function buildMarketOrder(account: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<OrderCreate> {
-    const limitPrice = await buildMarketOrderLimitPrice('', isSell, amount, baseCurrency, quoteCurrency)
+    const limitPrice = await buildMarketOrderLimitPrice(account, isSell, amount, baseCurrency, quoteCurrency)
 
     // THIS IS WRONG. RECIEVING 2 USD AMOUNTS
     const takerGets = createTakerGets(isSell, amount, limitPrice)
