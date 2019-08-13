@@ -8,6 +8,8 @@ import { fetchOpenOrders } from '../store/orderbook/actions'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import { connect } from 'react-redux'
+import UsdInput from './UsdInput';
+import XrpInput from './XrpInput';
 
 
 interface Props {
@@ -22,7 +24,6 @@ interface State {
     isSell: boolean
     amount: number
     limitPrice: number
-    stopPrice: number
     showAdvanced: boolean
     timeInForce: string
     isPostOnly: boolean
@@ -38,7 +39,6 @@ class OfferForm extends React.PureComponent<Props, State> {
             isSell: false,
             amount: 0.00,
             limitPrice: 0.00,
-            stopPrice: 0.00,
             showAdvanced: false,
             timeInForce: 'Good Til Cancelled',
             isPostOnly: false
@@ -89,34 +89,42 @@ class OfferForm extends React.PureComponent<Props, State> {
 
     onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        const { state, props } = this
+        const { state, props, clearForm } = this
         const { account, secret, baseCurrency, quoteCurrency, getOpenOrders } = props
-        const { isSell, amount, limitPrice, stopPrice, showAdvanced, timeInForce, isPostOnly } = state
+        const { isSell, amount, limitPrice, showAdvanced, timeInForce, isPostOnly } = state
         const offerAmount = (limitPrice > 0) ? new Amount(baseCurrency, amount.toString(), 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq') 
             : (isSell) ? new Amount(baseCurrency, amount.toString()) : new Amount(quoteCurrency, amount.toString())
         const limit = new Amount(quoteCurrency, limitPrice.toString(), 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq')
-        const offer = await offerService.buildCreateOffer(
-            account, 
-            isSell, 
-            offerAmount, 
-            limit, 
-            stopPrice, 
-            showAdvanced, 
-            timeInForce, 
-            isPostOnly,
-            baseCurrency,
-            quoteCurrency
-        )
-        offerService.sendOffer(offer, secret).then(() => {
-            getOpenOrders(account)
-        })
+        try {
+            const offer = await offerService.buildCreateOffer(
+                account, 
+                isSell, 
+                offerAmount, 
+                limit, 
+                showAdvanced, 
+                timeInForce, 
+                isPostOnly,
+                baseCurrency,
+                quoteCurrency
+            )
+        
+            offerService.sendOffer(offer, secret).then(() => {
+                getOpenOrders(account)
+                clearForm()
+            })
+        } catch(error) {
+            alert(error)
+        }
+    }
+
+    clearForm = () => {
+        this.clearOfferTabState()
     }
 
     clearOfferTabState = () => {
         this.setState({
             amount: 0.00,
             limitPrice: 0.00,
-            stopPrice: 0.00,
             showAdvanced: false,
             timeInForce: 'Good Til Cancelled',
             isPostOnly: false
@@ -125,10 +133,11 @@ class OfferForm extends React.PureComponent<Props, State> {
 
     render() {
         const { state, props, handleChange, handleCheckbox } = this
-        const { amount, limitPrice, stopPrice, showAdvanced } = state
+        const { amount, limitPrice, showAdvanced } = state
         const { isSell, timeInForce } = state
         const isGoodTilTime = timeInForce === 'Good Til Time'
         const { baseCurrency, quoteCurrency } = props
+        const marketCurrency = isSell ? baseCurrency : quoteCurrency
         return <div>
             <h3>{baseCurrency}-{quoteCurrency}</h3>
             <form onSubmit={this.onSubmit}>
@@ -141,18 +150,21 @@ class OfferForm extends React.PureComponent<Props, State> {
                     <div data-label='market'>
                         <label>
                             Amount
-                            <Input id='amount' type='number' value={amount} onChange={handleChange}/> {isSell ? baseCurrency : quoteCurrency}
+                            {marketCurrency === 'USD' && <UsdInput id='amount' value={amount} onChange={handleChange} />}
+                            {marketCurrency === 'XRP' && <XrpInput id='amount' value={amount} onChange={handleChange} />} {marketCurrency}
                         </label>
                     </div>
                     <div data-label='limit'>
                         <label>
                             Amount
-                            <Input id='amount' type='number' value={amount} onChange={handleChange}/> {baseCurrency}
+                            {baseCurrency === 'USD' && <UsdInput id='amount' value={amount} onChange={handleChange} />}
+                            {baseCurrency === 'XRP' && <XrpInput id='amount' value={amount} onChange={handleChange} />} {baseCurrency}
                         </label>
                         <br/>
                         <label>
                             Limit Price
-                            <Input id='limitPrice' type='number' value={limitPrice} onChange={handleChange}/> {quoteCurrency}
+                            {quoteCurrency === 'USD' && <UsdInput id='limitPrice' value={limitPrice} onChange={handleChange} />}
+                            {quoteCurrency === 'XRP' && <XrpInput id='limitPrice' value={limitPrice} onChange={handleChange} />} {quoteCurrency}
                         </label>
                         <br/>
                         <label>

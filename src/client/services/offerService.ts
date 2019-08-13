@@ -18,8 +18,7 @@ import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
 import OrderCancellation from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellation'
 import { OrderCancellationBuilder } from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellationBuilder'
 import Transaction from '../xrpl/api/model/transaction/Transaction'
-import subscribeToBook from '../xrpl/api/utils/subscribeToOrderbook'
-import { AsksAndBids } from '../xrpl/api/model/transaction/Orderbook/Orderbook';
+import { orderbookService } from './orderbookService'
 
 function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
     if (offers.length === 0) {
@@ -43,30 +42,24 @@ function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
 
 
 async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<Amount> {
-    //TODOThis is not the right way to do it, but it will work for now before the DEX refactor
-    const book = await subscribeToBook(baseCurrency, quoteCurrency).then((result: AsksAndBids) => {
-        return result
-    })
-    const bids = book.bids
-    const asks = book.asks
-    
     const formattedAmount = formatCurrency(amount)
     const value = typeof formattedAmount === 'string' ? formattedAmount : formattedAmount.value
 
+    const counterparty = amount.counterparty || 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'
+
     if (isSell) {
         //get bids
+        const bids = await orderbookService.getBids(address, baseCurrency, counterparty, quoteCurrency, counterparty)
         return findBidLimitPrice(bids, Number(value)) //TODO probably unsafe
-        //This is the right way to do things
-        //orderbookService.getBids(adress, amount.currency, ...)
     } else { //isBuy
         //get asks
+        const asks = await orderbookService.getAsks(address, baseCurrency, counterparty, quoteCurrency, counterparty)
         return findBidLimitPrice(asks, Number(amount.value)) //TODO probably unsafe
     }
 }
 
 async function buildMarketOrder(account: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<OrderCreate> {
-    //TODO will also want a parameter for what is being bought/sold
-    const limitPrice = await buildMarketOrderLimitPrice('', isSell, amount, baseCurrency, quoteCurrency)
+    const limitPrice = await buildMarketOrderLimitPrice(account, isSell, amount, baseCurrency, quoteCurrency)
 
     // THIS IS WRONG. RECIEVING 2 USD AMOUNTS
     const takerGets = createTakerGets(isSell, amount, limitPrice)
@@ -178,8 +171,7 @@ async function buildCreateOffer(
     account: string,
     isSell: boolean, 
     amount: Amount, 
-    limitPrice: Amount, 
-    stopPrice: number, //need to think about this one... may need to build serverside listener
+    limitPrice: Amount,
     showAdvanced: boolean, 
     timeInForce: string, 
     isPostOnly: boolean,
@@ -220,6 +212,12 @@ async function sendOffer(offer: Transaction, secret: string) {
             console.log('signed', signedTx)
             return await submitOffer(signedTx).then((submittedTx: SubmittedTransaction | null) => {
                 console.log('submitted', submittedTx)
+                if(submittedTx === null) {
+                    throw Error('Error submitting tx')
+                }
+                if(submittedTx.engine_result !== 'tesSUCCESS') {
+                    alert(submittedTx.resultMessage)
+                }
             })
         })
     })
@@ -234,7 +232,6 @@ async function prepareOffer(offer: Transaction): Promise<PreparedTransaction | n
 }
 
 async function signOffer(preparedTx: PreparedTransaction, secret: string): Promise<SignedTransaction | null> {
-    //const test = '{"Flags":2147483648,"TransactionType":"OfferCreate","Account":"rNsjHCBJWAa8JWTTCA2EEd5uREDTeyZiDM","TakerGets":"2000000","TakerPays":{"currency":"USD","issuer":"rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq"},"LastLedgerSequence":21611142,"Fee":"12","Sequence":4}'
     return await signTransaction(preparedTx.txJSON, secret)
 }
 

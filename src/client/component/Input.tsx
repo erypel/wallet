@@ -11,10 +11,14 @@ interface InputProps {
     className?: string
     autoComplete?: 'on' | 'off'
     required?: true | false
+    step?: number
 }
 
 const Input = (props: InputProps) => {
-    const { type, value, onChange, className, id, autoComplete, required, placeHolder } = props
+    const { 
+        type, value, onChange, className, id, autoComplete, required, placeHolder,
+        step 
+    } = props
     return (
         <input 
             className={className} 
@@ -25,6 +29,7 @@ const Input = (props: InputProps) => {
             onChange={onChange} 
             autoComplete={autoComplete ? autoComplete : "off"}
             required={required}
+            step={type === 'number' ? step : undefined}
         />
 )}
 export default Input
