@@ -45,15 +45,15 @@ async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amou
     const formattedAmount = formatCurrency(amount)
     const value = typeof formattedAmount === 'string' ? formattedAmount : formattedAmount.value
 
+    const counterparty = amount.counterparty || 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'
+
     if (isSell) {
         //get bids
-        const bids = await orderbookService.getBids(address, baseCurrency, amount.counterparty!!, quoteCurrency, amount.counterparty!!)
+        const bids = await orderbookService.getBids(address, baseCurrency, counterparty, quoteCurrency, counterparty)
         return findBidLimitPrice(bids, Number(value)) //TODO probably unsafe
-        //This is the right way to do things
-        //orderbookService.getBids(adress, amount.currency, ...)
     } else { //isBuy
         //get asks
-        const asks = await orderbookService.getAsks(address, baseCurrency, amount.counterparty!!, quoteCurrency, amount.counterparty!!)
+        const asks = await orderbookService.getAsks(address, baseCurrency, counterparty, quoteCurrency, counterparty)
         return findBidLimitPrice(asks, Number(amount.value)) //TODO probably unsafe
     }
 }
