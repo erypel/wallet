@@ -19,7 +19,7 @@ import OrderCancellation from '../xrpl/api/model/transaction/OrderCancellation/O
 import { OrderCancellationBuilder } from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellationBuilder'
 import Transaction from '../xrpl/api/model/transaction/Transaction'
 import subscribeToBook from '../xrpl/api/utils/subscribeToOrderbook'
-import { AsksAndBids } from '../xrpl/api/model/transaction/Orderbook/Orderbook';
+import { AsksAndBids } from '../xrpl/api/model/transaction/Orderbook/Orderbook'
 
 function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
     if (offers.length === 0) {
@@ -65,7 +65,6 @@ async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amou
 }
 
 async function buildMarketOrder(account: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<OrderCreate> {
-    //TODO will also want a parameter for what is being bought/sold
     const limitPrice = await buildMarketOrderLimitPrice('', isSell, amount, baseCurrency, quoteCurrency)
 
     // THIS IS WRONG. RECIEVING 2 USD AMOUNTS
@@ -178,8 +177,7 @@ async function buildCreateOffer(
     account: string,
     isSell: boolean, 
     amount: Amount, 
-    limitPrice: Amount, 
-    stopPrice: number, //need to think about this one... may need to build serverside listener
+    limitPrice: Amount,
     showAdvanced: boolean, 
     timeInForce: string, 
     isPostOnly: boolean,
@@ -220,6 +218,12 @@ async function sendOffer(offer: Transaction, secret: string) {
             console.log('signed', signedTx)
             return await submitOffer(signedTx).then((submittedTx: SubmittedTransaction | null) => {
                 console.log('submitted', submittedTx)
+                if(submittedTx === null) {
+                    throw Error('Error submitting tx')
+                }
+                if(submittedTx.engine_result !== 'tesSUCCESS') {
+                    alert(submittedTx.resultMessage)
+                }
             })
         })
     })
@@ -234,7 +238,6 @@ async function prepareOffer(offer: Transaction): Promise<PreparedTransaction | n
 }
 
 async function signOffer(preparedTx: PreparedTransaction, secret: string): Promise<SignedTransaction | null> {
-    //const test = '{"Flags":2147483648,"TransactionType":"OfferCreate","Account":"rNsjHCBJWAa8JWTTCA2EEd5uREDTeyZiDM","TakerGets":"2000000","TakerPays":{"currency":"USD","issuer":"rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq"},"LastLedgerSequence":21611142,"Fee":"12","Sequence":4}'
     return await signTransaction(preparedTx.txJSON, secret)
 }
 
