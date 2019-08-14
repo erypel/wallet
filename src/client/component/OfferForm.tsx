@@ -151,20 +151,20 @@ class OfferForm extends React.PureComponent<Props, State> {
                         <label>
                             Amount
                             {marketCurrency === 'USD' && <UsdInput id='amount' value={amount} onChange={handleChange} />}
-                            {marketCurrency === 'XRP' && <XrpInput id='amount' value={amount} onChange={handleChange} />} {marketCurrency}
+                            {marketCurrency !== 'USD' && <XrpInput id='amount' value={amount} onChange={handleChange} />} {marketCurrency}
                         </label>
                     </div>
                     <div data-label='limit'>
                         <label>
                             Amount
                             {baseCurrency === 'USD' && <UsdInput id='amount' value={amount} onChange={handleChange} />}
-                            {baseCurrency === 'XRP' && <XrpInput id='amount' value={amount} onChange={handleChange} />} {baseCurrency}
+                            {baseCurrency !== 'USD' && <XrpInput id='amount' value={amount} onChange={handleChange} />} {baseCurrency}
                         </label>
                         <br/>
                         <label>
                             Limit Price
                             {quoteCurrency === 'USD' && <UsdInput id='limitPrice' value={limitPrice} onChange={handleChange} />}
-                            {quoteCurrency === 'XRP' && <XrpInput id='limitPrice' value={limitPrice} onChange={handleChange} />} {quoteCurrency}
+                            {quoteCurrency !== 'USD' && <XrpInput id='limitPrice' value={limitPrice} onChange={handleChange} />} {quoteCurrency}
                         </label>
                         <br/>
                         <label>
