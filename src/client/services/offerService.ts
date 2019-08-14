@@ -19,6 +19,7 @@ import OrderCancellation from '../xrpl/api/model/transaction/OrderCancellation/O
 import { OrderCancellationBuilder } from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellationBuilder'
 import Transaction from '../xrpl/api/model/transaction/Transaction'
 import { orderbookService } from './orderbookService'
+import { issuers } from '../xrpl/api/utils/issuers';
 
 function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
     if (offers.length === 0) {
@@ -39,21 +40,19 @@ function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
     throw Error('Not enough order book depth for order. Try placing a limit order.')
 }
 
-
-
 async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<Amount> {
     const formattedAmount = formatCurrency(amount)
     const value = typeof formattedAmount === 'string' ? formattedAmount : formattedAmount.value
 
-    const counterparty = amount.counterparty || 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'
+    const counterparty = amount.counterparty || issuers[amount.currency][0]
 
     if (isSell) {
         //get bids
-        const bids = await orderbookService.getBids(address, baseCurrency, counterparty, quoteCurrency, counterparty)
+        const bids = await orderbookService.getBids(address, baseCurrency, quoteCurrency)
         return findBidLimitPrice(bids, Number(value)) //TODO probably unsafe
     } else { //isBuy
         //get asks
-        const asks = await orderbookService.getAsks(address, baseCurrency, counterparty, quoteCurrency, counterparty)
+        const asks = await orderbookService.getAsks(address, baseCurrency, quoteCurrency)
         return findBidLimitPrice(asks, Number(amount.value)) //TODO probably unsafe
     }
 }
@@ -66,7 +65,7 @@ async function buildMarketOrder(account: string, isSell: boolean, amount: Amount
     const takerPays = createTakerPays(isSell, amount, limitPrice)
 
     if(typeof takerPays !== 'string' && takerPays.counterparty === undefined) {
-        takerPays.counterparty = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'
+        takerPays.counterparty = issuers[takerPays.currency][0]
     }
 
     const transactionBuilder = new TransactionBuilder(account, 'OfferCreate')

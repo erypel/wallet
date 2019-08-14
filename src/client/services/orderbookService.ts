@@ -7,14 +7,15 @@ import OrderCreate from '../xrpl/api/model/transaction/OrderCreate/OrderCreate'
 import { addOrderToBook, removeOrderFromBook } from '../store/orderbook/actions'
 import { getStore } from '../../App'
 import OrderCancellation from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellation'
+import { issuers } from '../xrpl/api/utils/issuers'
 
 async function getBids(
     address: string, 
-    baseCurrency: string, 
-    baseCounterparty: string = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq', 
-    counterCurrency: string,
-    counterCounterparty: string = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'
+    baseCurrency: string,
+    counterCurrency: string
     ): Promise<Bid[]> {
+        const baseCounterparty = issuers[baseCurrency][0]
+        const counterCounterparty = issuers[counterCurrency][0]
         return await getOrderbook(
             address, baseCurrency, baseCounterparty, counterCurrency, counterCounterparty
         ).then((asksAndBids: AsksAndBids) => {
@@ -25,10 +26,10 @@ async function getBids(
 async function getAsks(
     address: string, 
     baseCurrency: string, 
-    baseCounterparty: string, 
-    counterCurrency: string,
-    counterCounterparty: string
+    counterCurrency: string
 ): Promise<Ask[]> {
+    const baseCounterparty = issuers[baseCurrency][0]
+        const counterCounterparty = issuers[counterCurrency][0]
     return await getOrderbook(
         address, baseCurrency, baseCounterparty, counterCurrency, counterCounterparty
     ).then((asksAndBids: AsksAndBids) => {

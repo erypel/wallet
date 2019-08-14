@@ -1,13 +1,14 @@
 import formatBidsAndAsks from './formatBidsAndAsks'
 import { AsksAndBids } from '../model/transaction/Orderbook/Orderbook'
 import { orderbookService } from '../../../services/orderbookService'
+import { issuers } from './issuers'
 
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({
 	server: 'wss://s.altnet.rippletest.net:51233'
 })
 
-export default async function subscribeToBook(takerPays: string, takerGets: string, issuer: string = 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq'/**Gatehub USD*/): Promise<AsksAndBids> {
+export default async function subscribeToBook(takerPays: string, takerGets: string): Promise<AsksAndBids> {
     return await api.connect().then(async () => { // Omit this if you are already connected
 
     api.connection.on('transaction', (tx: any) => {
@@ -26,20 +27,23 @@ export default async function subscribeToBook(takerPays: string, takerGets: stri
                     "\n  Validated? " + validated)
     })
 
+    const takerGetsIssuer = issuers[takerGets][0]
+    const takerPaysIssuer = issuers[takerPays][0] //TODO
+    
     return await api.request('subscribe', {
         books: [ 
-            {taker_pays: {currency: takerPays}, taker_gets: {currency: takerGets, issuer: issuer}, snapshot: true, both: true},
-            {taker_pays: {currency: takerGets, issuer: issuer}, taker_gets: {currency: takerPays}, snapshot: true, both: true}
+            {taker_pays: {currency: takerPays}, taker_gets: {currency: takerGets, issuer: takerGetsIssuer}, snapshot: true, both: true},
+            {taker_pays: {currency: takerGets, issuer: takerGetsIssuer}, taker_gets: {currency: takerPays}, snapshot: true, both: true}
          ]
     }).then(async (result: AsksAndBids) => {
         const orderbookInfo = {
             "base": {
               "currency": takerPays,
-              "counterparty": issuer
+              "counterparty": takerPaysIssuer
             },
             "counter": {
               "currency": takerGets,
-              "counterparty": issuer
+              "counterparty": takerGetsIssuer
             }
           }
         const directOffers = (result? result.asks : [])
