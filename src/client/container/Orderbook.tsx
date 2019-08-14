@@ -3,33 +3,17 @@ import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import { AppState } from '../store/rootReducer'
 import { fetchOrderbook } from '../store/orderbook/actions'
-import { connect } from 'react-redux'
 import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
 import Ask from '../xrpl/api/model/transaction/Orderbook/Ask'
-import unsubscribeFromBook from '../xrpl/api/utils/unsubscribeFromOrderbook'
 
 interface Props {
     baseCurrency: string,
     quoteCurrency: string,
     bids: Bid[]
     asks: Ask[]
-    loadOrderbook: (
-        baseCurrency: string, 
-        counterCurrency: string
-    ) => void
 }
 
 class Orderbook extends React.PureComponent<Props> {
-    componentWillMount() {
-        const { baseCurrency, quoteCurrency } = this.props
-        this.props.loadOrderbook(baseCurrency, quoteCurrency)
-    }
-
-    componentWillUnmount() {
-        const { baseCurrency, quoteCurrency } = this.props
-        unsubscribeFromBook(baseCurrency, quoteCurrency)
-    }
-
     render() {
         const { bids, asks } = this.props
         const bidsSize = bids.length > 10 ? 10 : bids.length
@@ -87,4 +71,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Orderbook)
+export default Orderbook

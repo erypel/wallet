@@ -8,13 +8,14 @@ import { fetchOpenOrders } from '../store/orderbook/actions'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import { connect } from 'react-redux'
-import UsdInput from './UsdInput';
-import XrpInput from './XrpInput';
+import UsdInput from './UsdInput'
+import XrpInput from './XrpInput'
+import { issuers, Issuers } from '../xrpl/api/utils/issuers'
 
 
 interface Props {
-    baseCurrency: string
-    quoteCurrency: string
+    baseCurrency: keyof Issuers
+    quoteCurrency: keyof Issuers
     account: string
     secret: string
     getOpenOrders: (address: string) => void
@@ -92,9 +93,9 @@ class OfferForm extends React.PureComponent<Props, State> {
         const { state, props, clearForm } = this
         const { account, secret, baseCurrency, quoteCurrency, getOpenOrders } = props
         const { isSell, amount, limitPrice, showAdvanced, timeInForce, isPostOnly } = state
-        const offerAmount = (limitPrice > 0) ? new Amount(baseCurrency, amount.toString(), 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq') 
-            : (isSell) ? new Amount(baseCurrency, amount.toString()) : new Amount(quoteCurrency, amount.toString())
-        const limit = new Amount(quoteCurrency, limitPrice.toString(), 'rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq')
+        const offerAmount = (limitPrice > 0) ? new Amount(String(baseCurrency), amount.toString(), issuers[baseCurrency][0]) 
+            : (isSell) ? new Amount(String(baseCurrency), amount.toString()) : new Amount(String(quoteCurrency), amount.toString())
+        const limit = new Amount(String(quoteCurrency), limitPrice.toString(), issuers[quoteCurrency][0])
         try {
             const offer = await offerService.buildCreateOffer(
                 account, 
@@ -104,8 +105,8 @@ class OfferForm extends React.PureComponent<Props, State> {
                 showAdvanced, 
                 timeInForce, 
                 isPostOnly,
-                baseCurrency,
-                quoteCurrency
+                String(baseCurrency),
+                String(quoteCurrency)
             )
         
             offerService.sendOffer(offer, secret).then(() => {
@@ -151,20 +152,20 @@ class OfferForm extends React.PureComponent<Props, State> {
                         <label>
                             Amount
                             {marketCurrency === 'USD' && <UsdInput id='amount' value={amount} onChange={handleChange} />}
-                            {marketCurrency === 'XRP' && <XrpInput id='amount' value={amount} onChange={handleChange} />} {marketCurrency}
+                            {marketCurrency !== 'USD' && <XrpInput id='amount' value={amount} onChange={handleChange} />} {marketCurrency}
                         </label>
                     </div>
                     <div data-label='limit'>
                         <label>
                             Amount
                             {baseCurrency === 'USD' && <UsdInput id='amount' value={amount} onChange={handleChange} />}
-                            {baseCurrency === 'XRP' && <XrpInput id='amount' value={amount} onChange={handleChange} />} {baseCurrency}
+                            {baseCurrency !== 'USD' && <XrpInput id='amount' value={amount} onChange={handleChange} />} {baseCurrency}
                         </label>
                         <br/>
                         <label>
                             Limit Price
                             {quoteCurrency === 'USD' && <UsdInput id='limitPrice' value={limitPrice} onChange={handleChange} />}
-                            {quoteCurrency === 'XRP' && <XrpInput id='limitPrice' value={limitPrice} onChange={handleChange} />} {quoteCurrency}
+                            {quoteCurrency !== 'USD' && <XrpInput id='limitPrice' value={limitPrice} onChange={handleChange} />} {quoteCurrency}
                         </label>
                         <br/>
                         <label>

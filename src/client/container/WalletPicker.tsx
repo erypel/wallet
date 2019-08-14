@@ -11,23 +11,6 @@ import Wallet from '../model/Wallet'
 import { walletService } from '../services/walletService'
 import { fetchOpenOrders } from '../store/orderbook/actions'
 
-const mapStateToProps = (store: AppState) => {
-    const { wallet, user } = store
-    const { wallets } = wallet
-    return {
-        wallets: wallets,
-        user: user.user
-    }
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-    return {
-        load: (userId: string) => dispatch(loadWallets(userId)),
-        setActive: (wallet: Wallet) => dispatch(setActiveWallet(wallet)),
-        getOpenOrders: (address: string) => dispatch(fetchOpenOrders(address))
-    }
-}
-
 interface Props {
     wallets: WalletMap
     displayCurrency: string
@@ -79,6 +62,23 @@ class WalletPicker extends React.PureComponent<Props> {
     loadOpenOrders = (publicKey: string) => {
         const { getOpenOrders } = this.props
         getOpenOrders(publicKey)
+    }
+}
+
+const mapStateToProps = (store: AppState) => {
+    const { wallet, user } = store
+    const { wallets } = wallet
+    return {
+        wallets: wallets,
+        user: user.user
+    }
+}
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return {
+        load: (userId: string) => dispatch(loadWallets(userId)),
+        setActive: (wallet: Wallet) => dispatch(setActiveWallet(wallet)),
+        getOpenOrders: (address: string) => dispatch(fetchOpenOrders(address))
     }
 }
 
