@@ -98,15 +98,22 @@ export const fetchOpenOrders: ActionCreator<any> = (account: string) => {
     }
 }
 
+export const setTradingPair: ActionCreator<any> = (base: string, quote: string) => {
+    return (dispatch: Dispatch<OrderbookActions>) => {
+        dispatch(setBase(base))
+        dispatch(setQuote(quote))
+    }
+}
+
 export const setBaseCurrency: ActionCreator<any> = (base: string) => {
     return (dispatch: Dispatch<OrderbookActions>) => {
-        dispatch(setBaseCurrency(base))
+        dispatch(setBase(base))
     }
 }
 
 export const setQuoteCurrency: ActionCreator<any> = (quote: string) => {
     return (dispatch: Dispatch<OrderbookActions>) => {
-        dispatch(setBaseCurrency(quote))
+        dispatch(setQuote(quote))
     }
 }
 

@@ -12,16 +12,18 @@ import TradingPairPicker from '../TradingPairPicker'
 interface Props {
     activeWallet?: Wallet
     openOrders: Offer[]
+    baseCurrency: string
+    quoteCurrency: string
 }
 
 class Trade extends React.PureComponent<Props> {
     render() {
-        const { activeWallet, openOrders } = this.props
+        const { activeWallet, openOrders, baseCurrency, quoteCurrency } = this.props
         return <div>
             <TradingPairPicker/>
-            <ExchangeWallet activeWallet={activeWallet} baseCurrency='XRP' quoteCurrency='USD'/>
-            {activeWallet && <OfferForm account={activeWallet.publicKey} secret={activeWallet.privateKey} baseCurrency='XRP' quoteCurrency='USD'/>}
-            <Orderbook baseCurrency='XRP' quoteCurrency='USD'/>
+            <ExchangeWallet activeWallet={activeWallet} baseCurrency={baseCurrency} quoteCurrency={quoteCurrency}/>
+            {activeWallet && <OfferForm account={activeWallet.publicKey} secret={activeWallet.privateKey} baseCurrency={baseCurrency} quoteCurrency={quoteCurrency}/>}
+            <Orderbook baseCurrency={baseCurrency} quoteCurrency={quoteCurrency}/>
             {activeWallet && <OpenOrdersTable openOrders={openOrders} activeWallet={activeWallet}/>}
         </div>
     }
@@ -29,9 +31,12 @@ class Trade extends React.PureComponent<Props> {
 
 const mapStateToProps = (store: AppState) => {
     const { wallet, orderbook } = store
+    const { openOrders, baseCurrency, quoteCurrency } = orderbook
     return {
         activeWallet: wallet.activeWallet,
-        openOrders: orderbook.openOrders
+        openOrders: openOrders,
+        baseCurrency: baseCurrency,
+        quoteCurrency: quoteCurrency
     }
 }
 

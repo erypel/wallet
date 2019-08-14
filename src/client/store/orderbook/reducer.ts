@@ -6,8 +6,8 @@ import {
 } from './types'
 
 const initialState: OrderbookState = {
-    baseCurrency: '',
-    quoteCurrency: '',
+    baseCurrency: 'XRP',
+    quoteCurrency: 'USD',
     asks: [],
     bids: [],
     openOrders: [],
