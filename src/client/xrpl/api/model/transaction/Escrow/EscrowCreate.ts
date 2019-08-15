@@ -2,7 +2,7 @@ import EscrowCreationBuilder from './EscrowCreationBuilder'
 import { TransactionBuilder } from '../TransactionBuilder'
 import Transaction from '../Transaction'
 
-export default class EscrowCreation extends Transaction {
+export default class EscrowCreate extends Transaction {
     Amount: string
     Destination: string
     CancelAfter?: string
