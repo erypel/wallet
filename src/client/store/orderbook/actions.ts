@@ -124,7 +124,7 @@ export const removeOrderFromBook: ActionCreator<any> = (order: OrderCancellation
         const {Account: account, OfferSequence: accountSequence } = order
         for (let i = 0; i < bids.length; i++) {
             const bid = bids[i]
-            const { maker, sequence } = bid.properties
+            const { maker, sequence } = bid.properties!!
             if (maker === account && sequence === accountSequence) {
                 dispatch(removeBid(bid))
                 return
@@ -132,7 +132,7 @@ export const removeOrderFromBook: ActionCreator<any> = (order: OrderCancellation
         }
         for(let i = 0; i < asks.length; i++) {
             const ask = asks[i]
-            const { maker, sequence } = ask.properties
+            const { maker, sequence } = ask.properties!!
             if (maker === account && sequence === accountSequence) {
                 dispatch(removeAsk(ask))
                 return

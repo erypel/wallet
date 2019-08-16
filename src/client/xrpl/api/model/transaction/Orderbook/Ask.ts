@@ -8,7 +8,7 @@ export default interface Ask {
     state?: State
 }
 
-interface Order {
+export interface Order {
     direction: string
     quantity: Amount
     totalPrice: Amount
