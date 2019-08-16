@@ -15,14 +15,14 @@ export default class AccountSet extends Transaction {
 
     constructor(txBuilder: TransactionBuilder, builder: AccountSetBuilder) {
         super(txBuilder)
-        this.ClearFlag
-        this.Domain
-        this.EmailHash
-        this.MessageKey
-        this.SetFlag
-        this.TransferRate
-        this.TickSize
-        this.WalletLocator
-        this.WalletSize
+        this.ClearFlag = builder.clearFlag
+        this.Domain = builder.domain
+        this.EmailHash = builder.emailHash
+        this.MessageKey = builder.messageKey
+        this.SetFlag = builder.setFlag
+        this.TransferRate = builder.transferRate
+        this.TickSize = builder.tickSize
+        this.WalletLocator = builder.walletLocator
+        this.WalletSize = builder.walletSize
     }
 }
