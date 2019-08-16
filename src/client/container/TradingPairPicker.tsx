@@ -16,7 +16,8 @@ interface Props {
 const currencyPairs = [
     ['XRP', 'USD'],
     ['XRP', 'BTC'],
-    ['XRP', 'ETH']
+    ['XRP', 'ETH'],
+    ['USD', 'BTC']
 ]
 
 class TradingPairPicker extends React.PureComponent<Props> {

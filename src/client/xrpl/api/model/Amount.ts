@@ -11,10 +11,6 @@ export default class Amount {
     this.value = value
     this.counterparty = counterparty
   }
-
-  toIssuerAmount() {
-    return new IssuerAmount(this.currency, this.value, this.counterparty)
-  }
 }
 
 export function amountToIssuerAmount(amount: Amount) {
