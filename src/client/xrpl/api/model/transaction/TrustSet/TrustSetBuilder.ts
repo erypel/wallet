@@ -1,4 +1,4 @@
-import { IssuerAmount } from '../../Amount';
+import { IssuerAmount } from '../../Amount'
 
 export default class TrustSetBuilder {
     private readonly _limitAmount: IssuerAmount
