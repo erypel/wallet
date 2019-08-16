@@ -32,8 +32,8 @@ export default async function subscribeToBook(takerPays: string, takerGets: stri
     
     return await api.request('subscribe', {
         books: [ 
-            {taker_pays: {currency: takerPays}, taker_gets: {currency: takerGets, issuer: takerGetsIssuer}, snapshot: true, both: true},
-            {taker_pays: {currency: takerGets, issuer: takerGetsIssuer}, taker_gets: {currency: takerPays}, snapshot: true, both: true}
+            {taker_pays: {currency: takerPays, issuer: takerPaysIssuer}, taker_gets: {currency: takerGets, issuer: takerGetsIssuer}, snapshot: true, both: true},
+            {taker_pays: {currency: takerGets, issuer: takerGetsIssuer}, taker_gets: {currency: takerPays, issuer: takerPaysIssuer}, snapshot: true, both: true}
          ]
     }).then(async (result: AsksAndBids) => {
         const orderbookInfo = {
