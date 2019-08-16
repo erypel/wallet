@@ -1,4 +1,4 @@
-import AccountInfo from '../model/AccountInfo'
+import AccountInfo from '../../model/AccountInfo'
 
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({
