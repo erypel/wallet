@@ -3,8 +3,8 @@ import Amount from '../../Amount'
 // this has the same structure as Ask
 export default interface Bid {
     specification: Order
-    properties: Properties
-    data: object //can include lots of things
+    properties?: Properties
+    data?: object //can include lots of things
     state?: State
 }
 
