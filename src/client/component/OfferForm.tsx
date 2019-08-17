@@ -90,6 +90,7 @@ class OfferForm extends React.PureComponent<Props, State> {
 
     onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        event.stopPropagation()
         const { state, props, clearForm } = this
         const { account, secret, baseCurrency, quoteCurrency, getOpenOrders } = props
         const { isSell, amount, limitPrice, showAdvanced, timeInForce, isPostOnly } = state
