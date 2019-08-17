@@ -46,6 +46,7 @@ class CreateUserForm extends React.PureComponent<CreateUserProps, CreateUserStat
 
     handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        event.stopPropagation()
         const { username, password, verifyPassword } = this.state
         const { createUser, login } = this.props
         const passwordValidation = validatePassword(password)

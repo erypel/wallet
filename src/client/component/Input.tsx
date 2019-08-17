@@ -12,24 +12,26 @@ interface InputProps {
     autoComplete?: 'on' | 'off'
     required?: true | false
     step?: number
+    maxLength?: number
 }
 
 const Input = (props: InputProps) => {
     const { 
         type, value, onChange, className, id, autoComplete, required, placeHolder,
-        step 
+        step, maxLength 
     } = props
     return (
         <input 
-            className={className} 
-            type={type} 
-            id={id} 
-            value={value}
-            placeholder={placeHolder}
-            onChange={onChange} 
-            autoComplete={autoComplete ? autoComplete : "off"}
-            required={required}
-            step={type === 'number' ? step : undefined}
+            className = {className} 
+            type = {type} 
+            id = {id} 
+            value = {value}
+            placeholder = {placeHolder}
+            onChange = {onChange} 
+            autoComplete = {autoComplete ? autoComplete : "off"}
+            required = {required}
+            step = {type === 'number' ? step : undefined}
+            maxLength = {maxLength}
         />
 )}
 export default Input

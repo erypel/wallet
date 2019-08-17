@@ -48,6 +48,7 @@ class UserProfileForm extends React.PureComponent<UserProfileProps, UserProfileS
 
     handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        event.stopPropagation()
         const { firstName, lastName, email } = this.state
         const { updateUser, userId } = this.props
         const user: UserDetail = {

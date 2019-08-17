@@ -191,7 +191,7 @@ function validateCreateOffer(offer: OrderCreate) {
 }
 
 function flagCheck(offer: OrderCreate) {
-    const flags = offer.flags
+    const flags = offer.Flags
     const { tf_IMMEDIATE_OR_CANCEL, tf_FILL_OR_KILL } = OrderCreateFlags
     if (flags && flags.has(tf_IMMEDIATE_OR_CANCEL) && flags.has(tf_FILL_OR_KILL)) {
         throw Error( 'Invalid flags ')

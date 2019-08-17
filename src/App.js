@@ -14,6 +14,7 @@ import configureStore from './client/store/configureStore'
 import './client/main.css'
 import UserProfileForm from './client/container/UserProfileForm'
 import NavBar from './client/container/NavBar'
+import Issue from './client/container/pages/Issue'
 
 const {store, persistor} = configureStore()
 
@@ -34,6 +35,7 @@ class App extends React.PureComponent {
                   <PrivateRoute path='/wallet/:publicKey' component={Wallet}/>
                   <PrivateRoute path='/profile' component={UserProfileForm}/>
                   <PrivateRoute path='/trade' component={Orderbook}/>
+                  <PrivateRoute path='/issue' component={Issue}/>
                   <Route render={() => (<div> Sorry, this page does not exist. </div>)} />
                 </Switch>
               </div>

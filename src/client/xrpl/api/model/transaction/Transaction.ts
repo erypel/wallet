@@ -3,42 +3,26 @@ import { TransactionBuilder } from './TransactionBuilder'
 export default class Transaction {
   Account: string
   TransactionType: string
-  fee?: string
-  sequence?: number
-  accountTxnId?: string
-  flags?: Set<number>
-  lastLedgerSequnces?: number
-  memos?: object[]
-  signers?: object[]
-  sourceTag?: number
-  signingPubKey?: string
-  txnSignature?: string
+  Fee?: string
+  Sequence?: number
+  AccountTxnId?: string
+  Flags?: Set<number>
+  LastLedgerSequence?: number
+  Memos?: object[]
+  Signers?: object[]
+  SourceTag?: number
+  SigningPubKey?: string
+  TxnSignature?: string
 
   constructor(builder: TransactionBuilder) {
     this.Account = builder.account
     this.TransactionType = builder.transactionType
-    this.fee = builder.fee
-    this.sequence = builder.sequence
-    this.accountTxnId = builder.accountTxnId
-    this.flags = builder.flags
-    this.lastLedgerSequnces = builder.lastLedgerSequence
-    this.memos = builder.memos
-    this.signers = builder.signers
+    this.Fee = builder.fee
+    this.Sequence = builder.sequence
+    this.AccountTxnId = builder.accountTxnId
+    this.Flags = builder.flags
+    this.LastLedgerSequence = builder.lastLedgerSequence
+    this.Memos = builder.memos
+    this.Signers = builder.signers
   }
-
-  // prepare(address: string, transaction: string, instructions?: Instructions): Promise<object>
-
-  // toJsonObject(): string
-  // TODO these go somewhere else
-  // sign() {
-  //   //TODO
-  // }
-
-  // function submit() {
-
-  // }
-
-  // function verify() {
-    
-  // }
 }

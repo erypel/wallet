@@ -28,6 +28,8 @@ class LoginForm extends React.PureComponent<LoginContainerProps, LoginContainerS
     }
     
     handleChange = (event: React.FormEvent<HTMLInputElement>) => {
+        event.stopPropagation()
+        event.preventDefault()
         const { currentTarget } = event
         const { value, id } = currentTarget
         this.props.clearMessage()
