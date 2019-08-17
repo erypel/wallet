@@ -9,7 +9,6 @@ import {
 import Ask from '../../xrpl/api/model/transaction/Orderbook/Ask'
 import { ActionCreator, Dispatch } from 'redux'
 import { rippledAccount } from '../../xrpl/rippled/methods/account'
-import Offer from '../../xrpl/rippled/model/Offer'
 import RippledResponse from '../../xrpl/rippled/model/RippledResponse'
 import OrderCreate from '../../xrpl/api/model/transaction/OrderCreate/OrderCreate'
 import { currencyService } from '../../services/currencyService'
@@ -18,9 +17,10 @@ import  { issuerAmountToAmount } from '../../xrpl/api/model/Amount'
 import subscribeToBook from '../../xrpl/api/utils/subscribeToOrderbook'
 import OrderCancellation from '../../xrpl/api/model/transaction/OrderCancellation/OrderCancellation'
 import { AsksAndBids } from '../../xrpl/api/model/transaction/Orderbook/Orderbook'
-import { getAccountOffers } from '../../xrpl/api/utils/account/accountOffers';
+import { getAccountOffers } from '../../xrpl/api/utils/account/accountOffers'
+import AccountOffers, { AccountOffer } from '../../xrpl/api/model/account/AccountOffers'
 
-function setOpenOrders(orders: Offer[]): SetOpenOrdersAction {
+function setOpenOrders(orders: AccountOffer[]): SetOpenOrdersAction {
     return {
         type: SET_OPEN_ORDERS,
         payload: orders
@@ -92,13 +92,9 @@ function removeAsk(ask: Ask): RemoveAskAction {
 
 export const fetchOpenOrders: ActionCreator<any> = (account: string) => {
     return async (dispatch: Dispatch<OrderbookActions>) => {
-        //TODO use the api call instead
-        await getAccountOffers(account).then((res: any) => {
-            console.log('testing new account offers method', res)
-        })
-        await rippledAccount.account_offers(account).then((response: RippledResponse) => {
-            console.log('openOrders', response.result)
-            dispatch(setOpenOrders(response.result.offers))
+        await getAccountOffers(account).then((response: AccountOffers) => {
+            console.log('openOrders', response)
+            dispatch(setOpenOrders(response.offers))
         })
     }
 }

@@ -1,5 +1,5 @@
 import winston from "../../../../utils/logger"
-import SubmittedTransaction from "../../model/transaction/flow/SubmittedTransaction";
+import SubmittedTransaction from "../../model/transaction/flow/SubmittedTransaction"
 const logger = winston(__filename)
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({

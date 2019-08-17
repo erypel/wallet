@@ -7,7 +7,7 @@ import TrustSetBuilder from './TrustSetBuilder'
  * Authorize the other party to hold issuances from this account. (No effect 
  * unless using the asfRequireAuth AccountSet flag.) Cannot be unset.
  */
-export const tf_SETF_AUTH = 65536
+const tf_SETF_AUTH = 65536
 
 /**
  * Blocks rippling between two trustlines of the same currency, if this flag is
@@ -17,22 +17,30 @@ export const tf_SETF_AUTH = 65536
  * can result in tesSUCCESS (making any other changes it can) even if it cannot 
  * enable NoRipple on the trust line.
  */
-export const tf_SET_NO_RIPPLE = 131072
+const tf_SET_NO_RIPPLE = 131072
 
 /**
  * Clears the No-Rippling flag. (See NoRipple for details.)
  */
-export const tf_CLEAR_NO_RIPPLE = 262144
+const tf_CLEAR_NO_RIPPLE = 262144
 
 /**
  * 	Freeze the trustline.
  */
-export const tf_SET_FREEZE = 1048576
+const tf_SET_FREEZE = 1048576
 
 /**
  * 	Unfreeze the trustline.
  */
-export const tf_CLEAR_FREEZE = 2097152
+const tf_CLEAR_FREEZE = 2097152
+
+export const TrustSetFlags = {
+    tf_SETF_AUTH,
+    tf_SET_NO_RIPPLE,
+    tf_CLEAR_NO_RIPPLE,
+    tf_SET_FREEZE,
+    tf_CLEAR_FREEZE
+}
 
 export default class TrustSet extends Transaction {
     LimitAmount: IssuerAmount

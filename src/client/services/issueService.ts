@@ -16,7 +16,7 @@ import { PaymentBuilder } from '../xrpl/api/model/transaction/Payment/PaymentBui
 import Payment from '../xrpl/api/model/transaction/Payment/Payment'
 import verifyTransaction from '../xrpl/api/utils/flow/verifyTransaction'
 import getBalances from '../xrpl/api/utils/getBalances'
-import toJsonObject from '../utils/toJsonObject';
+import toJsonObject from '../utils/toJsonObject'
 
 async function issue(issuingWallet: Wallet, receivingWallet: Wallet, issuance: IssuerAmount) {
     /** 
@@ -26,10 +26,8 @@ async function issue(issuingWallet: Wallet, receivingWallet: Wallet, issuance: I
     * such a trust line.) You can erase issued currency by sending it back to the 
     * issuer.
     */
-    // Check if there is a trust line between the receiver and the issuer with a nonzero limit for the currency
     const trustLine = await getTrustLineForCurrency(issuingWallet.publicKey, receivingWallet.publicKey, issuance.currency)
     if (!trustLine) {
-        // try to create a trust line
         const txId = await createTrustLine(receivingWallet, issuance)
         await waitForTransaction()
         const verified = await verifyTransaction(txId)
@@ -39,7 +37,6 @@ async function issue(issuingWallet: Wallet, receivingWallet: Wallet, issuance: I
         }
     } 
 
-    //send payment transaction
     const txId = await createPayment(issuingWallet, issuance, receivingWallet.publicKey)
     await waitForTransaction()
     const verified = await verifyTransaction(txId)

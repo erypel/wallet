@@ -1,6 +1,6 @@
 import Ask from '../../xrpl/api/model/transaction/Orderbook/Ask'
 import Bid from '../../xrpl/api/model/transaction/Orderbook/Bid'
-import Offer from '../../xrpl/rippled/model/Offer'
+import { AccountOffer } from '../../xrpl/api/model/account/AccountOffers'
 
 export const SET_ASKS = 'SET_ASKS'
 export const SET_BIDS = 'SET_BIDS'
@@ -18,7 +18,7 @@ export interface OrderbookState {
     quoteCurrency: string,
     asks: Ask[]
     bids: Bid[]
-    openOrders: Offer[]
+    openOrders: AccountOffer[]
     isLoading: boolean
 }
 
@@ -54,7 +54,7 @@ export interface SetQuoteAction {
 
 export interface SetOpenOrdersAction {
     type: typeof SET_OPEN_ORDERS
-    payload: Offer[]
+    payload: AccountOffer[]
 }
 
 export interface SetBidsAction {
