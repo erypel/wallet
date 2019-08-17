@@ -1,4 +1,4 @@
-import AccountRoot from './AccountRoot'
+import AccountRoot from '../ledger/AccountRoot'
 
 export default interface AccountInfo {
     account_data: AccountRoot
