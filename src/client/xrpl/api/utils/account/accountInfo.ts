@@ -5,6 +5,8 @@ const api = new RippleAPI({
 	server: 'wss://s.altnet.rippletest.net:51233'
 })
 
-export async function getAccountInfo(account: string): Promise<AccountInfo> {
-    return await api.request('account_info', {account: account})
+export async function getAccountInfo(account: string) {
+    return await api.connect().then(async() => {
+        return await api.request('account_info', {account: account})
+    })
 }

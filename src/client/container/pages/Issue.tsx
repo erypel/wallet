@@ -14,7 +14,7 @@ class Issue extends React.PureComponent<Props> {
         const { activeWallet } = this.props
         return <div>
             <WalletPicker displayCurrency='XRP' activeWallet={activeWallet}/>
-            <IssueForm/>
+            <IssueForm activeWallet={activeWallet}/>
         </div>
     }
 }

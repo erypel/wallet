@@ -4,5 +4,7 @@ const api = new RippleAPI({
 })
 
 export async function norippleCheck(account: string, role: 'gateway' | 'user'): Promise<any> {
-    return await api.request('noripple_check', {account: account, role: role})
+    return await api.connect().then(async() => {
+        return await api.request('noripple_check', {account: account, role: role})
+    })
 }

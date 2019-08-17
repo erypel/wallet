@@ -4,5 +4,7 @@ const api = new RippleAPI({
 })
 
 export async function getAccountOffers(account: string): Promise<any> {
-    return await api.request('account_offers', {account: account})
+    return await api.connect().then(async() => {
+        return await api.request('account_offers', {account: account})
+    })
 }
