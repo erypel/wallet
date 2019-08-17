@@ -18,6 +18,7 @@ import  { issuerAmountToAmount } from '../../xrpl/api/model/Amount'
 import subscribeToBook from '../../xrpl/api/utils/subscribeToOrderbook'
 import OrderCancellation from '../../xrpl/api/model/transaction/OrderCancellation/OrderCancellation'
 import { AsksAndBids } from '../../xrpl/api/model/transaction/Orderbook/Orderbook'
+import { getAccountOffers } from '../../xrpl/api/utils/account/accountOffers';
 
 function setOpenOrders(orders: Offer[]): SetOpenOrdersAction {
     return {
@@ -91,6 +92,10 @@ function removeAsk(ask: Ask): RemoveAskAction {
 
 export const fetchOpenOrders: ActionCreator<any> = (account: string) => {
     return async (dispatch: Dispatch<OrderbookActions>) => {
+        //TODO use the api call instead
+        await getAccountOffers(account).then((res: any) => {
+            console.log('testing new account offers method', res)
+        })
         await rippledAccount.account_offers(account).then((response: RippledResponse) => {
             console.log('openOrders', response.result)
             dispatch(setOpenOrders(response.result.offers))
