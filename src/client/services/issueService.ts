@@ -26,7 +26,7 @@ async function issue(issuingWallet: Wallet, receivingWallet: Wallet, issuance: I
     * issuer.
     */
     // Check if there is a trust line between the receiver and the issuer with a nonzero limit for the currency
-    const trustLine = getTrustLineForCurrency(issuingWallet.publicKey, receivingWallet.publicKey, issuance.currency)
+    const trustLine = await getTrustLineForCurrency(issuingWallet.publicKey, receivingWallet.publicKey, issuance.currency)
     if (!trustLine) {
         // try to create a trust line
         const txId = await createTrustLine(receivingWallet, issuance)
@@ -53,7 +53,7 @@ async function issue(issuingWallet: Wallet, receivingWallet: Wallet, issuance: I
 }
 
 async function waitForTransaction() {
-    return new Promise( resolve => setTimeout(resolve, 20000) );
+    return new Promise( resolve => setTimeout(resolve, 20000) )
 }
 
 async function getTrustLineForCurrency(issuingAccount: string, receivingAccount: string, currency: string): Promise<TrustLine | undefined> {
@@ -91,19 +91,24 @@ async function createTrustLine(wallet: Wallet, limitAmount: IssuerAmount): Promi
 }
 
 async function sendTransaction(tx: Transaction, secret: string): Promise<string> {
-    return await prepareTransaction(tx).then((preppedTx: PreparedTransaction) => {
-        return signTransaction(preppedTx.txJSON, secret).then((signedTx: SignedTransaction | null) => {
-            if(signedTx === null) {
-                throw Error('Error signing')
-            }
-            return submitTransaction(signedTx.signedTransaction).then((submittedTx: SubmittedTransaction | null) => {
-                if(submittedTx === null) {
-                    throw Error('error submitting')
+    try {
+        return await prepareTransaction(tx).then((preppedTx: PreparedTransaction) => {
+            return signTransaction(preppedTx.txJSON, secret).then((signedTx: SignedTransaction | null) => {
+                if(!signedTx) {
+                    throw Error('Error signing')
                 }
-                return signedTx.id
+                return submitTransaction(signedTx.signedTransaction).then((submittedTx: SubmittedTransaction | null) => {
+                    if(!submittedTx) {
+                        throw Error('error submitting')
+                    }
+                    return signedTx.id
+                })
             })
         })
-    })
+    } catch(error) {
+        console.log("error sending tx", error)
+        throw error
+    }
 }
 
 export const issueService = {
