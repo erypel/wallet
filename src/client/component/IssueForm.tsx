@@ -11,6 +11,7 @@ import { getAccountTx } from '../xrpl/api/utils/account/accountTx';
 import { getGatewayBalances } from '../xrpl/api/utils/account/gatewayBalances';
 import { norippleCheck } from '../xrpl/api/utils/account/norippleCheck';
 import { getAccountChannels } from '../xrpl/api/utils/account/accountChannels';
+import { issueService } from '../services/issueService';
 
 interface Props {
     activeWallet?: Wallet
@@ -37,12 +38,19 @@ export default class IssueForm extends React.PureComponent<Props, State> {
     submitIssuance = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         event.stopPropagation() 
-        const { activeWallet } = this.props
+        const { props, state } = this
+        const { activeWallet } = props
+        const { issuingSymbol, numberOfIssuingTokens } = state
          if (!activeWallet) {
              alert('Please select a wallet.')
          } else {
-             const { publicKey } = activeWallet
-             
+             const issuance = {
+                 currency: issuingSymbol,
+                 value: numberOfIssuingTokens.toString(),
+                 issuer: activeWallet.publicKey
+             }
+             issueService.issue(activeWallet, activeWallet, issuance)
+             this.clearForm()
         }
     }
 
@@ -52,6 +60,14 @@ export default class IssueForm extends React.PureComponent<Props, State> {
         this.setState({
             [id]: value as any
         } as Pick<State, FormFields>)
+    }
+
+    clearForm = () => {
+        this.setState({
+            numberOfIssuingTokens: 0.00,
+            issuingSymbol: '',
+            xrpValue: 0.00
+        })
     }
     
     render() {
