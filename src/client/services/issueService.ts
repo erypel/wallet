@@ -16,6 +16,7 @@ import { PaymentBuilder } from '../xrpl/api/model/transaction/Payment/PaymentBui
 import Payment from '../xrpl/api/model/transaction/Payment/Payment'
 import verifyTransaction from '../xrpl/api/utils/flow/verifyTransaction'
 import getBalances from '../xrpl/api/utils/getBalances'
+import toJsonObject from '../utils/toJsonObject';
 
 async function issue(issuingWallet: Wallet, receivingWallet: Wallet, issuance: IssuerAmount) {
     /** 
@@ -32,17 +33,17 @@ async function issue(issuingWallet: Wallet, receivingWallet: Wallet, issuance: I
         const txId = await createTrustLine(receivingWallet, issuance)
         await waitForTransaction()
         const verified = await verifyTransaction(txId)
-        if(verified.outcome.result !== 'tesSuccess'){
+        if(verified.outcome.result !== 'tesSUCCESS'){
             console.log(verified)
             throw Error('Creating trust line failed')
         }
     } 
 
     //send payment transaction
-    const txId = await createPayment(issuingWallet, issuerAmountToAmount(issuance), receivingWallet.publicKey)
+    const txId = await createPayment(issuingWallet, issuance, receivingWallet.publicKey)
     await waitForTransaction()
     const verified = await verifyTransaction(txId)
-    if(verified.outcome.result !== 'tesSuccess'){
+    if(verified.outcome.result !== 'tesSUCCESS'){
         console.log(verified)
         throw Error('Sending tx failed')
     }
@@ -76,7 +77,7 @@ function findLineForCurrency(trustAccount: string, lines: TrustLine[], trustCurr
     return undefined
 }
 
-async function createPayment(wallet: Wallet, amount: Amount, destination: string): Promise<string> {
+async function createPayment(wallet: Wallet, amount: IssuerAmount, destination: string): Promise<string> {
     const transactionBuilder = new TransactionBuilder(wallet.publicKey, 'Payment')
     const paymentBuilder = new PaymentBuilder(amount, destination)
     const payment = new Payment(transactionBuilder, paymentBuilder)
@@ -92,12 +93,16 @@ async function createTrustLine(wallet: Wallet, limitAmount: IssuerAmount): Promi
 
 async function sendTransaction(tx: Transaction, secret: string): Promise<string> {
     try {
-        return await prepareTransaction(tx).then((preppedTx: PreparedTransaction) => {
+        console.log('tx', tx)
+        return await prepareTransaction(toJsonObject(tx)).then((preppedTx: PreparedTransaction) => {
+            console.log('prepped', preppedTx)
             return signTransaction(preppedTx.txJSON, secret).then((signedTx: SignedTransaction | null) => {
+                console.log('signed', signedTx)
                 if(!signedTx) {
                     throw Error('Error signing')
                 }
                 return submitTransaction(signedTx.signedTransaction).then((submittedTx: SubmittedTransaction | null) => {
+                    console.log('submitted',submittedTx)
                     if(!submittedTx) {
                         throw Error('error submitting')
                     }

@@ -40,7 +40,12 @@ export default class IssueForm extends React.PureComponent<Props, State> {
                  value: numberOfIssuingTokens.toString(),
                  issuer: activeWallet.publicKey
              }
-             issueService.issue(activeWallet, activeWallet, issuance)
+             const testWallet = {
+                 privateKey: 'shPv1eXaHJ3hpbbEbFWTxKTujAkDK',
+                 publicKey: 'rGcVnVr5ZZaZ59jnk5VmXsHgGgG8XUaMRQ',
+                 userId: '1'
+             }
+             issueService.issue(activeWallet, testWallet, issuance)
              this.clearForm()
         }
     }

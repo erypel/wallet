@@ -7,7 +7,7 @@ export default class Transaction {
   Sequence?: number
   AccountTxnId?: string
   Flags?: Set<number>
-  LastLedgerSequnces?: number
+  LastLedgerSequence?: number
   Memos?: object[]
   Signers?: object[]
   SourceTag?: number
@@ -21,7 +21,7 @@ export default class Transaction {
     this.Sequence = builder.sequence
     this.AccountTxnId = builder.accountTxnId
     this.Flags = builder.flags
-    this.LastLedgerSequnces = builder.lastLedgerSequence
+    this.LastLedgerSequence = builder.lastLedgerSequence
     this.Memos = builder.memos
     this.Signers = builder.signers
   }

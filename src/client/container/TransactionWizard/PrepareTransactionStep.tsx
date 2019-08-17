@@ -8,6 +8,8 @@ import Currency from '../../xrpl/api/model/Currency'
 import { TransactionBuilder } from '../../xrpl/api/model/transaction/TransactionBuilder'
 import { PaymentBuilder } from '../../xrpl/api/model/transaction/Payment/PaymentBuilder'
 import Payment from '../../xrpl/api/model/transaction/Payment/Payment'
+import toJsonObject from '../../utils/toJsonObject'
+import prepareTransaction from '../../xrpl/api/utils/flow/prepareTransacton'
 
 
 interface Props {
@@ -26,7 +28,7 @@ class PrepareTransactionStep extends React.PureComponent<Props> {
         const builder = new TransactionBuilder(srcAddress, 'Payment')
         const paymentBuilder = new PaymentBuilder(amt, destAddress)
         const payment = new Payment(builder, paymentBuilder)
-        const preparedPayment = await payment.preparePayment()
+        const preparedPayment = await prepareTransaction(toJsonObject(payment))
         console.log("prepped", preparedPayment)
         const { setAmount, setDestAddress, setTxJson } = this.props
         setAmount(amount)
