@@ -4,6 +4,8 @@ import { AccountTransaction } from '../xrpl/api/model/account/AccountTransaction
 import { currencyService } from '../services/currencyService'
 import rippleTimeToIso8601 from '../xrpl/api/utils/rippleTimeToIso8601'
 import Payment from '../xrpl/api/model/transaction/Payment/Payment'
+import './Table.css'
+import '../main.css'
 
 interface Props {
     transactions: AccountTransaction[]
@@ -21,9 +23,9 @@ export default class TransactionTable extends React.PureComponent<Props> {
                 <div>Loading...</div>
             </div>
         }
-        return <div>
+        return <>
             <h1>Transactions</h1>
-            <Table>
+            <Table className='container-black'>
                 <Thead>
                     <Tr>
                         <Th>Transaction Type</Th>
@@ -36,7 +38,7 @@ export default class TransactionTable extends React.PureComponent<Props> {
                     {this.mapTransactions()}
                 </Tbody>
             </Table>
-        </div>
+        </>
     }
 
     mapTransactions = () => {
@@ -63,7 +65,7 @@ export default class TransactionTable extends React.PureComponent<Props> {
             <Td>Payment</Td>
             <Td>{currencyService.createCurrencyString(amount)}</Td>
             <Td>{dest}</Td>
-            <Td>{rippleTimeToIso8601(date!!).toUTCString()}</Td>
+            <Td>{rippleTimeToIso8601(date!!).toDateString()}</Td>
         </Tr>
     }
 }

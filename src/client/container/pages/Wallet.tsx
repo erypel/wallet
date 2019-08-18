@@ -37,25 +37,29 @@ class Wallet extends React.PureComponent<Props> {
             return <div>ERROR</div>
         }
         return <>
-        <Subheader title='Send and Receive'/>
-        <div className='content'>
-            <div className='width-2-3'>
-                <Balance address={publicKey}/>
-                <br/>
-                <Tabs>
-                    <div data-label="Send">
-                        <TransactionWizard publicKey={publicKey} privateKey={privateKey}/>
+            <Subheader title='Send and Receive'/>
+            <div className='section'>
+                <div className='content'>
+                    <div className='width-2-3'>
+                        <Balance address={publicKey}/>
+                        <br/>
+                        <Tabs>
+                            <div data-label="Send">
+                                <TransactionWizard publicKey={publicKey} privateKey={privateKey}/>
+                            </div>
+                            <div data-label="Receive">
+                                <div className='container-white'>Send XRP here: {publicKey}</div>
+                            </div>
+                        </Tabs>
+                        <br/>
+                        <Link to='/home'>Back to list</Link>
+                        <br/>
                     </div>
-                    <div data-label="Receive">
-                        <div className='container-white'>Send XRP here: {publicKey}</div>
-                    </div>
-                </Tabs>
-                <br/>
-                <TransactionTable transactions={transactions} isLoading={isLoadingTransactions}/>
-                <Link to='/home'>Back to list</Link>
-                <br/>
+                </div>
+                <div className='feature'>
+                    <TransactionTable transactions={transactions} isLoading={isLoadingTransactions}/>
+                </div>
             </div>
-        </div>
         </>
     }
 }
