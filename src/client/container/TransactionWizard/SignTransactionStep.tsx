@@ -5,6 +5,7 @@ import { setSignedTransaction } from '../../store/transaction/actions'
 import { connect } from 'react-redux'
 import SignedTransaction from '../../xrpl/api/model/transaction/flow/SignedTransaction'
 import signTransaction from '../../xrpl/api/utils/flow/signTransaction'
+import dropsToXrp from '../../xrpl/api/utils/dropsToXrp';
 
 
 interface Props {
@@ -34,7 +35,7 @@ class PrepareTransactionStep extends React.PureComponent<Props> {
     render() {
         const { amount, srcAddress, destAddress } = this.props
         return <div className='container-white'>
-            <p>Are you sure that you want to send {amount} from {srcAddress} to {destAddress}?</p>
+            <p>Are you sure that you want to send {dropsToXrp(amount)} XRP from {srcAddress} to {destAddress}?</p>
             <Button buttonText={'Confirm'} onClick={this.signTransaction} className='button-green'/>
         </div>
     }
