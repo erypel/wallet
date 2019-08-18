@@ -4,19 +4,35 @@ import TransactionWizard from '../TransactionWizard/TransactionWizard'
 import { Link } from 'react-router-dom'
 import Balance from '../Balance'
 import { WalletMap } from '../../store/wallet/types'
-import Tabs from '../Tabs';
+import Tabs from '../Tabs'
 import Subheader from '../../component/Subheader'
+import TransactionTable from '../../component/TransactionTable'
+import { AccountTransaction } from '../../xrpl/api/model/account/AccountTransactions'
+import { AppState } from '../../store/rootReducer'
+import { ThunkDispatch } from 'redux-thunk'
+import { AnyAction } from 'redux'
+import { setTransactionsForAccount } from '../../store/transaction/actions'
 
 interface Props {
     match: any
     publicKey: string
     wallets: WalletMap
+    transactions: AccountTransaction[]
+    isLoadingTransactions: boolean
+    loadTransactions: (account: string) => void
 }
 
 class Wallet extends React.PureComponent<Props> {
+    constructor(props: Props) {
+        super(props)
+        const { loadTransactions, match } = props
+        loadTransactions(match.params.publicKey)
+    }
+
     render() {
-        const { publicKey } = this.props.match.params
-        const privateKey = this.props.wallets[publicKey].privateKey
+        const { wallets, transactions, isLoadingTransactions, match } = this.props
+        const { publicKey } = match.params
+        const privateKey = wallets[publicKey].privateKey
         if(!privateKey) {
             return <div>ERROR</div>
         }
@@ -35,6 +51,7 @@ class Wallet extends React.PureComponent<Props> {
                     </div>
                 </Tabs>
                 <br/>
+                <TransactionTable transactions={transactions} isLoading={isLoadingTransactions}/>
                 <Link to='/home'>Back to list</Link>
                 <br/>
             </div>
@@ -43,10 +60,21 @@ class Wallet extends React.PureComponent<Props> {
     }
 }
 
-const mapStateToProps = (store: any) => {
+const mapStateToProps = (store: AppState) => {
+    const { wallet, tx } = store
     return {
-        wallets: store.wallet.wallets
+        wallets: wallet.wallets,
+        transactions: tx.accountTransactions,
+        isLoadingTransactions: tx.isLoadingAccountTransactions
     }
 }
 
-export default connect(mapStateToProps)(Wallet)
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return {
+        loadTransactions: (account: string) => dispatch(
+            setTransactionsForAccount(account)
+        )
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Wallet)

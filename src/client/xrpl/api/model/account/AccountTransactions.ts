@@ -1,3 +1,5 @@
+import { TransactionTypes } from '../transaction/Transaction'
+
 export default interface AccountTransactions {
     account: string
     ledger_index_min: number
@@ -11,7 +13,7 @@ export default interface AccountTransactions {
 export interface AccountTransaction {
     ledger_index: number
     meta: object | string
-    tx?: object
+    tx?: TransactionTypes
     tx_blob?: string
     validated: boolean
 }
