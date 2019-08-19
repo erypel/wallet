@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import SignedTransaction from '../../xrpl/api/model/transaction/flow/SignedTransaction'
 import VerifiedTransaction from '../../xrpl/api/model/transaction/flow/VerifiedTransaction'
-import verifyTransaction from '../../xrpl/api/utils/flow/verifyTransaction'
+import { transactionService } from '../../services/transactionService'
 
 interface Props {
     signedTx: SignedTransaction
@@ -27,7 +27,10 @@ class VerifyTransactionStep extends React.PureComponent<Props, State> {
     verifyTransaction = async () => {
         const { signedTx } = this.props
         await this.waitForTransaction()
-        const verifiedTransaction = await verifyTransaction(signedTx!!.id)
+        const verifiedTransaction = await transactionService.verify(signedTx!!.id)
+        if (verifiedTransaction === null) {
+            throw Error('Error verifying transaction!')
+        }
         console.log('verified', verifiedTransaction)
         this.setState({
             verifiedTransaction: verifiedTransaction

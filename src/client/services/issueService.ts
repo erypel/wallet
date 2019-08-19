@@ -7,7 +7,6 @@ import { IssuerAmount } from '../xrpl/api/model/Amount'
 import TrustSet from '../xrpl/api/model/transaction/TrustSet/TrustSet'
 import { PaymentBuilder } from '../xrpl/api/model/transaction/Payment/PaymentBuilder'
 import Payment from '../xrpl/api/model/transaction/Payment/Payment'
-import verifyTransaction from '../xrpl/api/utils/flow/verifyTransaction'
 import getBalances from '../xrpl/api/utils/getBalances'
 import { transactionService } from './transactionService'
 
@@ -23,8 +22,8 @@ async function issue(issuingWallet: Wallet, receivingWallet: Wallet, issuance: I
     if (!trustLine) {
         const txId = await createTrustLine(receivingWallet, issuance)
         await waitForTransaction()
-        const verified = await verifyTransaction(txId)
-        if(verified.outcome.result !== 'tesSUCCESS'){
+        const verified = await transactionService.verify(txId)
+        if(!verified || verified.outcome.result !== 'tesSUCCESS'){
             console.log(verified)
             throw Error('Creating trust line failed')
         }
@@ -32,8 +31,8 @@ async function issue(issuingWallet: Wallet, receivingWallet: Wallet, issuance: I
 
     const txId = await createPayment(issuingWallet, issuance, receivingWallet.publicKey)
     await waitForTransaction()
-    const verified = await verifyTransaction(txId)
-    if(verified.outcome.result !== 'tesSUCCESS'){
+    const verified = await transactionService.verify(txId)
+    if(!verified || verified.outcome.result !== 'tesSUCCESS'){
         console.log(verified)
         throw Error('Sending tx failed')
     }
