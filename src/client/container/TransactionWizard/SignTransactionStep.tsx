@@ -5,7 +5,7 @@ import { setSignedTransaction } from '../../store/transaction/actions'
 import { connect } from 'react-redux'
 import SignedTransaction from '../../xrpl/api/model/transaction/flow/SignedTransaction'
 import signTransaction from '../../xrpl/api/utils/flow/signTransaction'
-import dropsToXrp from '../../xrpl/api/utils/dropsToXrp';
+import dropsToXrp from '../../xrpl/api/utils/dropsToXrp'
 
 
 interface Props {

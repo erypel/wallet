@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto from 'crypto'
 const BASE58 = 'rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz'
 const baseX = require('base-x')(BASE58)
 const RippleAPI = require('ripple-lib').RippleAPI

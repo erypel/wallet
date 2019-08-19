@@ -10,6 +10,7 @@ import Subheader from '../component/Subheader'
 import { history } from '../utils/history'
 import { loadWallets } from '../store/wallet/actions'
 import { walletService } from '../services/walletService'
+import ImportWalletModal from '../component/ImportWalletModal';
 
 const mapStateToProps = (store: AppState) => {
     return {
@@ -75,6 +76,7 @@ class WalletTable extends React.PureComponent<Props> {
                 </table>
             })}
             <GenerateWalletButton className='button-green'/>
+            <ImportWalletModal/>
         </div>
     }
 }

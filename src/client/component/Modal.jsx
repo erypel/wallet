@@ -2,7 +2,7 @@ import React from 'react'
 import Button from './Button'
 import './Modal.css'
 
-const modal = (props) => {
+const Modal = (props) => {
     const {title, children, onClose} = props
     return (
         <div>
@@ -23,4 +23,4 @@ const modal = (props) => {
     )
 }
 
-export default modal;
+export default Modal
