@@ -1,8 +1,13 @@
-import { SET_TX_JSON, SET_SIGNED_TRANSACTION, SET_DEST_ADDRESS, SET_SRC_SECRET, SET_SRC_ADDRESS, SET_AMOUNT, SetAccountTransactions, SET_TRANSACTIONS, SetLoadingAccountTx, SET_LOADING_TX } from './types'
+import { 
+    SET_SIGNED_TRANSACTION, SET_DEST_ADDRESS, SET_SRC_SECRET, 
+    SET_SRC_ADDRESS, SET_AMOUNT, SetAccountTransactions, SET_TRANSACTIONS, 
+    SetLoadingAccountTx, SET_LOADING_TX, SET_PREPARED_TRANSACTION 
+} from './types'
 import SignedTransaction from '../../xrpl/api/model/transaction/flow/SignedTransaction'
 import { AccountTransaction } from '../../xrpl/api/model/account/AccountTransactions'
 import { ActionCreator, Dispatch } from 'redux'
 import { getAccountTx } from '../../xrpl/api/utils/account/accountTx'
+import PreparedTransaction from '../../xrpl/api/model/transaction/flow/PreparedTransaction'
 
 export const setAmount = (amount: string) => {
     return {type: SET_AMOUNT, payload: amount}
@@ -20,8 +25,8 @@ export const setDestAddress= (address: string) => {
     return {type: SET_DEST_ADDRESS, payload: address}
 }
 
-export const setTxJson = (txJson: string) => {
-    return {type: SET_TX_JSON, payload: txJson}
+export const setPreparedTransaction = (tx: PreparedTransaction) => {
+    return {type: SET_PREPARED_TRANSACTION, payload: tx}
 }
 
 export const setSignedTransaction = (tx: SignedTransaction) => {

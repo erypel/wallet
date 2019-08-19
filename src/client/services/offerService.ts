@@ -1,15 +1,6 @@
 import OrderCreate, { OrderCreateFlags } from '../xrpl/api/model/transaction/OrderCreate/OrderCreate'
 import { OrderCreateBuilder } from '../xrpl/api/model/transaction/OrderCreate/OrderCreateBuilder'
 import { TransactionBuilder } from '../xrpl/api/model/transaction/TransactionBuilder'
-import prepareTransaction from '../xrpl/api/utils/flow/prepareTransacton'
-import PreparedTransaction from '../xrpl/api/model/transaction/flow/PreparedTransaction'
-import toJsonObject from '../utils/toJsonObject'
-import signTransaction from '../xrpl/api/utils/flow/signTransaction'
-import submitTransaction from '../xrpl/api/utils/flow/submitTransaction'
-import SignedTransaction from '../xrpl/api/model/transaction/flow/SignedTransaction'
-import verifyTransaction from '../xrpl/api/utils/flow/verifyTransaction'
-import SubmittedTransaction from '../xrpl/api/model/transaction/flow/SubmittedTransaction'
-import VerifiedTransaction from '../xrpl/api/model/transaction/flow/VerifiedTransaction'
 import Amount from '../xrpl/api/model/Amount'
 import xrpToDrops from '../xrpl/api/utils/xrpToDrops'
 import iso8601ToRippleTime from '../xrpl/api/utils/iso8601ToRippleTime'
@@ -17,9 +8,9 @@ import Ask from '../xrpl/api/model/transaction/Orderbook/Ask'
 import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
 import OrderCancellation from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellation'
 import { OrderCancellationBuilder } from '../xrpl/api/model/transaction/OrderCancellation/OrderCancellationBuilder'
-import Transaction from '../xrpl/api/model/transaction/Transaction'
 import { orderbookService } from './orderbookService'
-import { issuers } from '../xrpl/api/utils/issuers';
+import { issuers } from '../xrpl/api/utils/issuers'
+import { transactionService } from './transactionService'
 
 function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
     if (offers.length === 0) {
@@ -157,7 +148,7 @@ function createTakerPays(isSell: boolean, amount: Amount, limit: Amount): Amount
 
 async function cancelOffer(account: string, secret: string, orderSequence: number) {
     const orderCancellation = buildOrderCancellation(account, orderSequence)
-    return await sendOffer(orderCancellation, secret)
+    return await transactionService.send(orderCancellation, secret)
 }
 
 function buildOrderCancellation(account: string, orderSequence: number): OrderCancellation {
@@ -198,54 +189,9 @@ function flagCheck(offer: OrderCreate) {
     }
 }
 
-async function sendOffer(offer: Transaction, secret: string) {
-    return await prepareOffer(offer).then(async (preppedTx: PreparedTransaction | null) => {
-        if(preppedTx === null) {
-            throw Error('Error prepping tx')
-        }
-        console.log('prepped offer', preppedTx)
-        return await signOffer(preppedTx, secret).then(async (signedTx: SignedTransaction | null) => {
-            if(signedTx === null) {
-                throw Error('Error signing tx')
-            }
-            console.log('signed', signedTx)
-            return await submitOffer(signedTx).then((submittedTx: SubmittedTransaction | null) => {
-                console.log('submitted', submittedTx)
-                if(submittedTx === null) {
-                    throw Error('Error submitting tx')
-                }
-                if(submittedTx.engine_result !== 'tesSUCCESS') {
-                    alert(submittedTx.engine_result_message)
-                }
-            })
-        })
-    })
-}
-
-async function prepareOffer(offer: Transaction): Promise<PreparedTransaction | null> {
-    const offerJson = toJsonObject(offer)
-    return await prepareTransaction(offerJson).then((preparedTx: PreparedTransaction) => {
-        console.log(preparedTx)
-        return preparedTx
-    })
-}
-
-async function signOffer(preparedTx: PreparedTransaction, secret: string): Promise<SignedTransaction | null> {
-    return await signTransaction(preparedTx.txJSON, secret)
-}
-
-async function submitOffer(signedTx: SignedTransaction): Promise<SubmittedTransaction | null> {
-    return await submitTransaction(signedTx.signedTransaction)
-}
-
-async function verifyOffer(txId: string): Promise<VerifiedTransaction | null> {
-    return await verifyTransaction(txId)
-}
-
 export const offerService = {
     buildOrderCancellation,
     buildCreateOffer,
     validateCreateOffer,
-    sendOffer, 
     cancelOffer
 }

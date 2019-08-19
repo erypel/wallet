@@ -4,14 +4,15 @@ import { Dispatch } from 'redux'
 import { setSignedTransaction } from '../../store/transaction/actions'
 import { connect } from 'react-redux'
 import SignedTransaction from '../../xrpl/api/model/transaction/flow/SignedTransaction'
-import signTransaction from '../../xrpl/api/utils/flow/signTransaction'
 import dropsToXrp from '../../xrpl/api/utils/dropsToXrp'
+import { transactionService } from '../../services/transactionService'
+import PreparedTransaction from '../../xrpl/api/model/transaction/flow/PreparedTransaction'
 
 
 interface Props {
     next: () => void
     setSignedTransaction: (signedTx: SignedTransaction) => void
-    txJson: string
+    preparedTx: PreparedTransaction
     srcSecret: string
     amount: string
     srcAddress: string
@@ -20,9 +21,8 @@ interface Props {
 
 class PrepareTransactionStep extends React.PureComponent<Props> {
     signTransaction = async () => {
-        const { txJson, srcSecret } = this.props
-        const { next, setSignedTransaction } = this.props
-        const signedTx = await signTransaction(txJson!!, srcSecret!!)
+        const { next, setSignedTransaction, preparedTx, srcSecret } = this.props
+        const signedTx = await transactionService.sign(preparedTx, srcSecret!!)
         if(signedTx) {
             setSignedTransaction(signedTx)
             console.log('signed', signedTx)
@@ -43,9 +43,9 @@ class PrepareTransactionStep extends React.PureComponent<Props> {
 
 const mapStateToProps = (store: any) => {
     const { tx } = store
-    const { txJSON, srcAddress, srcSecret, amount, destAddress } = tx
+    const { srcAddress, srcSecret, amount, destAddress, preparedTransaction } = tx
     return {
-        txJson: txJSON,
+        preparedTx: preparedTransaction,
         srcSecret: srcSecret,
         amount: amount,
         srcAddress: srcAddress,
