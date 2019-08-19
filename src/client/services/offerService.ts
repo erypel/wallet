@@ -215,7 +215,7 @@ async function sendOffer(offer: Transaction, secret: string) {
                     throw Error('Error submitting tx')
                 }
                 if(submittedTx.engine_result !== 'tesSUCCESS') {
-                    alert(submittedTx.resultMessage)
+                    alert(submittedTx.engine_result_message)
                 }
             })
         })

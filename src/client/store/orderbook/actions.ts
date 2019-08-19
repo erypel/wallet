@@ -8,8 +8,6 @@ import {
 } from './types'
 import Ask from '../../xrpl/api/model/transaction/Orderbook/Ask'
 import { ActionCreator, Dispatch } from 'redux'
-import { rippledAccount } from '../../xrpl/rippled/methods/account'
-import RippledResponse from '../../xrpl/rippled/model/RippledResponse'
 import OrderCreate from '../../xrpl/api/model/transaction/OrderCreate/OrderCreate'
 import { currencyService } from '../../services/currencyService'
 import { AppState } from '../rootReducer'
