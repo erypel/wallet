@@ -1,8 +1,20 @@
 import { TransactionBuilder } from './TransactionBuilder'
+import Payment from './Payment/Payment'
+import TrustSet from './TrustSet/TrustSet'
+import OrderCancellation from './OrderCancellation/OrderCancellation'
+import OrderCreate from './OrderCreate/OrderCreate'
+import EscrowCancel from './Escrow/EscrowCancel'
+import EscrowFinish from './Escrow/EscrowFinish'
+import EscrowCreate from './Escrow/EscrowCreate'
+import AccountSet from './AccountSet/AccountSet'
+
+export type TransactionTypes = AccountSet | EscrowCreate | EscrowCancel 
+  | EscrowFinish | OrderCreate | Payment | TrustSet | OrderCancellation
 
 export default class Transaction {
   Account: string
   TransactionType: string
+  date?: number
   Fee?: string
   Sequence?: number
   AccountTxnId?: string

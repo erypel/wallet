@@ -3,20 +3,12 @@ import { getAccountLines } from '../xrpl/api/utils/account/accountLines'
 import { TrustLine } from '../xrpl/api/model/account/AccountLines'
 import TrustSetBuilder from '../xrpl/api/model/transaction/TrustSet/TrustSetBuilder'
 import { TransactionBuilder } from '../xrpl/api/model/transaction/TransactionBuilder'
-import Amount, { IssuerAmount, issuerAmountToAmount } from '../xrpl/api/model/Amount'
+import { IssuerAmount } from '../xrpl/api/model/Amount'
 import TrustSet from '../xrpl/api/model/transaction/TrustSet/TrustSet'
-import prepareTransaction from '../xrpl/api/utils/flow/prepareTransacton'
-import PreparedTransaction from '../xrpl/api/model/transaction/flow/PreparedTransaction'
-import signTransaction from '../xrpl/api/utils/flow/signTransaction'
-import SignedTransaction from '../xrpl/api/model/transaction/flow/SignedTransaction'
-import submitTransaction from '../xrpl/api/utils/flow/submitTransaction'
-import SubmittedTransaction from '../xrpl/api/model/transaction/flow/SubmittedTransaction'
-import Transaction from '../xrpl/api/model/transaction/Transaction'
 import { PaymentBuilder } from '../xrpl/api/model/transaction/Payment/PaymentBuilder'
 import Payment from '../xrpl/api/model/transaction/Payment/Payment'
-import verifyTransaction from '../xrpl/api/utils/flow/verifyTransaction'
 import getBalances from '../xrpl/api/utils/getBalances'
-import toJsonObject from '../utils/toJsonObject'
+import { transactionService } from './transactionService'
 
 async function issue(issuingWallet: Wallet, receivingWallet: Wallet, issuance: IssuerAmount) {
     /** 
@@ -30,8 +22,8 @@ async function issue(issuingWallet: Wallet, receivingWallet: Wallet, issuance: I
     if (!trustLine) {
         const txId = await createTrustLine(receivingWallet, issuance)
         await waitForTransaction()
-        const verified = await verifyTransaction(txId)
-        if(verified.outcome.result !== 'tesSUCCESS'){
+        const verified = await transactionService.verify(txId)
+        if(!verified || verified.outcome.result !== 'tesSUCCESS'){
             console.log(verified)
             throw Error('Creating trust line failed')
         }
@@ -39,8 +31,8 @@ async function issue(issuingWallet: Wallet, receivingWallet: Wallet, issuance: I
 
     const txId = await createPayment(issuingWallet, issuance, receivingWallet.publicKey)
     await waitForTransaction()
-    const verified = await verifyTransaction(txId)
-    if(verified.outcome.result !== 'tesSUCCESS'){
+    const verified = await transactionService.verify(txId)
+    if(!verified || verified.outcome.result !== 'tesSUCCESS'){
         console.log(verified)
         throw Error('Sending tx failed')
     }
@@ -78,39 +70,14 @@ async function createPayment(wallet: Wallet, amount: IssuerAmount, destination: 
     const transactionBuilder = new TransactionBuilder(wallet.publicKey, 'Payment')
     const paymentBuilder = new PaymentBuilder(amount, destination)
     const payment = new Payment(transactionBuilder, paymentBuilder)
-    return await sendTransaction(payment, wallet.privateKey)
+    return await transactionService.send(payment, wallet.privateKey)
 }
 
 async function createTrustLine(wallet: Wallet, limitAmount: IssuerAmount): Promise<string> {
     const transactionBuilder = new TransactionBuilder(wallet.publicKey, 'TrustSet')
     const trustSetBuilder = new TrustSetBuilder(limitAmount)
     const trustSet = new TrustSet(transactionBuilder, trustSetBuilder)
-    return await sendTransaction(trustSet, wallet.privateKey)
-}
-
-async function sendTransaction(tx: Transaction, secret: string): Promise<string> {
-    try {
-        console.log('tx', tx)
-        return await prepareTransaction(toJsonObject(tx)).then((preppedTx: PreparedTransaction) => {
-            console.log('prepped', preppedTx)
-            return signTransaction(preppedTx.txJSON, secret).then((signedTx: SignedTransaction | null) => {
-                console.log('signed', signedTx)
-                if(!signedTx) {
-                    throw Error('Error signing')
-                }
-                return submitTransaction(signedTx.signedTransaction).then((submittedTx: SubmittedTransaction | null) => {
-                    console.log('submitted',submittedTx)
-                    if(!submittedTx) {
-                        throw Error('error submitting')
-                    }
-                    return signedTx.id
-                })
-            })
-        })
-    } catch(error) {
-        console.log("error sending tx", error)
-        throw error
-    }
+    return await transactionService.send(trustSet, wallet.privateKey)
 }
 
 export const issueService = {

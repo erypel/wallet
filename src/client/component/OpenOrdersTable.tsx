@@ -1,4 +1,3 @@
-import Offer from '../xrpl/rippled/model/Offer'
 import React from 'react'
 import { currencyService } from '../services/currencyService'
 import Button from './Button'
@@ -8,9 +7,10 @@ import { fetchOpenOrders } from '../store/orderbook/actions'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import { connect } from 'react-redux'
+import { AccountOffer } from '../xrpl/api/model/account/AccountOffers'
 
 interface Props {
-    openOrders: Offer[]
+    openOrders: AccountOffer[]
     activeWallet: Wallet
     getOpenOrders: (address: string) => void
 }
@@ -41,7 +41,7 @@ class OpenOrdersTable extends React.PureComponent<Props> {
             <td colSpan={3}>No open orders</td>
             </tr>
         }
-        return openOrders.map((order: Offer) => {
+        return openOrders.map((order: AccountOffer) => {
             const { taker_gets: takerGets, taker_pays: takerPays, seq } = order
             return <tr key={`${seq}`}>
                 <td>{currencyService.createCurrencyString(takerGets)}</td>

@@ -9,8 +9,23 @@ html {
 .section {
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
+    align-items: top;
+}
+
+.content {
+    /* height: 5em; */
+    text-align: center;
+}
+
+.feature {
+    text-align: center;
+}
+
+.feature h1 {
+    margin-top: 0;
+    color: white;
 }
 
 .menu {
@@ -86,11 +101,6 @@ html {
     font-weight: bold;
     font-size: 2em;
     margin-top: 0;
-}
-
-.content {
-    /* height: 5em; */
-    text-align: center;
 }
 
 a {
@@ -219,7 +229,7 @@ a {
 
 .width-2-3 {
     width: 66%;
-    display: inline-block
+    display: inline-block;
 }
 
 .container-black {
@@ -361,11 +371,8 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
-/*
-.feature-2 {
-    background-color: #F09A9D;
-}
 
+/*
 .feature-3 {
     background-color: #C8C6FA;
 } */
@@ -376,6 +383,9 @@ input:checked + .slider:before {
     /* body {
         background-color: red; 
     } */
+    .content, .feature {
+        width: 100%;
+    }
 }
   
 /* Tablet Styles */
@@ -385,10 +395,12 @@ input:checked + .slider:before {
         background-color: green;
     } */
 
-    /* .sign-up,
-    .feature-1, now orderbook
-    .feature-2,
-    .feature-3 {
+    /* .sign-up,*/
+    /*.feature-1, now orderbook*/
+    .content, .feature {
+        width: 100%;
+    }
+    /*.feature-3 {
     width: 50%;
   } */
 }
@@ -401,13 +413,14 @@ input:checked + .slider:before {
     } */
 
     .App {
-        width: 960px;
         margin: 0 auto;
      }
      /*
-    .feature-1,
-    .feature-2,
-    .feature-3 {
+    .feature-1,*/
+    .content, .feature {
+        width: 50%;
+    }
+    /*.feature-3 {
         width: 33.3%;
     } */
 }

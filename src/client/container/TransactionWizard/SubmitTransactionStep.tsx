@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import SignedTransaction from '../../xrpl/api/model/transaction/flow/SignedTransaction'
-import submitTransaction from '../../xrpl/api/utils/flow/submitTransaction'
+import { transactionService } from '../../services/transactionService'
 
 
 interface Props {
@@ -13,7 +13,7 @@ class SubmitTransactionStep extends React.PureComponent<Props> {
     submitTransaction = async () => {
         const { signedTx } = this.props
         const { next } = this.props
-        const submitted = await submitTransaction(signedTx!!.signedTransaction)
+        const submitted = await transactionService.submit(signedTx)
         console.log("submitted", submitted)
         next()
     }
