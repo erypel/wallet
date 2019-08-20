@@ -10,6 +10,7 @@ import '../main.css'
 interface Props {
     transactions: AccountTransaction[]
     isLoading: boolean
+    account: string
 }
 
 export default class TransactionTable extends React.PureComponent<Props> {
@@ -30,7 +31,7 @@ export default class TransactionTable extends React.PureComponent<Props> {
                     <Tr>
                         <Th>Transaction Type</Th>
                         <Th>Amount</Th>
-                        <Th>Destination</Th>
+                        <Th>Account</Th>
                         <Th>Date</Th>
                     </Tr>
                 </Thead>
@@ -60,11 +61,13 @@ export default class TransactionTable extends React.PureComponent<Props> {
     }
 
     mapPayment = (payment: Payment, idx: number) => {
-        const { Amount: amount, Destination: dest, date } = payment
+        const { Amount: amount, Destination: dest, date, Account: source } = payment
+        const { account } = this.props
+        const isReceived = account === dest
         return <Tr key={idx}>
-            <Td>Payment</Td>
+            <Td>{isReceived ? 'Received' : 'Sent' }</Td>
             <Td>{currencyService.createCurrencyString(amount)}</Td>
-            <Td>{dest}</Td>
+            <Td>{isReceived ? source : dest }</Td>
             <Td>{rippleTimeToIso8601(date!!).toDateString()}</Td>
         </Tr>
     }

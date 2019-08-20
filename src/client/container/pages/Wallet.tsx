@@ -57,7 +57,7 @@ class Wallet extends React.PureComponent<Props> {
                     </div>
                 </div>
                 <div className='feature'>
-                    <TransactionTable transactions={transactions} isLoading={isLoadingTransactions}/>
+                    <TransactionTable transactions={transactions} isLoading={isLoadingTransactions} account={publicKey}/>
                 </div>
             </div>
         </>
