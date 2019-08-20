@@ -1,8 +1,4 @@
 import React from 'react'
-import { ThunkDispatch } from 'redux-thunk'
-import { AnyAction } from 'redux'
-import { AppState } from '../store/rootReducer'
-import { fetchOrderbook } from '../store/orderbook/actions'
 import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
 import Ask from '../xrpl/api/model/transaction/Orderbook/Ask'
 
@@ -47,27 +43,6 @@ class Orderbook extends React.PureComponent<Props> {
                     </tbody>
                 </table>
             </div>
-    }
-}
-
-const mapStateToProps = (store: AppState) => {
-    return {
-        asks: store.orderbook.asks,
-        bids: store.orderbook.bids
-    }
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-    return {
-        loadOrderbook: (
-            baseCurrency: string,
-            counterCurrency: string
-        ) => dispatch(
-            fetchOrderbook(
-                baseCurrency,
-                counterCurrency
-            )
-        )
     }
 }
 

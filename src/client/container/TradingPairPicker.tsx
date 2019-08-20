@@ -17,7 +17,8 @@ const currencyPairs = [
     ['XRP', 'USD'],
     ['XRP', 'BTC'],
     ['XRP', 'ETH'],
-    ['USD', 'BTC']
+    ['USD', 'BTC'],
+    ['XYZ', 'XRP']
 ]
 
 class TradingPairPicker extends React.PureComponent<Props> {

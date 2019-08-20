@@ -9,6 +9,7 @@ export interface Issuers {
     'USD': string[],
     'XAG': string[],
     'XAU': string[],
+    'XYZ': string[],
     'XRP': []
     [key:string]: any
 }
@@ -24,6 +25,7 @@ export const issuers: Issuers = {
     'USD': ['rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq', 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'],
     'XAG': ['r9Dr5xwkeLegBeXq6ujinjSBLQzQ1zQGjH'],
     'XAU': ['r9Dr5xwkeLegBeXq6ujinjSBLQzQ1zQGjH'],
+    'XYZ': ['rGcVnVr5ZZaZ59jnk5VmXsHgGgG8XUaMRQ'],
     'XRP': []
 };
 
@@ -36,5 +38,6 @@ export const issuerNames = {
     'r9ZFPSb1TFdnJwbTMYHvVwFK1bQPUCVNfJ':'Ripple Exch Tokyo',
     'rPxU6acYni7FcXzPCMeaPSwKcuS2GTtNVN':'EXRP',
     'r9Dr5xwkeLegBeXq6ujinjSBLQzQ1zQGjH':'Ripple Singapore',
-    'rDVdJ62foD1sn7ZpxtXyptdkBSyhsQGviT':'Ripple Dividend'
+    'rDVdJ62foD1sn7ZpxtXyptdkBSyhsQGviT':'Ripple Dividend',
+    'rGcVnVr5ZZaZ59jnk5VmXsHgGgG8XUaMRQ': 'Testing'
 };

@@ -23,15 +23,21 @@ class Balance extends React.PureComponent<Props, State> {
     }
 
     setBalance = (account?: string) => {
-        getBalances(account ? account : this.props.address).then((balances: Balances[]) => {
-            const balanceMap: BalanceMap = {}
-            for(let i=0; i < balances.length; i++){
-                const balance = balances[i]
-                const { currency, value } = balance
-                balanceMap[currency] = value
-            }
-            this.setState({balances: balanceMap})
+        const { currencies, address } = this.props
+        const balanceMap: BalanceMap = {}
+        currencies && currencies.forEach((currency: string, idx: number) => {
+            getBalances(account ? account : address, {currency: currency}).then((balances: Balances[]) => {
+                var totalValue = 0
+                for(let i=0; i < balances.length; i++){
+                    const balance = balances[i]
+                    const { value } = balance
+                    totalValue += Number(value)
+                }
+                balanceMap[currency] = totalValue.toString()
+                if(idx === currencies.length - 1) {this.setState({balances: balanceMap})}
+            })
         })
+        
     }
 
     mapBalances = () => {
