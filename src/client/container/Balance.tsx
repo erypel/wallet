@@ -23,9 +23,13 @@ class Balance extends React.PureComponent<Props, State> {
     }
 
     setBalance = (account?: string) => {
-        const { currencies, address } = this.props
+        const { address } = this.props
+        var { currencies } = this.props
+        if (!currencies) {
+            currencies = ['XRP']
+        }
         const balanceMap: BalanceMap = {}
-        currencies && currencies.forEach((currency: string, idx: number) => {
+        currencies.forEach((currency: string, idx: number) => {
             getBalances(account ? account : address, {currency: currency}).then((balances: Balances[]) => {
                 var totalValue = 0
                 for(let i=0; i < balances.length; i++){
@@ -34,7 +38,7 @@ class Balance extends React.PureComponent<Props, State> {
                     totalValue += Number(value)
                 }
                 balanceMap[currency] = totalValue.toString()
-                if(idx === currencies.length - 1) {this.setState({balances: balanceMap})}
+                if(idx === currencies!!.length - 1) {this.setState({balances: balanceMap})}
             })
         })
         

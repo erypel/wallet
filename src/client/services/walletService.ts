@@ -37,14 +37,16 @@ async function loadList(userId: string): Promise<WalletMap> {
     })
 }
 
-function findBalance(currency: string, balances: Balance[]): string {
+function findBalance(matchCurrency: string, balances: Balance[]): string {
+    var totalValue = 0
     for(let i = 0; i < balances.length; i++) {
         const balance = balances[i]
-        if (balance.currency === currency) {
-            return `${balance.value} ${currency}`
+        const { currency, value } = balance
+        if (currency === matchCurrency) {
+            totalValue += Number(value)
         }
     }
-    return 'ERROR'
+    return totalValue.toString()
 }
 
 export const walletService = {
