@@ -10,11 +10,21 @@ const api = new RippleAPI({
 	server: 'wss://s.altnet.rippletest.net:51233'
 })
 
+//this is a hack until unsubscribe works
+const transactions = new Set()
+
 export default async function subscribeToBook(takerPays: string, takerGets: string): Promise<AsksAndBids> {
     return await api.connect().then(async () => { 
       api.connection.on('transaction', (tx: any) => {
           const { transaction, meta, ledger_index, validated } = tx
           const { TransactionType, Account } = transaction
+
+          //hack
+          if(transactions.has(transaction)) {
+            return
+          }
+          transactions.add(transaction)
+
           switch(transaction.TransactionType) {
               case 'OfferCreate':
                 return orderbookService.handleIncomingOrderCreate(transaction)
@@ -195,7 +205,7 @@ async function doSubscription(takerGets: string, takerPays: string): Promise<Ask
         {taker_pays: {currency: takerPays, issuer: takerPaysIssuer}, taker_gets: {currency: takerGets, issuer: takerGetsIssuer}, snapshot: true, both: true},
         {taker_pays: {currency: takerGets, issuer: takerGetsIssuer}, taker_gets: {currency: takerPays, issuer: takerPaysIssuer}, snapshot: true, both: true}
     ]
-}).then(async (result: AsksAndBids) => {
+  }).then(async (result: AsksAndBids) => {
     const orderbookInfo = {
         "base": {
           "currency": takerPays,

@@ -1,4 +1,4 @@
-import { issuers } from './issuers';
+import { issuers } from './issuers'
 
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({
@@ -20,16 +20,17 @@ export default async function unsubscribeFromBook(takerPays: string, takerGets: 
     }
 }
 
+// for some reason, unsubscribe is not working
 async function doUnsubscribe(takerPays: string, takerGets: string) {
     const takerGetsIssuer = issuers[takerGets][0]
-    const takerPaysIssuer = issuers[takerPays][0] //TODO
-    return await api.connect().then(async () => { 
-        return await api.request('unsubscribe', {
+    const takerPaysIssuer = issuers[takerPays][0]
+    return api.connect().then(async() => {
+        return await api.request("unsubscribe", {
             books: [ 
-                {taker_pays: {currency: takerPays, issuer: takerPaysIssuer}, taker_gets: {currency: takerGets, issuer: takerGetsIssuer}, snapshot: true, both: true},
-                {taker_pays: {currency: takerGets, issuer: takerGetsIssuer}, taker_gets: {currency: takerPays, issuer: takerPaysIssuer}, snapshot: true, both: true}
+                {taker_pays: {currency: takerPays, issuer: takerPaysIssuer}, taker_gets: {currency: takerGets, issuer: takerGetsIssuer}},
+                {taker_pays: {currency: takerGets, issuer: takerGetsIssuer}, taker_gets: {currency: takerPays, issuer: takerPaysIssuer}}
             ]
-        }).then(async (result: any) => {
+        }).then((result: any) => {
             console.log('unsubscribed from books', result)
         }).catch((error: any) => {
             console.log(error)
