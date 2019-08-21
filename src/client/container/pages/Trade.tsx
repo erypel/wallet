@@ -5,7 +5,6 @@ import ExchangeWallet from '../../component/ExchangeWallet'
 import { connect } from 'react-redux'
 import Wallet from '../../model/Wallet'
 import OpenOrdersTable from '../../component/OpenOrdersTable'
-import Offer from '../../xrpl/rippled/model/Offer'
 import { AppState } from '../../store/rootReducer'
 import TradingPairPicker from '../TradingPairPicker'
 import { fetchOrderbook } from '../../store/orderbook/actions'
@@ -14,10 +13,11 @@ import { AnyAction } from 'redux'
 import Bid from '../../xrpl/api/model/transaction/Orderbook/Bid'
 import Ask from '../../xrpl/api/model/transaction/Orderbook/Ask'
 import unsubscribeFromBook from '../../xrpl/api/utils/unsubscribeFromOrderbook'
+import { AccountOffer } from '../../xrpl/api/model/account/AccountOffers'
 
 interface Props {
     activeWallet?: Wallet
-    openOrders: Offer[]
+    openOrders: AccountOffer[]
     baseCurrency: string
     quoteCurrency: string
     bids: Bid[],
@@ -29,6 +29,12 @@ interface Props {
 }
 
 class Trade extends React.PureComponent<Props> {
+    constructor(props: Props) {
+        super(props)
+        const { baseCurrency, quoteCurrency, loadOrderbook } = props
+        loadOrderbook(baseCurrency, quoteCurrency)
+    }
+
     componentWillReceiveProps(newProps: Props) {
         const oldProps = this.props
         const { baseCurrency: oldBase, quoteCurrency: oldQuote } = oldProps
