@@ -12,6 +12,29 @@ import { orderbookService } from './orderbookService'
 import { issuers } from '../xrpl/api/utils/issuers'
 import { transactionService } from './transactionService'
 
+function findAskLimitPrice(offers: Bid[], value: number): Amount {
+    if (offers.length === 0) {
+        throw Error('Not enough order book depth for order. Try placing a limit order.')
+    }
+    var remainingValue = value
+    for(let i = 0; i < offers.length; i++) {
+        const offer = offers[i]
+        //TODO will eventually want to deal with the state of the offer and whether it's been partially filled
+        const { totalPrice, quantity } = offer.specification
+        const askCost = totalPrice.value
+        remainingValue -= Number(askCost)
+        if(remainingValue <= 0) {
+            return {
+                currency: totalPrice.currency,
+                counterparty: totalPrice.counterparty,
+                value: String((Number(totalPrice.value) / Number(quantity.value)) * value)
+            }
+        }
+    }
+
+    throw Error('Not enough order book depth for order. Try placing a limit order.')
+}
+
 function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
     if (offers.length === 0) {
         throw Error('Not enough order book depth for order. Try placing a limit order.')
@@ -24,7 +47,11 @@ function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
         const bidCost = totalPrice.value
         remainingValue -= Number(bidCost)
         if(remainingValue <= 0) {
-            return quantity
+            return {
+                currency: quantity.currency,
+                counterparty: quantity.counterparty,
+                value: String((Number(totalPrice.value) / Number(quantity.value)) / value)
+            }
         }
     }
 
@@ -40,7 +67,7 @@ async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amou
     if (isSell) {
         //get bids
         const bids = await orderbookService.getBids(address, baseCurrency, quoteCurrency)
-        return findBidLimitPrice(bids, Number(value)) //TODO probably unsafe
+        return findAskLimitPrice(bids, Number(value)) //TODO probably unsafe
     } else { //isBuy
         //get asks
         const asks = await orderbookService.getAsks(address, baseCurrency, quoteCurrency)
@@ -51,7 +78,6 @@ async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amou
 async function buildMarketOrder(account: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<OrderCreate> {
     const limitPrice = await buildMarketOrderLimitPrice(account, isSell, amount, baseCurrency, quoteCurrency)
 
-    // THIS IS WRONG. RECIEVING 2 USD AMOUNTS
     const takerGets = createTakerGets(isSell, amount, limitPrice)
     const takerPays = createTakerPays(isSell, amount, limitPrice)
 
@@ -173,6 +199,9 @@ async function buildCreateOffer(
             account, isSell, amount, limitPrice, showAdvanced, timeInForce, isPostOnly
         )
     } else {
+        if (!amount.counterparty) {
+            amount.counterparty = issuers[amount.currency][0]
+        }
         return await buildMarketOrder(account, isSell, amount, baseCurrency, quoteCurrency)
     }
 }
