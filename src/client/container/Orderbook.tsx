@@ -31,7 +31,8 @@ class Orderbook extends React.PureComponent<Props> {
                     <thead>
                         <tr>
                             <th></th>
-                            <th>MarketSize</th>
+                            <th>Market Size</th>
+                            <th>Total</th>
                             <th>Price</th>
                         </tr>
                     </thead>
@@ -41,18 +42,21 @@ class Orderbook extends React.PureComponent<Props> {
                                 <td>{idx === 0 ? 'Offers to buy' : ''}</td>
                                 <td>{bid.specification.quantity.value} {baseCurrency}</td>
                                 <td>{bid.specification.totalPrice.value} {quoteCurrency}</td>
+                                <td>{Number(bid.specification.totalPrice.value) / Number(bid.specification.quantity.value)} {quoteCurrency}</td>
                             </tr>
                         })}
                         {hasSpread && <tr>
                             <td></td>
                             <td>Spread</td>
+                            <td></td>
                             <td>{Math.abs(bidSpread - askSpread)} {quoteCurrency}</td>
                         </tr>}
                         {asks.slice(0, asksSize).map((ask: Ask, idx: number) => {
                             return <tr className='red-text' key={idx}>
                                 <td>{idx === 0 ? 'Offers to sell' : ''}</td>
                                 <td>{ask.specification.quantity.value} {baseCurrency}</td>
-                                <td>{ask.specification.totalPrice.value} {quoteCurrency}</td> 
+                                <td>{ask.specification.totalPrice.value} {quoteCurrency}</td>
+                                <td>{Number(ask.specification.totalPrice.value) / Number(ask.specification.quantity.value)} {quoteCurrency}</td> 
                             </tr>
                         })}
                     </tbody>
