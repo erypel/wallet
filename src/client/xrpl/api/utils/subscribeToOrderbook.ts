@@ -24,6 +24,14 @@ export default async function subscribeToBook(takerPays: string, takerGets: stri
             return
           }
           transactions.add(transaction)
+          
+          const { AffectedNodes } = meta
+          for(var i = 0; i < AffectedNodes.length; i++) {
+            const node = AffectedNodes[i]
+            if (node.DeletedNode && node.DeletedNode.LedgerEntryType === 'Offer') {
+              orderbookService.removeOffer(node.DeletedNode.FinalFields)
+            }
+          }
 
           switch(transaction.TransactionType) {
               case 'OfferCreate':
