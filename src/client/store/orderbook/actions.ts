@@ -149,7 +149,7 @@ export const addOrderToBook: ActionCreator<any> = (order: OrderCreate) => {
         if (baseCurrency === currency) {
             dispatch(addAsk({
                 specification: {
-                    direction: 'BUY',
+                    direction: 'SELL',
                     quantity: issuerAmountToAmount(TakerGets),
                     totalPrice: issuerAmountToAmount(TakerPays)
                 },
@@ -163,9 +163,9 @@ export const addOrderToBook: ActionCreator<any> = (order: OrderCreate) => {
         } else if(quoteCurrency === currency) {
             dispatch(addBid({
                 specification: {
-                    direction: 'SELL',
-                    quantity: issuerAmountToAmount(TakerGets),
-                    totalPrice: issuerAmountToAmount(TakerPays)
+                    direction: 'BUY',
+                    quantity: issuerAmountToAmount(TakerPays),
+                    totalPrice: issuerAmountToAmount(TakerGets)
                 },
                 properties: {
                     maker: Account,
