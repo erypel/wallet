@@ -26,7 +26,6 @@ export default async function subscribeToBook(takerPays: string, takerGets: stri
           transactions.add(transaction)
           
           const { AffectedNodes } = meta
-          var orderFilled = false
           for(var i = 0; i < AffectedNodes.length; i++) {
             const node = AffectedNodes[i]
             
@@ -49,23 +48,27 @@ export default async function subscribeToBook(takerPays: string, takerGets: stri
                 }
                 orderbookService.removeOffer(offerToRemove)
                 orderbookService.addOffer(FinalFields)
-                orderFilled = true
             }
 
             // Remove filled orders
             if (node.DeletedNode && node.DeletedNode.LedgerEntryType === 'Offer') {
               orderbookService.removeOffer(node.DeletedNode.FinalFields)
             }
-          }
 
-          if(!orderFilled) {
-            switch(transaction.TransactionType) {
-                case 'OfferCreate':
-                  return orderbookService.handleIncomingOrderCreate(transaction)
-                case 'OfferCancel':
-                  return orderbookService.handleIncomingOrderCancel(transaction)
+            // Add new orders
+            if (node.CreatedNode && node.CreatedNode.LedgerEntryType === 'Offer') {
+              orderbookService.addOffer(node.CreatedNode.NewFields)
             }
           }
+
+          
+          switch(transaction.TransactionType) {
+              case 'OfferCreate':
+                return //orderbookService.handleIncomingOrderCreate(transaction)
+              case 'OfferCancel':
+                return orderbookService.handleIncomingOrderCancel(transaction)
+          }
+          
           console.log(TransactionType + " transaction sent by " +
                       Account +
                       "\n  Result: " + meta.TransactionResult +
