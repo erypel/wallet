@@ -26,18 +26,45 @@ export default async function subscribeToBook(takerPays: string, takerGets: stri
           transactions.add(transaction)
           
           const { AffectedNodes } = meta
+          var orderFilled = false
           for(var i = 0; i < AffectedNodes.length; i++) {
             const node = AffectedNodes[i]
+            
+            // Remove old orders when paritally filled
+            if (node.ModifiedNode && node.ModifiedNode.LedgerEntryType === 'Offer') {
+              const { FinalFields } = node.ModifiedNode
+                const offerToRemove = {
+                  LedgerEntryType: FinalFields.LedgerEntryType,
+                  Flags: FinalFields.Flags,
+                  Account: FinalFields.Account,
+                  Sequence: FinalFields.Sequence,
+                  TakerPays: node.ModifiedNode.PreviousFields.TakerPays,
+                  TakerGets: node.ModifiedNode.PreviousFields.TakerGets,
+                  BookDirectory: FinalFields.BookDirectory,
+                  BookNode: FinalFields.BookNode,
+                  OwnerNode: FinalFields.OwnerNode,
+                  PreviousTxnID: FinalFields.PreviousTxnID,
+                  PreviousTxnLgrSeq: FinalFields.PreviousTxnLgrSeq,
+                  Expiraton: FinalFields.Expiraton
+                }
+                orderbookService.removeOffer(offerToRemove)
+                orderbookService.addOffer(FinalFields)
+                orderFilled = true
+            }
+
+            // Remove filled orders
             if (node.DeletedNode && node.DeletedNode.LedgerEntryType === 'Offer') {
               orderbookService.removeOffer(node.DeletedNode.FinalFields)
             }
           }
 
-          switch(transaction.TransactionType) {
-              case 'OfferCreate':
-                return orderbookService.handleIncomingOrderCreate(transaction)
-              case 'OfferCancel':
-                return orderbookService.handleIncomingOrderCancel(transaction)
+          if(!orderFilled) {
+            switch(transaction.TransactionType) {
+                case 'OfferCreate':
+                  return orderbookService.handleIncomingOrderCreate(transaction)
+                case 'OfferCancel':
+                  return orderbookService.handleIncomingOrderCancel(transaction)
+            }
           }
           console.log(TransactionType + " transaction sent by " +
                       Account +

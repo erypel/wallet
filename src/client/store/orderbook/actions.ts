@@ -11,7 +11,7 @@ import { ActionCreator, Dispatch } from 'redux'
 import OrderCreate from '../../xrpl/api/model/transaction/OrderCreate/OrderCreate'
 import { currencyService } from '../../services/currencyService'
 import { AppState } from '../rootReducer'
-import  { issuerAmountToAmount } from '../../xrpl/api/model/Amount'
+import  Amount, { issuerAmountToAmount, IssuerAmount, amountToIssuerAmount } from '../../xrpl/api/model/Amount'
 import subscribeToBook from '../../xrpl/api/utils/subscribeToOrderbook'
 import OrderCancellation from '../../xrpl/api/model/transaction/OrderCancellation/OrderCancellation'
 import { AsksAndBids } from '../../xrpl/api/model/transaction/Orderbook/Orderbook'
@@ -137,6 +137,50 @@ const removeOrder = (account: string, accountSequence: number, dispatch: Dispatc
     }
 }
 
+const addOrder = (orderbook: OrderbookState, TakerGets: Amount | string, TakerPays: Amount | string, Account: string, offerSequence: number, dispatch: Dispatch<OrderbookActions>) => {
+    const { baseCurrency, quoteCurrency } = orderbook
+    const currency = currencyService.createAmount(TakerGets).currency
+    if (baseCurrency === currency) {
+        dispatch(addAsk({
+            specification: {
+                direction: 'SELL',
+                quantity: issuerAmountToAmount(TakerGets),
+                totalPrice: issuerAmountToAmount(TakerPays)
+            },
+            properties: {
+                maker: Account,
+                sequence: offerSequence!!,
+                makerExchangeRate: ''
+            },
+            data: {}
+        }))
+    } else if(quoteCurrency === currency) {
+        dispatch(addBid({
+            specification: {
+                direction: 'BUY',
+                quantity: issuerAmountToAmount(TakerPays),
+                totalPrice: issuerAmountToAmount(TakerGets)
+            },
+            properties: {
+                maker: Account,
+                sequence: offerSequence!!,
+                makerExchangeRate: ''
+            },
+            data: {}
+        }))
+    } else {
+        console.log('ERROR UPDATING ORDER BOOK')
+    }
+}
+
+export const addOfferToBook: ActionCreator<any> = (offer: Offer) => {
+    return async (dispatch: Dispatch<OrderbookActions>, getState: () => AppState) => {
+        const { orderbook } = getState()
+        const {Account: account, Sequence: sequence, TakerGets, TakerPays } = offer
+        addOrder(orderbook, TakerGets, TakerPays, account, sequence, dispatch)
+    }
+}
+
 export const removeOfferFromBook: ActionCreator<any> = (offer: Offer) => {
     return async (dispatch: Dispatch<OrderbookActions>, getState: () => AppState) => {
         const { orderbook } = getState()
@@ -156,40 +200,8 @@ export const removeOrderFromBook: ActionCreator<any> = (order: OrderCancellation
 export const addOrderToBook: ActionCreator<any> = (order: OrderCreate) => {
     return async (dispatch: Dispatch<OrderbookActions>, getState: () => AppState) => {
         const { orderbook } = getState()
-        const { baseCurrency, quoteCurrency } = orderbook
-        const currency = currencyService.createAmount(order.TakerGets).currency
         const { TakerGets, TakerPays, Account, offerSequence } = order
-        if (baseCurrency === currency) {
-            dispatch(addAsk({
-                specification: {
-                    direction: 'SELL',
-                    quantity: issuerAmountToAmount(TakerGets),
-                    totalPrice: issuerAmountToAmount(TakerPays)
-                },
-                properties: {
-                    maker: Account,
-                    sequence: offerSequence!!,
-                    makerExchangeRate: ''
-                },
-                data: {}
-            }))
-        } else if(quoteCurrency === currency) {
-            dispatch(addBid({
-                specification: {
-                    direction: 'BUY',
-                    quantity: issuerAmountToAmount(TakerPays),
-                    totalPrice: issuerAmountToAmount(TakerGets)
-                },
-                properties: {
-                    maker: Account,
-                    sequence: offerSequence!!,
-                    makerExchangeRate: ''
-                },
-                data: {}
-            }))
-        } else {
-            console.log('ERROR UPDATING ORDER BOOK')
-        }
+        addOrder(orderbook, TakerGets, TakerPays, Account, offerSequence!!, dispatch)
     }
 }
 
