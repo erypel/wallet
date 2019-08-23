@@ -13,6 +13,31 @@ interface Props {
 class Orderbook extends React.PureComponent<Props> {
     render() {
         const { bids, asks, baseCurrency, quoteCurrency } = this.props
+        // Sort the bid/asks by price. This probably should happen an insert, but I'm lazy today
+        bids.sort(function(a: any, b: any) {
+            const { quantity, totalPrice } = a.specification
+            const { value: quantityValue } = quantity
+            const { value: priceValue } = totalPrice
+            const priceA = Number(priceValue) / Number(quantityValue)
+
+            const { quantity: qualityB, totalPrice: totalPriceB } = b.specification
+            const { value: quantityValueB } = qualityB
+            const { value: priceValueB } = totalPriceB
+            const priceB = Number(priceValueB) / Number(quantityValueB)
+            return  priceA - priceB 
+        });
+        asks.sort(function(a: any, b: any) {
+            const { quantity, totalPrice } = a.specification
+            const { value: quantityValue } = quantity
+            const { value: priceValue } = totalPrice
+            const priceA = Number(priceValue) / Number(quantityValue)
+
+            const { quantity: qualityB, totalPrice: totalPriceB } = b.specification
+            const { value: quantityValueB } = qualityB
+            const { value: priceValueB } = totalPriceB
+            const priceB = Number(priceValueB) / Number(quantityValueB)
+            return priceA - priceB
+        })
         const bidsSize = bids.length > 10 ? 10 : bids.length
         const asksSize = asks.length > 10 ? 10 : asks.length
         const hasSpread = asksSize !== 0 && bidsSize !== 0
@@ -43,8 +68,8 @@ class Orderbook extends React.PureComponent<Props> {
                         {hasSpread && <tr>
                             <td></td>
                             <td>Spread</td>
-                            <td></td>
                             <td>{spread} {quoteCurrency}</td>
+                            <td></td>
                         </tr>}
                         {asks.slice(0, asksSize).map((ask: Ask, idx: number) => {
                             const { quantity, totalPrice } = ask.specification

@@ -17,16 +17,16 @@ export async function autoBridge(takerGets: string, takerPays: string, leftBook:
     // Sort the bid/asks by price
     bids1.sort(function(a: any, b: any) {
       return  b.price - a.price;
-    });
+    })
     asks1.sort(function(a: any, b: any) {
         return a.price - b.price;
-    });
+    })
     bids2.sort(function(a: any, b: any) {
         return  b.price - a.price;
-    });
+    })
     asks2.sort(function(a: any, b: any) {
         return a.price - b.price;
-    });
+    })
   
     buildBook(asks1, bids2, takerGets, takerPays, orderbook, false)
     buildBook(bids1, asks2, takerGets, takerPays, orderbook, true)
