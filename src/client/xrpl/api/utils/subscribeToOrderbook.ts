@@ -1,9 +1,8 @@
 import formatBidsAndAsks from './formatBidsAndAsks'
 import { AsksAndBids } from '../model/transaction/Orderbook/Orderbook'
-import { orderbookService } from '../../../services/orderbookService'
 import { issuers } from './issuers'
-import { autoBridge } from './autobridge';
-import handleIncomingTransaction from './handleIncomingTransaction';
+import { autoBridge } from './autobridge'
+import handleIncomingTransaction from './handleIncomingTransaction'
 
 const RippleAPI = require('ripple-lib').RippleAPI
 const api = new RippleAPI({
@@ -34,8 +33,18 @@ async function doSubscription(takerGets: string, takerPays: string): Promise<Ask
 
   return await api.request('subscribe', {
     books: [ 
-        {taker_pays: {currency: takerPays, issuer: takerPaysIssuer}, taker_gets: {currency: takerGets, issuer: takerGetsIssuer}, snapshot: true, both: true},
-        {taker_pays: {currency: takerGets, issuer: takerGetsIssuer}, taker_gets: {currency: takerPays, issuer: takerPaysIssuer}, snapshot: true, both: true}
+        {
+          taker_pays: {currency: takerPays, issuer: takerPaysIssuer}, 
+          taker_gets: {currency: takerGets, issuer: takerGetsIssuer}, 
+          snapshot: true, 
+          both: true
+        },
+        {
+          taker_pays: {currency: takerGets, issuer: takerGetsIssuer}, 
+          taker_gets: {currency: takerPays, issuer: takerPaysIssuer}, 
+          snapshot: true, 
+          both: true
+        }
     ]
   }).then(async (result: AsksAndBids) => {
     const orderbookInfo = {

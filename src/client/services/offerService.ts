@@ -2,7 +2,6 @@ import OrderCreate, { OrderCreateFlags } from '../xrpl/api/model/transaction/Ord
 import { OrderCreateBuilder } from '../xrpl/api/model/transaction/OrderCreate/OrderCreateBuilder'
 import { TransactionBuilder } from '../xrpl/api/model/transaction/TransactionBuilder'
 import Amount from '../xrpl/api/model/Amount'
-import xrpToDrops from '../xrpl/api/utils/xrpToDrops'
 import iso8601ToRippleTime from '../xrpl/api/utils/iso8601ToRippleTime'
 import Ask from '../xrpl/api/model/transaction/Orderbook/Ask'
 import Bid from '../xrpl/api/model/transaction/Orderbook/Bid'
@@ -11,89 +10,29 @@ import { OrderCancellationBuilder } from '../xrpl/api/model/transaction/OrderCan
 import { orderbookService } from './orderbookService'
 import { issuers } from '../xrpl/api/utils/issuers'
 import { transactionService } from './transactionService'
+import { currencyService } from './currencyService'
 
-function findAskLimitPrice(offers: Bid[], value: number): Amount {
-    if (offers.length === 0) {
-        throw Error('Not enough order book depth for order. Try placing a limit order.')
-    }
-    var remainingValue = value
-    for(let i = 0; i < offers.length; i++) {
-        const offer = offers[i]
-        //TODO will eventually want to deal with the state of the offer and whether it's been partially filled
-        const { totalPrice, quantity } = offer.specification
-        const askCost = totalPrice.value
-        remainingValue -= Number(askCost)
-        if(remainingValue <= 0) {
-            return {
-                currency: totalPrice.currency,
-                counterparty: totalPrice.counterparty,
-                value: String((Number(totalPrice.value) / Number(quantity.value)) * value)
-            }
+async function buildCreateOffer(
+    account: string,
+    isSell: boolean, 
+    amount: Amount, 
+    limitPrice: Amount,
+    showAdvanced: boolean, 
+    timeInForce: string, 
+    isPostOnly: boolean,
+    baseCurrency: string,
+    quoteCurrency: string
+): Promise<OrderCreate> {
+    if(limitPrice.value !== '0') { //TODO pass in order type and use that
+        return buildLimitOrder(
+            account, isSell, amount, limitPrice, showAdvanced, timeInForce, isPostOnly
+        )
+    } else {
+        if (!amount.counterparty) {
+            amount.counterparty = issuers[amount.currency][0]
         }
+        return await buildMarketOrder(account, isSell, amount, baseCurrency, quoteCurrency)
     }
-
-    throw Error('Not enough order book depth for order. Try placing a limit order.')
-}
-
-function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
-    if (offers.length === 0) {
-        throw Error('Not enough order book depth for order. Try placing a limit order.')
-    }
-    var remainingValue = value
-    for(let i = 0; i < offers.length; i++) {
-        const offer = offers[i]
-        //TODO will eventually want to deal with the state of the offer and whether it's been partially filled
-        const { totalPrice, quantity } = offer.specification
-        const bidCost = totalPrice.value
-        remainingValue -= Number(bidCost)
-        if(remainingValue <= 0) {
-            return {
-                currency: quantity.currency,
-                counterparty: quantity.counterparty,
-                value: String((Number(totalPrice.value) / Number(quantity.value)) / value)
-            }
-        }
-    }
-
-    throw Error('Not enough order book depth for order. Try placing a limit order.')
-}
-
-async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<Amount> {
-    const formattedAmount = formatCurrency(amount)
-    const value = typeof formattedAmount === 'string' ? formattedAmount : formattedAmount.value
-
-    if (isSell) {
-        //get bids
-        const bids = await orderbookService.getBids(address, baseCurrency, quoteCurrency)
-        return findAskLimitPrice(bids, Number(value)) //TODO probably unsafe
-    } else { //isBuy
-        //get asks
-        const asks = await orderbookService.getAsks(address, baseCurrency, quoteCurrency)
-        return findBidLimitPrice(asks, Number(amount.value)) //TODO probably unsafe
-    }
-}
-
-async function buildMarketOrder(account: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<OrderCreate> {
-    const limitPrice = await buildMarketOrderLimitPrice(account, isSell, amount, baseCurrency, quoteCurrency)
-
-    const takerGets = createTakerGets(isSell, amount, limitPrice)
-    const takerPays = createTakerPays(isSell, amount, limitPrice)
-
-    if(typeof takerPays !== 'string' && takerPays.counterparty === undefined) {
-        takerPays.counterparty = issuers[takerPays.currency][0]
-    }
-
-    const transactionBuilder = new TransactionBuilder(account, 'OfferCreate')
-    const offerBuilder = new OrderCreateBuilder(takerGets, takerPays)
-
-    if (isSell) {
-        transactionBuilder.addFlag(OrderCreateFlags.tf_SELL)
-    }
-
-    transactionBuilder.addFlag(OrderCreateFlags.tf_FILL_OR_KILL)
-
-    const offer = new OrderCreate(transactionBuilder, offerBuilder)
-    return offer
 }
 
 function buildLimitOrder(
@@ -143,31 +82,104 @@ function buildLimitOrder(
     return offer
 }
 
-function formatCurrency(amount: Amount): Amount | string {
-    const { currency } = amount
-    if (currency === 'drops') {
-        return amount.value
-    } else if (currency === 'XRP') {
-        return xrpToDrops(amount.value)
-    } else {
-        return amount
+async function buildMarketOrder(account: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<OrderCreate> {
+    const limitPrice = await buildMarketOrderLimitPrice(account, isSell, amount, baseCurrency, quoteCurrency)
+
+    const takerGets = createTakerGets(isSell, amount, limitPrice)
+    const takerPays = createTakerPays(isSell, amount, limitPrice)
+
+    if(typeof takerPays !== 'string' && takerPays.counterparty === undefined) {
+        takerPays.counterparty = issuers[takerPays.currency][0]
+    }
+
+    const transactionBuilder = new TransactionBuilder(account, 'OfferCreate')
+    const offerBuilder = new OrderCreateBuilder(takerGets, takerPays)
+
+    if (isSell) {
+        transactionBuilder.addFlag(OrderCreateFlags.tf_SELL)
+    }
+
+    transactionBuilder.addFlag(OrderCreateFlags.tf_FILL_OR_KILL)
+
+    const offer = new OrderCreate(transactionBuilder, offerBuilder)
+    return offer
+}
+
+async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amount: Amount, baseCurrency: string, quoteCurrency: string): Promise<Amount> {
+    const formattedAmount = currencyService.formatCurrency(amount)
+    const value = typeof formattedAmount === 'string' ? formattedAmount : formattedAmount.value
+
+    if (isSell) {
+        //get bids
+        const bids = await orderbookService.getBids(address, baseCurrency, quoteCurrency)
+        return findAskLimitPrice(bids, Number(value)) //TODO probably unsafe
+    } else { //isBuy
+        //get asks
+        const asks = await orderbookService.getAsks(address, baseCurrency, quoteCurrency)
+        return findBidLimitPrice(asks, Number(amount.value)) //TODO probably unsafe
     }
 }
 
 function createTakerGets(isSell: boolean, amount: Amount, limit: Amount): Amount | string {
     if (isSell) {
-        return formatCurrency(amount)
+        return currencyService.formatCurrency(amount)
     } else { //isBuy
-        return formatCurrency(limit)
+        return currencyService.formatCurrency(limit)
     }
 }
 
 function createTakerPays(isSell: boolean, amount: Amount, limit: Amount): Amount | string {
     if (isSell) {
-        return formatCurrency(limit)
+        return currencyService.formatCurrency(limit)
     } else {
-        return formatCurrency(amount)
+        return currencyService.formatCurrency(amount)
     }
+}
+
+function findAskLimitPrice(offers: Bid[], value: number): Amount {
+    if (offers.length === 0) {
+        throw Error('Not enough order book depth for order. Try placing a limit order.')
+    }
+    var remainingValue = value
+    for(let i = 0; i < offers.length; i++) {
+        const offer = offers[i]
+        //TODO will eventually want to deal with the state of the offer and whether it's been partially filled
+        const { totalPrice, quantity } = offer.specification
+        const askCost = totalPrice.value
+        remainingValue -= Number(askCost)
+        if(remainingValue <= 0) {
+            return {
+                currency: totalPrice.currency,
+                counterparty: totalPrice.counterparty,
+                value: String((Number(totalPrice.value) / Number(quantity.value)) * value)
+            }
+        }
+    }
+
+    throw Error('Not enough order book depth for order. Try placing a limit order.')
+}
+
+function findBidLimitPrice(offers: Bid[] | Ask[], value: number): Amount {
+    if (offers.length === 0) {
+        throw Error('Not enough order book depth for order. Try placing a limit order.')
+    }
+    var remainingValue = value
+    for(let i = 0; i < offers.length; i++) {
+        const offer = offers[i]
+        //TODO will eventually want to deal with the state of the offer and whether it's been partially filled
+        const { totalPrice, quantity } = offer.specification
+        const bidCost = totalPrice.value
+        remainingValue -= Number(bidCost)
+        if(remainingValue <= 0) {
+            return {
+                currency: quantity.currency,
+                counterparty: quantity.counterparty,
+                value: String((Number(totalPrice.value) / Number(quantity.value)) / value)
+            }
+        }
+    }
+
+    throw Error('Not enough order book depth for order. Try placing a limit order.')
 }
 
 async function cancelOffer(account: string, secret: string, orderSequence: number) {
@@ -179,29 +191,6 @@ function buildOrderCancellation(account: string, orderSequence: number): OrderCa
     const transactionBuilder = new TransactionBuilder(account, 'OfferCancel')
     const orderCancellationBuilder = new OrderCancellationBuilder(orderSequence)
     return orderCancellationBuilder.build(transactionBuilder)
-}
-
-async function buildCreateOffer(
-    account: string,
-    isSell: boolean, 
-    amount: Amount, 
-    limitPrice: Amount,
-    showAdvanced: boolean, 
-    timeInForce: string, 
-    isPostOnly: boolean,
-    baseCurrency: string,
-    quoteCurrency: string
-): Promise<OrderCreate> {
-    if(limitPrice.value !== '0') { //TODO pass in order type and use that
-        return buildLimitOrder(
-            account, isSell, amount, limitPrice, showAdvanced, timeInForce, isPostOnly
-        )
-    } else {
-        if (!amount.counterparty) {
-            amount.counterparty = issuers[amount.currency][0]
-        }
-        return await buildMarketOrder(account, isSell, amount, baseCurrency, quoteCurrency)
-    }
 }
 
 function validateCreateOffer(offer: OrderCreate) {
