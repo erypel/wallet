@@ -49,6 +49,10 @@ export default class OrderCreate extends Transaction {
     offerSequence?: number
     TakerGets: IssuerAmount | string
     TakerPays: IssuerAmount | string
+    /**
+     * only used by orderbook stream messages
+     */
+    owner_funds?: string
 
 
     constructor(transactionBuilder: TransactionBuilder, orderCreateBuilder: OrderCreateBuilder) {
