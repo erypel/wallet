@@ -35,7 +35,8 @@ class OpenOrdersTable extends React.PureComponent<Props> {
     }
 
     mapOpenOrders = () => {
-        const { openOrders } = this.props
+        const { props } = this
+        const { openOrders } = props
         if (openOrders.length === 0) {
             return <tr key={'no-orders'}>
             <td colSpan={3}>No open orders</td>
@@ -46,13 +47,14 @@ class OpenOrdersTable extends React.PureComponent<Props> {
             return <tr key={`${seq}`}>
                 <td>{currencyService.createCurrencyString(takerGets)}</td>
                 <td>{currencyService.createCurrencyString(takerPays)}</td>
-                <td><Button buttonText='Cancel Order' onClick={() => this.cancelOrder(seq)}/></td>
+                <td><Button buttonText='Cancel Order' onClick={() => this.cancelOrder(seq)}/>}</td>
             </tr>
         })
     }
 
     cancelOrder = (seq: number) => {
-        const { getOpenOrders, activeWallet } = this.props
+        const { props } = this
+        const { getOpenOrders, activeWallet } = props
         const { publicKey, privateKey } = activeWallet
         offerService.cancelOffer(publicKey, privateKey, seq).then(() => {
             getOpenOrders(publicKey)

@@ -30,14 +30,16 @@ class TradingPairPicker extends React.PureComponent<Props> {
         return currencyPairs.map((pair: string[], idx: number) => {
             const base = pair[0]
             const quote = pair[1]
-            return <div key={idx} onClick={() => this.handleClick(base, quote)}>{`${base}/${quote}`}</div>
+            return <div key={idx} onClick={() => this.handleClick(base, quote)}>
+                {`${base}/${quote}`}
+            </div>
         })
     }
 
     render() {
         const { baseCurrency, quoteCurrency } = this.props
 
-        return <Menu title={baseCurrency ? `${baseCurrency}/${quoteCurrency}` : 'Select a pair'}>
+        return <Menu title={`${baseCurrency}/${quoteCurrency}`}>
                 {this.mapCurrencyPairs()}
             </Menu>
     }
@@ -54,7 +56,8 @@ const mapStateToProps = (store: AppState) => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
-        setTradingPair: (base: string, quote: string) => dispatch(setTradingPair(base, quote))
+        setTradingPair: (base: string, quote: string) => 
+            dispatch(setTradingPair(base, quote))
     }
 }
 

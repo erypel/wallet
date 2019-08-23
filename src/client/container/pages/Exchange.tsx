@@ -14,12 +14,13 @@ import Bid from '../../xrpl/api/model/transaction/Orderbook/Bid'
 import Ask from '../../xrpl/api/model/transaction/Orderbook/Ask'
 import unsubscribeFromBook from '../../xrpl/api/utils/unsubscribeFromOrderbook'
 import { AccountOffer } from '../../xrpl/api/model/account/AccountOffers'
+import { IssuerCurrency } from '../../xrpl/api/utils/issuers'
 
 interface Props {
     activeWallet?: Wallet
     openOrders: AccountOffer[]
-    baseCurrency: string
-    quoteCurrency: string
+    baseCurrency: IssuerCurrency
+    quoteCurrency: IssuerCurrency
     bids: Bid[],
     asks: Ask[],
     loadOrderbook: (
@@ -28,7 +29,7 @@ interface Props {
     ) => void
 }
 
-class Trade extends React.PureComponent<Props> {
+class Exchange extends React.PureComponent<Props> {
     constructor(props: Props) {
         super(props)
         const { baseCurrency, quoteCurrency, loadOrderbook } = props
@@ -51,13 +52,32 @@ class Trade extends React.PureComponent<Props> {
     }
 
     render() {
-        const { activeWallet, openOrders, baseCurrency, quoteCurrency, bids, asks } = this.props
+        const { 
+            activeWallet, openOrders, baseCurrency, quoteCurrency, bids, asks 
+        } = this.props
         return <div>
             <TradingPairPicker/>
-            <ExchangeWallet activeWallet={activeWallet} baseCurrency={baseCurrency} quoteCurrency={quoteCurrency}/>
-            {activeWallet && <OfferForm account={activeWallet.publicKey} secret={activeWallet.privateKey} baseCurrency={baseCurrency} quoteCurrency={quoteCurrency}/>}
-            <Orderbook baseCurrency={baseCurrency} quoteCurrency={quoteCurrency} bids={bids} asks={asks}/>
-            {activeWallet && <OpenOrdersTable openOrders={openOrders} activeWallet={activeWallet}/>}
+            <ExchangeWallet 
+                activeWallet={activeWallet} 
+                baseCurrency={baseCurrency} 
+                quoteCurrency={quoteCurrency}
+            />
+            {activeWallet && <OfferForm 
+                account={activeWallet.publicKey} 
+                secret={activeWallet.privateKey} 
+                baseCurrency={baseCurrency} 
+                quoteCurrency={quoteCurrency}
+            />}
+            <Orderbook 
+                baseCurrency={baseCurrency} 
+                quoteCurrency={quoteCurrency} 
+                bids={bids} 
+                asks={asks}
+            />
+            {activeWallet && <OpenOrdersTable 
+                openOrders={openOrders} 
+                activeWallet={activeWallet}
+            />}
         </div>
     }
 }
@@ -90,4 +110,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Trade)
+export default connect(mapStateToProps, mapDispatchToProps)(Exchange)
