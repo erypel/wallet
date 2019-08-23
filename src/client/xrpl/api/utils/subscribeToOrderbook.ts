@@ -25,8 +25,6 @@ export default async function subscribeToBook(takerPays: string, takerGets: stri
   })
 }
 
-
-
 async function doSubscription(takerGets: string, takerPays: string): Promise<AsksAndBids> {
   const takerGetsIssuer = issuers[takerGets][0]
   const takerPaysIssuer = issuers[takerPays][0]
@@ -60,7 +58,6 @@ async function doSubscription(takerGets: string, takerPays: string): Promise<Ask
     const directOffers = (result? result.asks : [])
     //const reverseOffers = (result? result.bids : [])
     const orderbook = await formatBidsAndAsks(orderbookInfo, [...directOffers])
-    console.log('lookey tado', orderbook)
     return orderbook
   }).catch((error: any) => {
       console.log(error)

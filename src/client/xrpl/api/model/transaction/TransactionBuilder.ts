@@ -11,7 +11,7 @@ export class TransactionBuilder {
     private _fee?: string
     private _sequence?: number
     private _accountTxnId?: string
-    private _flags?: Set<number>
+    private _flags?: number
     private _lastLedgerSequence?: number
     private _signers?: object[]
     private _sourceTag?: number
@@ -43,16 +43,17 @@ export class TransactionBuilder {
 
     addFlag(flag: number) {
         if (!this._flags) {
-            this._flags = new Set<number>()
-            this._flags.add(flag)
+            this._flags = flag
         } else {
-            this._flags.add(flag)
+            this._flags |= flag
         }
         return this
     }
 
     setFlags(...flags: number[]) {
-        this._flags = new Set(flags)
+        this._flags = flags.reduce((prevVal: number, currVal: number) => {
+            return prevVal & currVal
+        })
         return this
     }
 

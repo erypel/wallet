@@ -23,7 +23,7 @@ async function buildCreateOffer(
     baseCurrency: string,
     quoteCurrency: string
 ): Promise<OrderCreate> {
-    if(limitPrice.value !== '0') { //TODO pass in order type and use that
+    if(limitPrice.value) { //TODO pass in order type and use that
         return buildLimitOrder(
             account, isSell, amount, limitPrice, showAdvanced, timeInForce, isPostOnly
         )
@@ -76,7 +76,9 @@ function buildLimitOrder(
                 break
         }
 
-        //TODO isPostOnly fields (if isPostOnly, reject offer if any part of it would be filled immediately)
+        if(isPostOnly) {
+            transactionBuilder.addFlag(OrderCreateFlags.tf_PASSIVE)
+        }
     }
     const offer = offerBuilder.build(transactionBuilder)
     return offer
@@ -110,11 +112,9 @@ async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amou
     const value = typeof formattedAmount === 'string' ? formattedAmount : formattedAmount.value
 
     if (isSell) {
-        //get bids
         const bids = await orderbookService.getBids(address, baseCurrency, quoteCurrency)
         return findAskLimitPrice(bids, Number(value)) //TODO probably unsafe
     } else { //isBuy
-        //get asks
         const asks = await orderbookService.getAsks(address, baseCurrency, quoteCurrency)
         return findBidLimitPrice(asks, Number(amount.value)) //TODO probably unsafe
     }
