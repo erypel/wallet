@@ -192,30 +192,30 @@ function collectOffers(offers: Bid[] | Ask[]){
   var accuracy = 8
   var collected = []
   for(var i = 0; i < offers.length; i++) {
-    if(i < offers.length && Number(offers[i].specification.quantity.value) != 0) {
+    if(i < offers.length && Number(offers[i].specification.quantity.value) !== 0) {
       var offer = 0
       var q1 = 0
       var counterparty1 = ""
       var counterparty2 = ""
       var s1 = ""
       var s2 = ""
-      if(offers[i].state != null && offers[i].state!!.fundedAmount != null 
+      if(offers[i].state !== null && offers[i].state!!.fundedAmount !== null 
         && Number(offers[i].state!!.fundedAmount.value) > 0) {
           offer = (1.00000000 * Number(offers[i].specification.totalPrice.value)) 
             / (1.00000000 * Number(offers[i].specification.quantity.value))
           counterparty1 = "" + offers[i].specification.quantity.counterparty
           counterparty2 = "" + offers[i].specification.totalPrice.counterparty
           q1 = Number(offers[i].state!!.fundedAmount.value) / offer
-          s1 = offers[i].specification.quantity.currency + (counterparty1 != "undefined" && (!(offers[i].specification.quantity.currency in issuers) || (issuers[offers[i].specification.quantity.currency].length>0))? "."+counterparty1:"")
-          s2 = offers[i].specification.totalPrice.currency + (counterparty2!="undefined" && (!(offers[i].specification.totalPrice.currency in issuers) || (issuers[offers[i].specification.totalPrice.currency].length>0))? "."+counterparty2:"")
+          s1 = offers[i].specification.quantity.currency + (counterparty1 !== undefined && (!(offers[i].specification.quantity.currency in issuers) || (issuers[offers[i].specification.quantity.currency].length>0))? "."+counterparty1:"")
+          s2 = offers[i].specification.totalPrice.currency + (counterparty2 !== undefined && (!(offers[i].specification.totalPrice.currency in issuers) || (issuers[offers[i].specification.totalPrice.currency].length>0))? "."+counterparty2:"")
       }
       else {
           offer = (1.00000000 * Number(offers[i].specification.totalPrice.value)) / (1.00000000 * Number(offers[i].specification.quantity.value))
           counterparty1 = "" + offers[i].specification.quantity.counterparty
           counterparty2 = "" + offers[i].specification.totalPrice.counterparty
           q1 = Number(offers[i].specification.quantity.value)
-          s1 = offers[i].specification.quantity.currency + (counterparty1!="undefined" && (!(offers[i].specification.quantity.currency in issuers) || (issuers[offers[i].specification.quantity.currency].length>0))? "."+counterparty1:"");
-          s2 = offers[i].specification.totalPrice.currency + (counterparty2!="undefined" && (!(offers[i].specification.totalPrice.currency in issuers) || (issuers[offers[i].specification.totalPrice.currency].length>0))? "."+counterparty2:"");
+          s1 = offers[i].specification.quantity.currency + (counterparty1 !== undefined && (!(offers[i].specification.quantity.currency in issuers) || (issuers[offers[i].specification.quantity.currency].length>0))? "."+counterparty1:"");
+          s2 = offers[i].specification.totalPrice.currency + (counterparty2 !== undefined && (!(offers[i].specification.totalPrice.currency in issuers) || (issuers[offers[i].specification.totalPrice.currency].length>0))? "."+counterparty2:"");
           
       }
         collected[collected.length] = {

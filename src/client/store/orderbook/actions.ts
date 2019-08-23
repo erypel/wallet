@@ -11,13 +11,13 @@ import { ActionCreator, Dispatch } from 'redux'
 import OrderCreate from '../../xrpl/api/model/transaction/OrderCreate/OrderCreate'
 import { currencyService } from '../../services/currencyService'
 import { AppState } from '../rootReducer'
-import  Amount, { issuerAmountToAmount, IssuerAmount, amountToIssuerAmount } from '../../xrpl/api/model/Amount'
+import  Amount, { issuerAmountToAmount } from '../../xrpl/api/model/Amount'
 import subscribeToBook from '../../xrpl/api/utils/subscribeToOrderbook'
 import OrderCancellation from '../../xrpl/api/model/transaction/OrderCancellation/OrderCancellation'
 import { AsksAndBids } from '../../xrpl/api/model/transaction/Orderbook/Orderbook'
 import { getAccountOffers } from '../../xrpl/api/utils/account/accountOffers'
 import AccountOffers, { AccountOffer } from '../../xrpl/api/model/account/AccountOffers'
-import Offer from '../../xrpl/api/model/ledger/Offer';
+import Offer from '../../xrpl/api/model/ledger/Offer'
 
 function setOpenOrders(orders: AccountOffer[]): SetOpenOrdersAction {
     return {
@@ -117,62 +117,6 @@ export const setQuoteCurrency: ActionCreator<any> = (quote: string) => {
     }
 }
 
-const removeOrder = (account: string, accountSequence: number, dispatch: Dispatch<OrderbookActions>, orderbook: OrderbookState) => {
-    const { bids, asks } = orderbook
-    for (let i = 0; i < bids.length; i++) {
-        const bid = bids[i]
-        const { maker, sequence } = bid.properties!!
-        if (maker === account && sequence === accountSequence) {
-            dispatch(removeBid(bid))
-            return
-        }
-    }
-    for(let i = 0; i < asks.length; i++) {
-        const ask = asks[i]
-        const { maker, sequence } = ask.properties!!
-        if (maker === account && sequence === accountSequence) {
-            dispatch(removeAsk(ask))
-            return
-        }
-    }
-}
-
-const addOrder = (orderbook: OrderbookState, TakerGets: Amount | string, TakerPays: Amount | string, Account: string, offerSequence: number, dispatch: Dispatch<OrderbookActions>) => {
-    const { baseCurrency, quoteCurrency } = orderbook
-    const currency = currencyService.createAmount(TakerGets).currency
-    if (baseCurrency === currency) {
-        dispatch(addAsk({
-            specification: {
-                direction: 'SELL',
-                quantity: issuerAmountToAmount(TakerGets),
-                totalPrice: issuerAmountToAmount(TakerPays)
-            },
-            properties: {
-                maker: Account,
-                sequence: offerSequence!!,
-                makerExchangeRate: ''
-            },
-            data: {}
-        }))
-    } else if(quoteCurrency === currency) {
-        dispatch(addBid({
-            specification: {
-                direction: 'BUY',
-                quantity: issuerAmountToAmount(TakerPays),
-                totalPrice: issuerAmountToAmount(TakerGets)
-            },
-            properties: {
-                maker: Account,
-                sequence: offerSequence!!,
-                makerExchangeRate: ''
-            },
-            data: {}
-        }))
-    } else {
-        console.log('ERROR UPDATING ORDER BOOK')
-    }
-}
-
 export const addOfferToBook: ActionCreator<any> = (offer: Offer) => {
     return async (dispatch: Dispatch<OrderbookActions>, getState: () => AppState) => {
         const { orderbook } = getState()
@@ -220,5 +164,68 @@ export const fetchOrderbook: ActionCreator<any> = (
             dispatch(setLoading(false))
         })
         
+    }
+}
+
+const removeOrder = (account: string, accountSequence: number, dispatch: Dispatch<OrderbookActions>, orderbook: OrderbookState) => {
+    const { bids, asks } = orderbook
+    for (let i = 0; i < bids.length; i++) {
+        const bid = bids[i]
+        const { maker, sequence } = bid.properties!!
+        if (maker === account && sequence === accountSequence) {
+            dispatch(removeBid(bid))
+            return
+        }
+    }
+    for(let i = 0; i < asks.length; i++) {
+        const ask = asks[i]
+        const { maker, sequence } = ask.properties!!
+        if (maker === account && sequence === accountSequence) {
+            dispatch(removeAsk(ask))
+            return
+        }
+    }
+}
+
+const addOrder = (
+    orderbook: OrderbookState, 
+    TakerGets: Amount | string, 
+    TakerPays: Amount | string, 
+    Account: string, 
+    offerSequence: number, 
+    dispatch: Dispatch<OrderbookActions>
+) => {
+    const { baseCurrency, quoteCurrency } = orderbook
+    const currency = currencyService.createAmount(TakerGets).currency
+    if (baseCurrency === currency) {
+        dispatch(addAsk({
+            specification: {
+                direction: 'SELL',
+                quantity: issuerAmountToAmount(TakerGets),
+                totalPrice: issuerAmountToAmount(TakerPays)
+            },
+            properties: {
+                maker: Account,
+                sequence: offerSequence!!,
+                makerExchangeRate: ''
+            },
+            data: {}
+        }))
+    } else if(quoteCurrency === currency) {
+        dispatch(addBid({
+            specification: {
+                direction: 'BUY',
+                quantity: issuerAmountToAmount(TakerPays),
+                totalPrice: issuerAmountToAmount(TakerGets)
+            },
+            properties: {
+                maker: Account,
+                sequence: offerSequence!!,
+                makerExchangeRate: ''
+            },
+            data: {}
+        }))
+    } else {
+        console.log('ERROR UPDATING ORDER BOOK')
     }
 }

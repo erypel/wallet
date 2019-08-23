@@ -62,8 +62,6 @@ async function buildMarketOrderLimitPrice(address: string, isSell: boolean, amou
     const formattedAmount = formatCurrency(amount)
     const value = typeof formattedAmount === 'string' ? formattedAmount : formattedAmount.value
 
-    const counterparty = amount.counterparty || issuers[amount.currency][0]
-
     if (isSell) {
         //get bids
         const bids = await orderbookService.getBids(address, baseCurrency, quoteCurrency)

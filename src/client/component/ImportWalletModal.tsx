@@ -8,7 +8,7 @@ interface State {
 }
 
 export default class ImportWalletModal extends React.PureComponent<{}, State> {
-    constructor({}) {
+    constructor() {
         super({})
         this.state = {
             isOpen: false
