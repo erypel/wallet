@@ -10,16 +10,61 @@ const api = new RippleAPI({
 	server: 'wss://s.altnet.rippletest.net:51233'
 })
 
+//this is a hack until unsubscribe works
+const transactions = new Set()
+
 export default async function subscribeToBook(takerPays: string, takerGets: string): Promise<AsksAndBids> {
     return await api.connect().then(async () => { 
       api.connection.on('transaction', (tx: any) => {
           const { transaction, meta, ledger_index, validated } = tx
           const { TransactionType, Account } = transaction
-          switch(transaction.TransactionType) {
-              case 'OfferCreate':
-                return orderbookService.handleIncomingOrderCreate(transaction)
-              case 'OfferCancel':
-                return orderbookService.handleIncomingOrderCancel(transaction)
+
+          //hack
+          if(transactions.has(transaction)) {
+            return
+          }
+          transactions.add(transaction)
+          
+          const { AffectedNodes } = meta
+          var orderFilled = false
+          for(var i = 0; i < AffectedNodes.length; i++) {
+            const node = AffectedNodes[i]
+            
+            // Remove old orders when paritally filled
+            if (node.ModifiedNode && node.ModifiedNode.LedgerEntryType === 'Offer') {
+              const { FinalFields } = node.ModifiedNode
+                const offerToRemove = {
+                  LedgerEntryType: FinalFields.LedgerEntryType,
+                  Flags: FinalFields.Flags,
+                  Account: FinalFields.Account,
+                  Sequence: FinalFields.Sequence,
+                  TakerPays: node.ModifiedNode.PreviousFields.TakerPays,
+                  TakerGets: node.ModifiedNode.PreviousFields.TakerGets,
+                  BookDirectory: FinalFields.BookDirectory,
+                  BookNode: FinalFields.BookNode,
+                  OwnerNode: FinalFields.OwnerNode,
+                  PreviousTxnID: FinalFields.PreviousTxnID,
+                  PreviousTxnLgrSeq: FinalFields.PreviousTxnLgrSeq,
+                  Expiraton: FinalFields.Expiraton
+                }
+                orderbookService.removeOffer(offerToRemove)
+                orderbookService.addOffer(FinalFields)
+                orderFilled = true
+            }
+
+            // Remove filled orders
+            if (node.DeletedNode && node.DeletedNode.LedgerEntryType === 'Offer') {
+              orderbookService.removeOffer(node.DeletedNode.FinalFields)
+            }
+          }
+
+          if(!orderFilled) {
+            switch(transaction.TransactionType) {
+                case 'OfferCreate':
+                  return orderbookService.handleIncomingOrderCreate(transaction)
+                case 'OfferCancel':
+                  return orderbookService.handleIncomingOrderCancel(transaction)
+            }
           }
           console.log(TransactionType + " transaction sent by " +
                       Account +
@@ -195,7 +240,7 @@ async function doSubscription(takerGets: string, takerPays: string): Promise<Ask
         {taker_pays: {currency: takerPays, issuer: takerPaysIssuer}, taker_gets: {currency: takerGets, issuer: takerGetsIssuer}, snapshot: true, both: true},
         {taker_pays: {currency: takerGets, issuer: takerGetsIssuer}, taker_gets: {currency: takerPays, issuer: takerPaysIssuer}, snapshot: true, both: true}
     ]
-}).then(async (result: AsksAndBids) => {
+  }).then(async (result: AsksAndBids) => {
     const orderbookInfo = {
         "base": {
           "currency": takerPays,

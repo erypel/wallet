@@ -10,7 +10,7 @@ import Subheader from '../component/Subheader'
 import { history } from '../utils/history'
 import { loadWallets } from '../store/wallet/actions'
 import { walletService } from '../services/walletService'
-import ImportWalletModal from '../component/ImportWalletModal';
+import ImportWalletModal from '../component/ImportWalletModal'
 
 const mapStateToProps = (store: AppState) => {
     return {

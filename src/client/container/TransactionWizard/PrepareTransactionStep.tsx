@@ -10,7 +10,7 @@ import { PaymentBuilder } from '../../xrpl/api/model/transaction/Payment/Payment
 import Payment from '../../xrpl/api/model/transaction/Payment/Payment'
 import xrpToDrops from '../../xrpl/api/utils/xrpToDrops'
 import { transactionService } from '../../services/transactionService'
-import PreparedTransaction from '../../xrpl/api/model/transaction/flow/PreparedTransaction';
+import PreparedTransaction from '../../xrpl/api/model/transaction/flow/PreparedTransaction'
 
 
 interface Props {

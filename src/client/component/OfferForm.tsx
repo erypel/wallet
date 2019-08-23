@@ -11,7 +11,7 @@ import { connect } from 'react-redux'
 import UsdInput from './UsdInput'
 import XrpInput from './XrpInput'
 import { issuers, Issuers } from '../xrpl/api/utils/issuers'
-import { transactionService } from '../services/transactionService';
+import { transactionService } from '../services/transactionService'
 
 
 interface Props {

@@ -51,7 +51,7 @@ class WalletPicker extends React.PureComponent<Props> {
                         </tr>
                         <tr key={`${publicKey}${balance}`}>
                             <td className="wallet-table-label">Balance:</td>
-                            <td className="wallet-table-value">{balance}</td>
+                            <td className="wallet-table-value">{balance} {displayCurrency}</td>
                         </tr>
                     </tbody>
                 </table>
