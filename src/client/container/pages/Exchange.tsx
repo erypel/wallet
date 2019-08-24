@@ -56,12 +56,14 @@ class Exchange extends React.PureComponent<Props> {
             activeWallet, openOrders, baseCurrency, quoteCurrency, bids, asks 
         } = this.props
         return <div>
-            <TradingPairPicker/>
+            <div className=''>
+            <TradingPairPicker className='dropdown'/>
             <ExchangeWallet 
                 activeWallet={activeWallet} 
                 baseCurrency={baseCurrency} 
                 quoteCurrency={quoteCurrency}
             />
+            </div>
             {activeWallet && <OfferForm 
                 account={activeWallet.publicKey} 
                 secret={activeWallet.privateKey} 
