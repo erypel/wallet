@@ -10,13 +10,13 @@ import { AnyAction } from 'redux'
 import { connect } from 'react-redux'
 import UsdInput from './UsdInput'
 import XrpInput from './XrpInput'
-import { issuers, Issuers } from '../xrpl/api/utils/issuers'
+import { issuers, IssuerCurrency } from '../xrpl/api/utils/issuers'
 import { transactionService } from '../services/transactionService'
 
 
 interface Props {
-    baseCurrency: keyof Issuers
-    quoteCurrency: keyof Issuers
+    baseCurrency: IssuerCurrency
+    quoteCurrency: IssuerCurrency
     account: string
     secret: string
     getOpenOrders: (address: string) => void
@@ -24,8 +24,8 @@ interface Props {
 
 interface State {
     isSell: boolean
-    amount: number
-    limitPrice: number
+    amount: string
+    limitPrice: string
     showAdvanced: boolean
     timeInForce: string
     isPostOnly: boolean
@@ -39,8 +39,8 @@ class OfferForm extends React.PureComponent<Props, State> {
 
         this.state = {
             isSell: false,
-            amount: 0.00,
-            limitPrice: 0.00,
+            amount: '',
+            limitPrice: '',
             showAdvanced: false,
             timeInForce: 'Good Til Cancelled',
             isPostOnly: false
@@ -95,9 +95,9 @@ class OfferForm extends React.PureComponent<Props, State> {
         const { state, props, clearForm } = this
         const { account, secret, baseCurrency, quoteCurrency, getOpenOrders } = props
         const { isSell, amount, limitPrice, showAdvanced, timeInForce, isPostOnly } = state
-        const offerAmount = (limitPrice > 0) ? new Amount(String(baseCurrency), amount.toString(), issuers[baseCurrency][0]) 
-            : (isSell) ? new Amount(String(baseCurrency), amount.toString()) : new Amount(String(quoteCurrency), amount.toString())
-        const limit = new Amount(String(quoteCurrency), limitPrice.toString(), issuers[quoteCurrency][0])
+        const offerAmount = (Number(limitPrice) > 0) ? new Amount(baseCurrency, amount.toString(), issuers[baseCurrency][0]) 
+            : (isSell) ? new Amount(baseCurrency, amount.toString()) : new Amount(quoteCurrency, amount.toString())
+        const limit = new Amount(quoteCurrency, limitPrice.toString(), issuers[quoteCurrency][0])
         try {
             const offer = await offerService.buildCreateOffer(
                 account, 
@@ -107,8 +107,8 @@ class OfferForm extends React.PureComponent<Props, State> {
                 showAdvanced, 
                 timeInForce, 
                 isPostOnly,
-                String(baseCurrency),
-                String(quoteCurrency)
+                baseCurrency,
+                quoteCurrency
             )
         
             transactionService.send(offer, secret).then(() => {
@@ -126,8 +126,8 @@ class OfferForm extends React.PureComponent<Props, State> {
 
     clearOfferTabState = () => {
         this.setState({
-            amount: 0.00,
-            limitPrice: 0.00,
+            amount: '',
+            limitPrice: '',
             showAdvanced: false,
             timeInForce: 'Good Til Cancelled',
             isPostOnly: false
@@ -147,27 +147,30 @@ class OfferForm extends React.PureComponent<Props, State> {
                 <span>
                     <div>BUY</div>
                     <Switch id='isSell' onChange={handleCheckbox}/>
-                    <p>SELL</p>
+                    <div>SELL</div>
                 </span>
                 <Tabs onTabSwitch={this.clearOfferTabState}>
                     <div data-label='market'>
                         <label>
                             Amount
-                            {marketCurrency === 'USD' && <UsdInput id='amount' value={amount} onChange={handleChange} />}
-                            {marketCurrency !== 'USD' && <XrpInput id='amount' value={amount} onChange={handleChange} />} {marketCurrency}
+                            {marketCurrency === 'USD' ? 
+                                <UsdInput id='amount' value={amount} onChange={handleChange} placeHolder={0.00}/> :
+                                <XrpInput id='amount' value={amount} onChange={handleChange} placeHolder={0.000000}/>} {marketCurrency}
                         </label>
                     </div>
                     <div data-label='limit'>
                         <label>
                             Amount
-                            {baseCurrency === 'USD' && <UsdInput id='amount' value={amount} onChange={handleChange} />}
-                            {baseCurrency !== 'USD' && <XrpInput id='amount' value={amount} onChange={handleChange} />} {baseCurrency}
+                            {baseCurrency === 'USD' ? 
+                                <UsdInput id='amount' value={amount} onChange={handleChange} placeHolder={0.00}/> :
+                                <XrpInput id='amount' value={amount} onChange={handleChange} placeHolder={0.000000}/>} {baseCurrency}
                         </label>
                         <br/>
                         <label>
                             Limit Price
-                            {quoteCurrency === 'USD' && <UsdInput id='limitPrice' value={limitPrice} onChange={handleChange} />}
-                            {quoteCurrency !== 'USD' && <XrpInput id='limitPrice' value={limitPrice} onChange={handleChange} />} {quoteCurrency}
+                            {quoteCurrency === 'USD' ? 
+                                <UsdInput id='limitPrice' value={limitPrice} onChange={handleChange} placeHolder={0.00}/> :
+                                <XrpInput id='limitPrice' value={limitPrice} onChange={handleChange} placeHolder={0.000000}/>} {quoteCurrency}
                         </label>
                         <br/>
                         <label>
@@ -195,28 +198,6 @@ class OfferForm extends React.PureComponent<Props, State> {
                         </div>
                         }
                     </div>
-                    {/* 
-                    
-                    Leaving this unimplemented for now since it will probably require creating an order
-                    book listener serverside to execute trades as they become available. Client side 
-                    support is good enough for the DEX
-                    
-                    <div data-label='stop'>
-                        <label>
-                            Stop Price
-                            <Input id='amount' type='number' value={stopPrice}/> {baseCurrency}
-                        </label>
-                        <br/>
-                        <label>
-                            Amount
-                            <Input id='amount' type='number' value={amount}/> {quoteCurrency}
-                        </label>
-                        <br/>
-                        <label>
-                            Limit Price
-                            <Input id='limitPrice' type='number' value={limitPrice}/> {baseCurrency}
-                        </label>
-                    </div> */}
                 </Tabs>
                 <Input id='submit' type='submit' value='Submit Order'/>
             </form>

@@ -1,5 +1,9 @@
 import { ActionCreator, Dispatch } from 'redux'
-import { REGISTER_REQUEST, SuccessAction, REGISTER_SUCCESS, REGISTER_FAILURE, FailureAction, CreateUserAction, UPDATE_USER_DETAIL, SetUserAction, SET_USER, ClearUserAction, CLEAR, SetUserDetailAction, SET_USER_DETAIL } from './types';
+import { 
+    REGISTER_REQUEST, SuccessAction, REGISTER_SUCCESS, REGISTER_FAILURE, 
+    FailureAction, UPDATE_USER_DETAIL, SetUserAction, SET_USER, ClearUserAction, 
+    CLEAR, SetUserDetailAction, SET_USER_DETAIL 
+} from './types'
 import User from '../../model/User'
 import { userService } from '../../services/userService'
 import UserDetail from '../../model/UserDetail'

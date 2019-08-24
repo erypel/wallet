@@ -8,13 +8,13 @@ import { Route, Router, Switch } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { history } from './client/utils/history'
 import Wallet from './client/container/pages/Wallet'
-import Orderbook from './client/container/pages/Trade'
 import { PersistGate } from 'redux-persist/integration/react'
 import configureStore from './client/store/configureStore'
 import './client/main.css'
 import UserProfileForm from './client/container/UserProfileForm'
 import NavBar from './client/container/NavBar'
 import Issue from './client/container/pages/Issue'
+import Exchange from './client/container/pages/Exchange'
 
 const {store, persistor} = configureStore()
 
@@ -34,7 +34,7 @@ class App extends React.PureComponent {
                   <Route path='/register' component={Register}/>
                   <PrivateRoute path='/wallet/:publicKey' component={Wallet}/>
                   <PrivateRoute path='/profile' component={UserProfileForm}/>
-                  <PrivateRoute path='/trade' component={Orderbook}/>
+                  <PrivateRoute path='/trade' component={Exchange}/>
                   <PrivateRoute path='/issue' component={Issue}/>
                   <Route render={() => (<div> Sorry, this page does not exist. </div>)} />
                 </Switch>

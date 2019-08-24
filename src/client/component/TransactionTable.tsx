@@ -51,11 +51,13 @@ export default class TransactionTable extends React.PureComponent<Props> {
         }
         return transactions.map((transaction: AccountTransaction, idx: number) => {
             const { tx } = transaction
-            if (!tx) { return }
+            if (!tx) { return null }
             const { TransactionType: type } = tx
             //only showing payments for now
             if (type === 'Payment') {
                 return this.mapPayment(tx as Payment, idx)
+            } else {
+                return null
             }
         })
     }

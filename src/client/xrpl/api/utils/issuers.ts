@@ -1,3 +1,5 @@
+export type IssuerCurrency = keyof Issuers & string
+
 export interface Issuers {
     'BTC': string[],
     'CNY': string[],
