@@ -83,7 +83,6 @@ html {
 
 .dropdown {
     width: 8em;
-    position: relative;
     display: inline-block;
     z-index: 1;
     background-color: black;
@@ -100,7 +99,7 @@ html {
 
 .dropdown div {
     position: absolute;
-    width: inherit;
+    width: auto;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     background-color: black;
@@ -117,6 +116,20 @@ html {
 }
 
 .dropdown div div:hover {
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
+.dropdown div table {
+    width: 100%;
+    background: black;
+    color: white;
+    padding: .5em;
+    cursor: pointer;
+}
+
+.dropdown div table:hover {
     cursor: pointer;
     background-color: white;
     color: black;
@@ -319,7 +332,7 @@ a {
     cursor: pointer;
 }
 
-.wallet-table .wallet-table-label {
+.table-label {
     float: right;
     font-weight: bold;
 }

@@ -58,11 +58,11 @@ class WalletTable extends React.PureComponent<Props> {
                 return <table key={`wallet-table-${publicKey}`} className="wallet-table" onClick={() => handleClick(publicKey)}>
                     <tbody>
                         <tr key={publicKey}>
-                            <td className="wallet-table-label">Account #:</td>
+                            <td className="table-label">Account #:</td>
                             <td className="wallet-table-value">{publicKey}</td>
                         </tr>
                         <tr key={`${publicKey}${balance}`}>
-                            <td className="wallet-table-label">Balance:</td>
+                            <td className="table-label">Balance:</td>
                             <td className="wallet-table-value">{balance}</td>
                         </tr>
                     </tbody>

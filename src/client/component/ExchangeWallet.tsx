@@ -12,14 +12,10 @@ interface Props {
 class ExchangeWallet extends React.PureComponent<Props> {
     render() {
         const { activeWallet, baseCurrency, quoteCurrency } = this.props
-        return <>
+        return <div>
             <WalletPicker displayCurrency={baseCurrency} activeWallet={activeWallet}/>
-            {activeWallet && <div className='content'>
-                <div className='width-2-3'>
-                    <Balance address={activeWallet.publicKey} currencies={[baseCurrency, quoteCurrency]}/>
-                </div>
-            </div>}
-        </>
+            {activeWallet && <Balance address={activeWallet.publicKey} currencies={[baseCurrency, quoteCurrency]}/>}
+        </div>
     }
 }
 

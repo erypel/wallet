@@ -15,6 +15,7 @@ import Ask from '../../xrpl/api/model/transaction/Orderbook/Ask'
 import unsubscribeFromBook from '../../xrpl/api/utils/unsubscribeFromOrderbook'
 import { AccountOffer } from '../../xrpl/api/model/account/AccountOffers'
 import { IssuerCurrency } from '../../xrpl/api/utils/issuers'
+import Subheader from '../../component/Subheader';
 
 interface Props {
     activeWallet?: Wallet
@@ -56,9 +57,10 @@ class Exchange extends React.PureComponent<Props> {
             activeWallet, openOrders, baseCurrency, quoteCurrency, bids, asks 
         } = this.props
         return <div>
+            <Subheader title='Exchange'/>
             <div className=''>
             <TradingPairPicker className='dropdown'/>
-            <ExchangeWallet 
+            <ExchangeWallet
                 activeWallet={activeWallet} 
                 baseCurrency={baseCurrency} 
                 quoteCurrency={quoteCurrency}
