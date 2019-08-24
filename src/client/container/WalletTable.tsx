@@ -10,7 +10,6 @@ import Subheader from '../component/Subheader'
 import { history } from '../utils/history'
 import { loadWallets } from '../store/wallet/actions'
 import { walletService } from '../services/walletService'
-import ImportWalletModal from '../component/ImportWalletModal'
 
 const mapStateToProps = (store: AppState) => {
     return {
@@ -50,14 +49,10 @@ class WalletTable extends React.PureComponent<Props> {
         var justWallets = Array.from(Object.values(wallets))
 
         if ( !justWallets || justWallets.length < 1 ){
-            return <div className='width-2-3'>
-                <Subheader title='Accounts'/>
-                <GenerateWalletButton className='button-green'/>
-            </div>
+            return
         }
 
-        return <div className='width-2-3'>
-            <Subheader title='Accounts'/>
+        return <div>
             {justWallets.map(wallet => {
                 const { publicKey } = wallet
                 var { balances } = wallet
@@ -75,8 +70,6 @@ class WalletTable extends React.PureComponent<Props> {
                     </tbody>
                 </table>
             })}
-            <GenerateWalletButton className='button-green'/>
-            <ImportWalletModal/>
         </div>
     }
 }

@@ -227,6 +227,10 @@ a {
     border-radius: .5em;
 }
 
+.width-1-2 {
+    width: 50%
+}
+
 .width-2-3 {
     width: 66%;
     display: inline-block;
@@ -280,7 +284,6 @@ a {
 }
 
 .button-green {
-    width: 100%;
     background: #26AE5F;
     color: white;
     border-radius: 1em;
