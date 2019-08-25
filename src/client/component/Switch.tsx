@@ -1,5 +1,6 @@
 import React from 'react'
 import Input from './Input'
+import '../css/Switch.css'
 
 interface Props {
     id: string

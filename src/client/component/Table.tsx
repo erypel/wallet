@@ -1,5 +1,5 @@
 import React from 'react'
-import './Table.css'
+import '../css/Table.css'
 
 //Based off of https://github.com/ua-oira/react-super-responsive-table
 const { Provider, Consumer } = React.createContext({})
