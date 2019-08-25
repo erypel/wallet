@@ -42,7 +42,7 @@ class Orderbook extends React.PureComponent<Props> {
         const asksSize = asks.length > 10 ? 10 : asks.length
         const hasSpread = asksSize !== 0 && bidsSize !== 0
         const spread = hasSpread ? this.calculateSpread(bidsSize, bids, asks) : 0
-        return <div className='orderbook'>
+        return <div className='table-dashboard'>
                 <h1>Orderbook</h1>
                 <table>
                     <thead>

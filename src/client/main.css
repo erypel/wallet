@@ -198,6 +198,13 @@ a {
     font-size: 1.25em;
 }
 
+
+.offer-form {
+    width: 80%;
+    display: inline-block;
+    background-color: white;
+}
+
 .send-form {
     width: 80%;
     display: inline-block;
@@ -359,12 +366,21 @@ a {
     height: 5em;
 }
 
-.orderbook {
+.button-red {
+    background: red;
+    color: white;
+    border-radius: 1em;
+    padding: .5em;
+    cursor: pointer;
+    border: none;
+}
+
+.table-dashboard {
     background-color: black;
     border-radius: 1em;
 }
 
-.orderbook h1 {
+.table-dashboard h1 {
     color: white;
     text-align: left;
     padding-left: 1em;
@@ -372,7 +388,7 @@ a {
     border-radius: 1em;
 }
 
-.orderbook table {
+.table-dashboard table {
     color: white;
     width: 100%;
 }

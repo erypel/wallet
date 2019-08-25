@@ -142,7 +142,7 @@ class OfferForm extends React.PureComponent<Props, State> {
         const { baseCurrency, quoteCurrency } = props
         const marketCurrency = isSell ? baseCurrency : quoteCurrency
         return <div>
-            <form onSubmit={this.onSubmit}>
+            <form onSubmit={this.onSubmit} className='offer-form'>
                 <span>
                     <Switch id='isSell' onChange={handleCheckbox} onLabel='BUY' offLabel='SELL' isOn={true}/>
                 </span>
@@ -186,10 +186,7 @@ class OfferForm extends React.PureComponent<Props, State> {
                                 {isGoodTilTime && <p>Good Til: Tomorrow</p>}
                             </label>
                             <br/>
-                            <label>
-                                Execution
-                                <Switch id='isPostOnly' onChange={handleCheckbox} onLabel={'Post Only'} offLabel={'Allow Taker'}/>
-                            </label>
+                            <Switch id='isPostOnly' onChange={handleCheckbox} onLabel={'Post Only'} offLabel={'Allow Taker'}/>
                         </div>
                         }
                     </div>

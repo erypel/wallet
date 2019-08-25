@@ -17,7 +17,7 @@ interface Props {
 
 class OpenOrdersTable extends React.PureComponent<Props> {
     render() {
-        return <div>
+        return <div className='table-dashboard'>
             <h1>Open Orders</h1>
             <table>
                 <thead>
@@ -48,7 +48,7 @@ class OpenOrdersTable extends React.PureComponent<Props> {
                 <td>{currencyService.createCurrencyString(takerGets)}</td>
                 <td>{currencyService.createCurrencyString(takerPays)}</td>
                 <td>
-                    <Button buttonText='Cancel Order' onClick={() => this.cancelOrder(seq)}/>
+                    <Button buttonText='Cancel Order' onClick={() => this.cancelOrder(seq)} className='button-red'/>
                 </td>
             </tr>
         })
