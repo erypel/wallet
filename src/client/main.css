@@ -392,8 +392,38 @@ a {
     height: 50px;
 }
   
-.switch input {display:none;}
+.switch input {
+    display:none;
+}
+
+.on {
+    display: none;
+    padding-right: 2.5em;
+    color: white;
+}
+
+.off {
+    color: white;
+    padding-left: 2.5em;
+}
   
+.on, .off
+{
+  color: white;
+  position: absolute;
+  transform: translate(-50%,-50%);
+  top: 50%;
+  left: 50%;
+  font-size: 1em;
+  font-family: Verdana, sans-serif;
+}
+
+input:checked+ .slider .on
+{display: block;}
+
+input:checked + .slider .off
+{display: none;}
+
 .slider {
     position: absolute;
     cursor: pointer;
@@ -422,10 +452,6 @@ input:checked + .slider {
     background-color: green;
 }
   
-input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
-}
-  
 input:checked + .slider:before {
     -webkit-transform: translateX(50px);
     -ms-transform: translateX(50px);
@@ -449,7 +475,6 @@ input:checked + .slider:before {
     display: table;
     clear: both;
 }
-
 
 .text-align-left {
     text-align: left;

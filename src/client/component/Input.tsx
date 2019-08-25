@@ -13,12 +13,13 @@ interface InputProps {
     required?: true | false
     step?: number
     maxLength?: number
+    defaultChecked?: boolean
 }
 
 const Input = (props: InputProps) => {
     const { 
         type, value, onChange, className, id, autoComplete, required, placeHolder,
-        step, maxLength 
+        step, maxLength, defaultChecked 
     } = props
     return (
         <input 
@@ -32,6 +33,7 @@ const Input = (props: InputProps) => {
             required = {required}
             step = {type === 'number' ? step : undefined}
             maxLength = {maxLength}
+            defaultChecked={defaultChecked}
         />
 )}
 export default Input

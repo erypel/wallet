@@ -144,9 +144,7 @@ class OfferForm extends React.PureComponent<Props, State> {
         return <div>
             <form onSubmit={this.onSubmit}>
                 <span>
-                    <div>BUY</div>
-                    <Switch id='isSell' onChange={handleCheckbox}/>
-                    <div>SELL</div>
+                    <Switch id='isSell' onChange={handleCheckbox} onLabel='BUY' offLabel='SELL' isOn={true}/>
                 </span>
                 <Tabs onTabSwitch={this.clearOfferTabState}>
                     <div data-label='market'>
@@ -190,9 +188,7 @@ class OfferForm extends React.PureComponent<Props, State> {
                             <br/>
                             <label>
                                 Execution
-                                <div>Post Only</div>
-                                <Switch id='isPostOnly' onChange={handleCheckbox}/>
-                                <div>AllowTaker</div>
+                                <Switch id='isPostOnly' onChange={handleCheckbox} onLabel={'Post Only'} offLabel={'Allow Taker'}/>
                             </label>
                         </div>
                         }
