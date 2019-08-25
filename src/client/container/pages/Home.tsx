@@ -7,7 +7,7 @@ import Subheader from '../../component/Subheader'
 export default class Home extends React.PureComponent {
     
     render() {
-        return <div className='width-2-3'>
+        return <div className='content'>
                 <Subheader title='Accounts'/>
                 <WalletTable displayCurrency='XRP'/>
                 <span>

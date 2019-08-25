@@ -19,14 +19,14 @@ export default class TransactionTable extends React.PureComponent<Props> {
         console.log('isloading', isLoading)
         console.log('tx', transactions)
         if (isLoading) {
-            return <div>
+            return <div className='table-dashboard'>
                 <h1>Transactions</h1>
                 <div>Loading...</div>
             </div>
         }
-        return <>
+        return <div className='table-dashboard'>
             <h1>Transactions</h1>
-            <Table className='container-black'>
+            <Table>
                 <Thead>
                     <Tr>
                         <Th>Transaction Type</Th>
@@ -39,7 +39,7 @@ export default class TransactionTable extends React.PureComponent<Props> {
                     {this.mapTransactions()}
                 </Tbody>
             </Table>
-        </>
+        </div>
     }
 
     mapTransactions = () => {
