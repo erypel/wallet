@@ -142,7 +142,6 @@ class OfferForm extends React.PureComponent<Props, State> {
         const { baseCurrency, quoteCurrency } = props
         const marketCurrency = isSell ? baseCurrency : quoteCurrency
         return <div>
-            <h3>{baseCurrency}-{quoteCurrency}</h3>
             <form onSubmit={this.onSubmit}>
                 <span>
                     <div>BUY</div>

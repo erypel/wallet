@@ -58,30 +58,36 @@ class Exchange extends React.PureComponent<Props> {
         } = this.props
         return <div>
             <Subheader title='Exchange'/>
-            <div className=''>
-            <TradingPairPicker className='dropdown'/>
-            <ExchangeWallet
-                activeWallet={activeWallet} 
-                baseCurrency={baseCurrency} 
-                quoteCurrency={quoteCurrency}
-            />
+            <div className='column width-1-3'>
+                <div className='row text-align-left width-1-1'>
+                <TradingPairPicker className='dropdown'/>
+                <ExchangeWallet
+                    activeWallet={activeWallet} 
+                    baseCurrency={baseCurrency} 
+                    quoteCurrency={quoteCurrency}
+                />
+                </div>
+                <div className='row'>
+                {activeWallet && <OfferForm 
+                    account={activeWallet.publicKey} 
+                    secret={activeWallet.privateKey} 
+                    baseCurrency={baseCurrency} 
+                    quoteCurrency={quoteCurrency}
+                />}
+                </div>
             </div>
-            {activeWallet && <OfferForm 
-                account={activeWallet.publicKey} 
-                secret={activeWallet.privateKey} 
-                baseCurrency={baseCurrency} 
-                quoteCurrency={quoteCurrency}
-            />}
-            <Orderbook 
-                baseCurrency={baseCurrency} 
-                quoteCurrency={quoteCurrency} 
-                bids={bids} 
-                asks={asks}
-            />
-            {activeWallet && <OpenOrdersTable 
-                openOrders={openOrders} 
-                activeWallet={activeWallet}
-            />}
+            <div className='column width-2-3'>
+                <Orderbook 
+                    baseCurrency={baseCurrency} 
+                    quoteCurrency={quoteCurrency} 
+                    bids={bids} 
+                    asks={asks}
+                />
+                {activeWallet && <OpenOrdersTable 
+                    openOrders={openOrders} 
+                    activeWallet={activeWallet}
+                />}
+            </div>
         </div>
     }
 }

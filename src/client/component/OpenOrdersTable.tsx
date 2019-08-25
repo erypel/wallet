@@ -47,7 +47,9 @@ class OpenOrdersTable extends React.PureComponent<Props> {
             return <tr key={`${seq}`}>
                 <td>{currencyService.createCurrencyString(takerGets)}</td>
                 <td>{currencyService.createCurrencyString(takerPays)}</td>
-                <td><Button buttonText='Cancel Order' onClick={() => this.cancelOrder(seq)}/>}</td>
+                <td>
+                    <Button buttonText='Cancel Order' onClick={() => this.cancelOrder(seq)}/>
+                </td>
             </tr>
         })
     }
