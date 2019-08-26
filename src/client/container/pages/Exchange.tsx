@@ -77,13 +77,15 @@ class Exchange extends React.PureComponent<Props> {
                 </div>
             </div>
             <div className='column width-2-3'>
-                <Orderbook 
+                <Orderbook
+                    className='table-dashboard'
                     baseCurrency={baseCurrency} 
                     quoteCurrency={quoteCurrency} 
                     bids={bids} 
                     asks={asks}
                 />
                 {activeWallet && <OpenOrdersTable 
+                    className='table-dashboard'
                     openOrders={openOrders} 
                     activeWallet={activeWallet}
                 />}

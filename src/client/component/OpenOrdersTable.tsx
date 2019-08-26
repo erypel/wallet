@@ -13,11 +13,12 @@ interface Props {
     openOrders: AccountOffer[]
     activeWallet: Wallet
     getOpenOrders: (address: string) => void
+    className?: string
 }
 
 class OpenOrdersTable extends React.PureComponent<Props> {
     render() {
-        return <div className='table-dashboard'>
+        return <div className={this.props.className}>
             <h1>Open Orders</h1>
             <table>
                 <thead>

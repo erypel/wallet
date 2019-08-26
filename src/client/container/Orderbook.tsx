@@ -8,11 +8,12 @@ interface Props {
     quoteCurrency: IssuerCurrency,
     bids: Bid[]
     asks: Ask[]
+    className: string
 }
 
 class Orderbook extends React.PureComponent<Props> {
     render() {
-        const { bids, asks, baseCurrency, quoteCurrency } = this.props
+        const { bids, asks, baseCurrency, quoteCurrency, className } = this.props
         // Sort the bid/asks by price. This probably should happen an insert, but I'm lazy today
         bids.sort(function(a: any, b: any) {
             const { quantity, totalPrice } = a.specification
@@ -42,7 +43,7 @@ class Orderbook extends React.PureComponent<Props> {
         const asksSize = asks.length > 10 ? 10 : asks.length
         const hasSpread = asksSize !== 0 && bidsSize !== 0
         const spread = hasSpread ? this.calculateSpread(bidsSize, bids, asks) : 0
-        return <div className='table-dashboard'>
+        return <div className={className}>
                 <h1>Orderbook</h1>
                 <table>
                     <thead>
