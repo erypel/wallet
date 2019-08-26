@@ -59,24 +59,21 @@ class Exchange extends React.PureComponent<Props> {
         return <div>
             <Subheader title='Exchange'/>
             <div><TradingPairPicker className='dropdown container-black'/></div>
-            
             <div className='column width-1-3'>
                 <div className='row width-1-1'>
-                
-                <ExchangeWallet
-                    activeWallet={activeWallet} 
-                    baseCurrency={baseCurrency} 
-                    quoteCurrency={quoteCurrency}
-                    className='table-dashboard'
-                />
-                </div>
-                <div className='row'>
-                {activeWallet && <OfferForm 
-                    account={activeWallet.publicKey} 
-                    secret={activeWallet.privateKey} 
-                    baseCurrency={baseCurrency} 
-                    quoteCurrency={quoteCurrency}
-                />}
+                    <ExchangeWallet
+                        activeWallet={activeWallet} 
+                        baseCurrency={baseCurrency} 
+                        quoteCurrency={quoteCurrency}
+                        className='table-dashboard'
+                    />
+                    {activeWallet && <OfferForm 
+                        account={activeWallet.publicKey} 
+                        secret={activeWallet.privateKey} 
+                        baseCurrency={baseCurrency} 
+                        quoteCurrency={quoteCurrency}
+                        className='dashboard'
+                    />}
                 </div>
             </div>
             <div className='column width-2-3'>
