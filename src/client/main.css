@@ -83,7 +83,6 @@ html {
 }
 
 .dropdown {
-    width: 8em;
     display: inline-block;
     z-index: 1;
     background-color: black;
@@ -93,7 +92,6 @@ html {
     background-color: black;
     color: white;
     font-weight: bold;
-    font-size: 1.5em;
     border: none;
     cursor: pointer;
 }
@@ -116,7 +114,7 @@ html {
 
 .dropdown div div {
     position: relative;
-    font-size: 1.5em;
+    font-size: 1em;
     color: white;
     border: none;
 }
@@ -375,7 +373,21 @@ a {
     border: none;
 }
 
+.dashboard {
+    background-color: black;
+    border-radius: 1em;
+    margin: .5em;
+}
+
+.dashboard h1 {
+    color: white;
+    text-align: left;
+    padding-left: 1em;
+    padding-top: .5em;
+}
+
 .table-dashboard {
+    margin: 0.5em;
     background-color: black;
     border-radius: 1em;
 }

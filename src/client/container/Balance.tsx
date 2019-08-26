@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Td, Tbody, Tr, Thead } from '../component/Table'
+import { Table, Td, Tbody, Tr, Thead, Th } from '../component/Table'
 import getBalances from '../xrpl/api/utils/getBalances'
 import { Balance as Balances } from '../xrpl/api/model/Balance'
 
@@ -8,6 +8,7 @@ type BalanceMap = { [key:string]: string } //currency to value
 interface Props {
     address: string
     currencies?: string[]
+    className?: string
 }
 
 interface State {
@@ -71,16 +72,16 @@ class Balance extends React.PureComponent<Props, State> {
     render() {
         const { props, state } = this
         const { balances } = state
-        const { currencies } = props
+        const { currencies, className } = props
         if(balances === {}) {
             return <label>Fetching Balance...</label>
         }
         if (currencies) {
-            return <Table className='container-black'>
+            return <Table className={className}>
                 <Thead>
                     <Tr key='header'>
-                        <Td>Asset</Td>
-                        <Td>Balance</Td>
+                        <Th>Asset</Th>
+                        <Th>Balance</Th>
                     </Tr>
                 </Thead>
                 <Tbody>
@@ -88,7 +89,7 @@ class Balance extends React.PureComponent<Props, State> {
                 </Tbody>
             </Table>
         } else {
-            return <Table className='container-black'>
+            return <Table className={className}>
                 <Tbody>
                     <Tr>
                         <Td>Balance</Td>

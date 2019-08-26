@@ -41,7 +41,7 @@ class Wallet extends React.PureComponent<Props> {
             <div className='section'>
                 <div className='content'>
                     <div className='width-2-3'>
-                        <Balance address={publicKey}/>
+                        <Balance address={publicKey} className='container-black'/>
                         <br/>
                         <Tabs>
                             <div data-label="Send">
