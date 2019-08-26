@@ -38,19 +38,19 @@ class WalletPicker extends React.PureComponent<Props> {
         // for IE
         var justWallets = Array.from(Object.values(wallets))
 
-        return <Menu title={activeWallet ? activeWallet.publicKey : 'Select a wallet'}>
+        return <Menu className='dropdown' title={activeWallet ? activeWallet.publicKey : 'Select a wallet'}>
             {justWallets.map(wallet => {
                 const { publicKey } = wallet
                 var { balances } = wallet
                 const balance = balances ? walletService.findBalance(displayCurrency, balances) : 'Could not fetch balances'
-                return <table key={`wallet-picker-${publicKey}`} className="wallet-table" onClick={() => this.handleClick(wallet)}>
+                return <table key={`wallet-picker-${publicKey}`} onClick={() => this.handleClick(wallet)}>
                     <tbody>
                         <tr key={publicKey}>
-                            <td className="wallet-table-label">Account #:</td>
+                            <td className="table-label">Account #:</td>
                             <td className="wallet-table-value">{publicKey}</td>
                         </tr>
                         <tr key={`${publicKey}${balance}`}>
-                            <td className="wallet-table-label">Balance:</td>
+                            <td className="table-label">Balance:</td>
                             <td className="wallet-table-value">{balance} {displayCurrency}</td>
                         </tr>
                     </tbody>

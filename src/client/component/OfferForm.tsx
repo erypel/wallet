@@ -20,6 +20,7 @@ interface Props {
     account: string
     secret: string
     getOpenOrders: (address: string) => void
+    className?: string
 }
 
 interface State {
@@ -139,16 +140,14 @@ class OfferForm extends React.PureComponent<Props, State> {
         const { amount, limitPrice, showAdvanced } = state
         const { isSell, timeInForce } = state
         const isGoodTilTime = timeInForce === 'Good Til Time'
-        const { baseCurrency, quoteCurrency } = props
+        const { baseCurrency, quoteCurrency, className } = props
         const marketCurrency = isSell ? baseCurrency : quoteCurrency
-        return <div>
-            <h3>{baseCurrency}-{quoteCurrency}</h3>
-            <form onSubmit={this.onSubmit}>
-                <span>
-                    <div>BUY</div>
-                    <Switch id='isSell' onChange={handleCheckbox}/>
-                    <div>SELL</div>
-                </span>
+        return <div className={className}>
+            <form onSubmit={this.onSubmit} className=''>
+                <br/>
+                <Switch id='isSell' onChange={handleCheckbox} onLabel='BUY' offLabel='SELL' isOn={true}/>
+                <br/>
+                <br/>
                 <Tabs onTabSwitch={this.clearOfferTabState}>
                     <div data-label='market'>
                         <label>
@@ -189,17 +188,14 @@ class OfferForm extends React.PureComponent<Props, State> {
                                 {isGoodTilTime && <p>Good Til: Tomorrow</p>}
                             </label>
                             <br/>
-                            <label>
-                                Execution
-                                <div>Post Only</div>
-                                <Switch id='isPostOnly' onChange={handleCheckbox}/>
-                                <div>AllowTaker</div>
-                            </label>
+                            <br/>
+                            <Switch id='isPostOnly' onChange={handleCheckbox} onLabel={'Post Only'} offLabel={'Allow Taker'}/>
                         </div>
                         }
                     </div>
                 </Tabs>
-                <Input id='submit' type='submit' value='Submit Order'/>
+                <br/>
+                <Input id='submit' type='submit' value='Submit Order' className='button-green'/>
             </form>
         </div>
     }

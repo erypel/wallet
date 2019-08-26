@@ -10,6 +10,7 @@ interface Props {
     baseCurrency: string,
     quoteCurrency: string,
     setTradingPair: (base: string, quote: string) => void
+    className?: string
 }
 
 // Add new currency pairs here:
@@ -37,9 +38,12 @@ class TradingPairPicker extends React.PureComponent<Props> {
     }
 
     render() {
-        const { baseCurrency, quoteCurrency } = this.props
+        const { baseCurrency, quoteCurrency, className } = this.props
 
-        return <Menu title={`${baseCurrency}/${quoteCurrency}`}>
+        return <Menu 
+            title={`${baseCurrency}/${quoteCurrency}`} 
+            className={className}
+            >
                 {this.mapCurrencyPairs()}
             </Menu>
     }

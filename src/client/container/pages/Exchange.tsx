@@ -15,6 +15,7 @@ import Ask from '../../xrpl/api/model/transaction/Orderbook/Ask'
 import unsubscribeFromBook from '../../xrpl/api/utils/unsubscribeFromOrderbook'
 import { AccountOffer } from '../../xrpl/api/model/account/AccountOffers'
 import { IssuerCurrency } from '../../xrpl/api/utils/issuers'
+import Subheader from '../../component/Subheader';
 
 interface Props {
     activeWallet?: Wallet
@@ -56,28 +57,39 @@ class Exchange extends React.PureComponent<Props> {
             activeWallet, openOrders, baseCurrency, quoteCurrency, bids, asks 
         } = this.props
         return <div>
-            <TradingPairPicker/>
-            <ExchangeWallet 
-                activeWallet={activeWallet} 
-                baseCurrency={baseCurrency} 
-                quoteCurrency={quoteCurrency}
-            />
-            {activeWallet && <OfferForm 
-                account={activeWallet.publicKey} 
-                secret={activeWallet.privateKey} 
-                baseCurrency={baseCurrency} 
-                quoteCurrency={quoteCurrency}
-            />}
-            <Orderbook 
-                baseCurrency={baseCurrency} 
-                quoteCurrency={quoteCurrency} 
-                bids={bids} 
-                asks={asks}
-            />
-            {activeWallet && <OpenOrdersTable 
-                openOrders={openOrders} 
-                activeWallet={activeWallet}
-            />}
+            <Subheader title='Exchange'/>
+            <div><TradingPairPicker className='dropdown container-black'/></div>
+            <div className='column width-1-3'>
+                <div className='row width-1-1'>
+                    <ExchangeWallet
+                        activeWallet={activeWallet} 
+                        baseCurrency={baseCurrency} 
+                        quoteCurrency={quoteCurrency}
+                        className='table-dashboard'
+                    />
+                    {activeWallet && <OfferForm 
+                        account={activeWallet.publicKey} 
+                        secret={activeWallet.privateKey} 
+                        baseCurrency={baseCurrency} 
+                        quoteCurrency={quoteCurrency}
+                        className='dashboard'
+                    />}
+                </div>
+            </div>
+            <div className='column width-2-3'>
+                <Orderbook
+                    className='table-dashboard'
+                    baseCurrency={baseCurrency} 
+                    quoteCurrency={quoteCurrency} 
+                    bids={bids} 
+                    asks={asks}
+                />
+                {activeWallet && <OpenOrdersTable 
+                    className='table-dashboard'
+                    openOrders={openOrders} 
+                    activeWallet={activeWallet}
+                />}
+            </div>
         </div>
     }
 }

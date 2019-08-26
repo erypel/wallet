@@ -1,16 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import GenerateWalletButton from './GenerateWalletButton'
 import User from '../model/User'
 import { AppState } from '../store/rootReducer'
 import { WalletMap } from '../store/wallet/types'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
-import Subheader from '../component/Subheader'
 import { history } from '../utils/history'
 import { loadWallets } from '../store/wallet/actions'
 import { walletService } from '../services/walletService'
-import ImportWalletModal from '../component/ImportWalletModal'
 
 const mapStateToProps = (store: AppState) => {
     return {
@@ -50,14 +47,10 @@ class WalletTable extends React.PureComponent<Props> {
         var justWallets = Array.from(Object.values(wallets))
 
         if ( !justWallets || justWallets.length < 1 ){
-            return <div className='width-2-3'>
-                <Subheader title='Accounts'/>
-                <GenerateWalletButton className='button-green'/>
-            </div>
+            return
         }
 
-        return <div className='width-2-3'>
-            <Subheader title='Accounts'/>
+        return <div>
             {justWallets.map(wallet => {
                 const { publicKey } = wallet
                 var { balances } = wallet
@@ -65,18 +58,16 @@ class WalletTable extends React.PureComponent<Props> {
                 return <table key={`wallet-table-${publicKey}`} className="wallet-table" onClick={() => handleClick(publicKey)}>
                     <tbody>
                         <tr key={publicKey}>
-                            <td className="wallet-table-label">Account #:</td>
+                            <td className="table-label">Account #:</td>
                             <td className="wallet-table-value">{publicKey}</td>
                         </tr>
                         <tr key={`${publicKey}${balance}`}>
-                            <td className="wallet-table-label">Balance:</td>
+                            <td className="table-label">Balance:</td>
                             <td className="wallet-table-value">{balance}</td>
                         </tr>
                     </tbody>
                 </table>
             })}
-            <GenerateWalletButton className='button-green'/>
-            <ImportWalletModal/>
         </div>
     }
 }

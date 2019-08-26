@@ -1,6 +1,6 @@
 import React from 'react'
 import Button from './Button'
-import './Modal.css'
+import '../css/Modal.css'
 
 const Modal = (props) => {
     const {title, children, onClose} = props

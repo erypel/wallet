@@ -4,6 +4,7 @@ import React from  'react'
 interface Props {
     title: string
     children: JSX.Element[]
+    className?: string
     menuItemsClassName?: string
 }
 
@@ -37,9 +38,9 @@ export default class Menu extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { title, children, menuItemsClassName } = this.props
+        const { title, children, menuItemsClassName, className } = this.props
         const { showMenu } = this.state
-        return <div>
+        return <div className={className}>
             <Button onClick={this.openMenu} buttonText={title}/>
             {showMenu && <div className={menuItemsClassName}>
                 {children}

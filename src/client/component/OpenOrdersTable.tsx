@@ -13,11 +13,12 @@ interface Props {
     openOrders: AccountOffer[]
     activeWallet: Wallet
     getOpenOrders: (address: string) => void
+    className?: string
 }
 
 class OpenOrdersTable extends React.PureComponent<Props> {
     render() {
-        return <div>
+        return <div className={this.props.className}>
             <h1>Open Orders</h1>
             <table>
                 <thead>
@@ -47,7 +48,9 @@ class OpenOrdersTable extends React.PureComponent<Props> {
             return <tr key={`${seq}`}>
                 <td>{currencyService.createCurrencyString(takerGets)}</td>
                 <td>{currencyService.createCurrencyString(takerPays)}</td>
-                <td><Button buttonText='Cancel Order' onClick={() => this.cancelOrder(seq)}/>}</td>
+                <td>
+                    <Button buttonText='Cancel Order' onClick={() => this.cancelOrder(seq)} className='button-red'/>
+                </td>
             </tr>
         })
     }
