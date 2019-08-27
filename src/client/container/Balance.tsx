@@ -23,9 +23,9 @@ class Balance extends React.PureComponent<Props, State> {
         }
     }
 
-    setBalance = (account?: string) => {
+    setBalance = (account?: string, newCurrencies?: string[]) => {
         const { address } = this.props
-        var { currencies } = this.props
+        var currencies = newCurrencies || this.props.currencies
         if (!currencies) {
             currencies = ['XRP']
         }
@@ -66,7 +66,7 @@ class Balance extends React.PureComponent<Props, State> {
     }
 
     componentWillReceiveProps(props: Props) {
-        this.setBalance(props.address)
+        this.setBalance(props.address, props.currencies)
     }
 
     render() {
