@@ -8,8 +8,7 @@ import org.jetbrains.exposed.dao.IntIdTable
 data class WalletDTO(
         var privateKey: String,
         var publicKey: String,
-        var userId: Int,
-        var balance: String
+        var userId: Int
 ) {
     fun toWallet(): Wallet {
         return Wallet(this.privateKey, this.publicKey, this.userId)

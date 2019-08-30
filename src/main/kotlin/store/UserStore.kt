@@ -1,7 +1,6 @@
 package store
 
 import dao.*
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 

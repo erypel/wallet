@@ -10,7 +10,11 @@ async function create(wallet: Wallet): Promise<Wallet | undefined> {
         },
         credentials: 'include',
         method: 'POST',
-        body: JSON.stringify(wallet)
+        body: JSON.stringify({
+            privateKey: wallet.privateKey,
+            publicKey: wallet.publicKey,
+            userId: wallet.userId
+        })
     }).then(async response => {
         const json = await response.json()
         console.log(json)
