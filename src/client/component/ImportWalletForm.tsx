@@ -12,7 +12,7 @@ import { isValidSecret } from '../xrpl/api/utils/isValidSecret'
 
 interface Props {
     createWallet: (wallet: Wallet, userId: string) => Promise<any>
-    user: User
+    user?: User
     afterSubmit?: () => void
 }
 
@@ -33,9 +33,9 @@ class ImportWalletForm extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { state, handleChange } = this
+        const { state, handleChange, onSubmit } = this
         const { publicKey, privateKey } = state
-        return <form>
+        return <form onSubmit={onSubmit}>
             <Input id='publicKey' value={publicKey} type='text' placeHolder='Public Key' onChange={handleChange}/>
             <Input id='privateKey' value={privateKey} type='text' placeHolder='Private Key' onChange={handleChange}/>
             {isValidAddress(publicKey) && isValidSecret(privateKey)
