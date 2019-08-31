@@ -53,8 +53,26 @@ function findBalance(matchCurrency: string, balances: Balance[]): string {
     return totalValue.toString()
 }
 
+async function deleteWallet(walletId: string) {
+    return await fetch(`http://localhost:7000/wallet/${walletId}`, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        method: 'DELETE'
+    }).then(async response => {
+        const json = await response.json()
+        console.log(json)
+        return json
+    }).catch(error => {
+        alert(error)
+    })
+}
+
 export const walletService = {
     create,
     loadList,
-    findBalance
+    findBalance,
+    delete: deleteWallet
 }

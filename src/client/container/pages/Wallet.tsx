@@ -12,6 +12,7 @@ import { AppState } from '../../store/rootReducer'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import { setTransactionsForAccount } from '../../store/transaction/actions'
+import DeleteWalletButton from '../../component/DeleteWalletButton';
 
 interface Props {
     match: any
@@ -32,7 +33,8 @@ class Wallet extends React.PureComponent<Props> {
     render() {
         const { wallets, transactions, isLoadingTransactions, match } = this.props
         const { publicKey } = match.params
-        const privateKey = wallets[publicKey].privateKey
+        const wallet = wallets[publicKey]
+        const privateKey = wallet.privateKey
         if(!privateKey) {
             return <div>ERROR</div>
         }
@@ -59,6 +61,7 @@ class Wallet extends React.PureComponent<Props> {
                 <div className='feature'>
                     <TransactionTable transactions={transactions} isLoading={isLoadingTransactions} account={publicKey}/>
                 </div>
+                <DeleteWalletButton privateKey={privateKey}/>
             </div>
         </>
     }

@@ -64,6 +64,7 @@ fun main(args: Array<String>) {
             }
             path(":userId") {
                 get(walletApi::getWalletsForUser)
+                delete(walletApi::delete)
             }
         }
         get("/") { ctx -> ctx.result("Hello World") }
