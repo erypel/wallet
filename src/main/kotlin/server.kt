@@ -62,8 +62,12 @@ fun main(args: Array<String>) {
             path("create") {
                 post(walletApi::create)
             }
-            path(":userId") {
-                get(walletApi::getWalletsForUser)
+            path("user") {
+                path(":userId") {
+                    get(walletApi::getWalletsForUser)
+                }
+            }
+            path(":privateKey") {
                 delete(walletApi::delete)
             }
         }

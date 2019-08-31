@@ -16,7 +16,7 @@ class WalletApiImpl(private val walletService: WalletService) : WalletApi {
     }
 
     override fun delete(ctx: Context) {
-        val privateKey = ctx.pathParam("userId")
+        val privateKey = ctx.pathParam("privateKey")
         ctx.json(walletService.delete(privateKey))
     }
 }

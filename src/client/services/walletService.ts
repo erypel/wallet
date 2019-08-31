@@ -25,7 +25,7 @@ async function create(wallet: Wallet): Promise<Wallet | undefined> {
 }
 
 async function loadList(userId: string): Promise<WalletMap> {
-    return await fetch(`http://localhost:7000/wallet/${userId}`, {
+    return await fetch(`http://localhost:7000/wallet/user/${userId}`, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -53,8 +53,8 @@ function findBalance(matchCurrency: string, balances: Balance[]): string {
     return totalValue.toString()
 }
 
-async function deleteWallet(walletId: string) {
-    return await fetch(`http://localhost:7000/wallet/${walletId}`, {
+async function deleteWallet(privateKey: string) {
+    return await fetch(`http://localhost:7000/wallet/${privateKey}`, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
