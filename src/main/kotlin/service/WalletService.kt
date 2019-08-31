@@ -13,4 +13,8 @@ class WalletService(private val walletStore: WalletStore) {
         return walletStore.create(wallet)
     }
 
+    fun delete(privateKey: String) {
+        return walletStore.delete(privateKey)
+    }
+
 }

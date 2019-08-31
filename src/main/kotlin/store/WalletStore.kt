@@ -3,6 +3,7 @@ package store
 import dao.Wallet
 import dao.WalletDao
 import dao.Wallets
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class WalletStore {
@@ -20,6 +21,12 @@ class WalletStore {
         return transaction {
             val wallets = WalletDao.find { Wallets.userId eq userId }
             wallets.associateBy({it.publicKey}, {it.toModel()})
+        }
+    }
+
+    fun delete(privateKey: String) {
+        return transaction {
+            Wallets.deleteWhere { Wallets.privateKey eq privateKey }
         }
     }
 }

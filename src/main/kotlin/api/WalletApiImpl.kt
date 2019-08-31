@@ -14,4 +14,9 @@ class WalletApiImpl(private val walletService: WalletService) : WalletApi {
         val wallet = ctx.body<WalletDTO>().toWallet()
         ctx.json(walletService.create(wallet))
     }
+
+    override fun delete(ctx: Context) {
+        val privateKey = ctx.pathParam("privateKey")
+        ctx.json(walletService.delete(privateKey))
+    }
 }
