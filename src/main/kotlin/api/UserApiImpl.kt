@@ -16,7 +16,7 @@ class UserApiImpl(private val userService: UserService) : UserApi {
     }
 
     override fun logout(ctx: Context) {
-        ctx.req.session.invalidate()
+        ctx.json(ctx.req.session.invalidate())
     }
 
     override fun create(ctx: Context) {
@@ -26,7 +26,6 @@ class UserApiImpl(private val userService: UserService) : UserApi {
 
     override fun update(ctx: Context) {
         val detail = ctx.body<UserDetail>()
-        userService.update(detail)
-        ctx
+        ctx.json(userService.update(detail))
     }
 }
